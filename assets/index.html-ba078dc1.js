@@ -1,0 +1,1 @@
+import{_ as t,W as e,X as s,Y as c}from"./framework-ab602749.js";const r={},a=c("img",{src:"https://ghchart.rshah.org/Luotianxu-ltx",alt:"2016rshah's Github chart",style:{width:"100%"}},null,-1),n=[a];function o(_,h){return e(),s("div",null,n)}const i=t(r,[["render",o],["__file","index.html.vue"]]);export{i as default};
