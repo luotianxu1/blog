@@ -2,7 +2,7 @@ import { navbar } from 'vuepress-theme-hope'
 
 export const MyNavbar = navbar([
     '/',
-    { text: '演示', icon: 'discover', link: '/demo/' },
+    { text: '面试题', icon: 'discover', link: '/interview/' },
     {
         text: '博文',
         icon: 'edit',
@@ -24,6 +24,6 @@ export const MyNavbar = navbar([
     {
         text: 'Github主页',
         icon: 'github',
-        link: 'https://github.com/Luotianxu-ltx/',
+        link: 'https://github.com/luotianxu1/',
     },
 ])

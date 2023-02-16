@@ -10,6 +10,13 @@ export const MySidebar = sidebar({
             link: 'demo/',
             children: 'structure',
         },
+        {
+            text: '面试题',
+            icon: 'creative',
+            prefix: 'interview/',
+            link: 'interview/',
+            children: 'structure',
+        },
         'slides',
     ],
 })

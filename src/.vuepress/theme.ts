@@ -3,11 +3,11 @@ import { MyNavbar } from './navbar/index.js'
 import { MySidebar } from './sidebar/index.js'
 
 export default hopeTheme({
-    hostname: 'https://Luotianxu-ltx.github.io', // hostname 当前网站部署到的域名
+    hostname: 'https://luotianxu1.github.io', // hostname 当前网站部署到的域名
     // 文章显示的默认作者
     author: {
         name: '罗天旭',
-        url: 'https://Luotianxu-ltx.github.io',
+        url: 'https://luotianxu1.github.io',
         email: '1265062404@qq.com',
     },
     navbar: MyNavbar, // 顶部导航栏
@@ -80,12 +80,12 @@ export default hopeTheme({
     // 博客选项
     blog: {
         name: '罗天旭', // 姓名
-        intro: 'https://github.com/Luotianxu-ltx', // 填写后将可以点击“博主信息”中的头像或姓名进入个人介绍页
+        intro: 'https://github.com/luotianxu1', // 填写后将可以点击“博主信息”中的头像或姓名进入个人介绍页
         avatar: '/img/author/author.jpg', // 头像
         description: '搬砖',
         // 媒体链接配置
         medias: {
-            Github: 'https://github.com/Luotianxu-ltx',
+            Github: 'https://github.com/luotianxu1',
         },
         roundAvatar: true, // 裁头像为圆形形状
         sidebarDisplay: 'mobile', // 是否在侧边栏展示博主信息
