@@ -1,25 +1,23 @@
 import { navbar } from 'vuepress-theme-hope'
 
 export const MyNavbar = navbar([
-    '/',
-    { text: '面试题', icon: 'discover', link: '/interview/' },
     {
-        text: '博文',
+        text: '主页',
+        icon: 'discover',
+        prefix: '/',
+        link: '/',
+    },
+    {
+        text: '面试题',
+        icon: 'discover',
+        prefix: '/interview/',
+        link: '/interview/',
+    },
+    {
+        text: 'threejs',
         icon: 'edit',
-        prefix: '/posts/',
-        children: [
-            {
-                text: '苹果',
-                icon: 'edit',
-                prefix: 'apple/',
-                children: [
-                    { text: '苹果1', icon: 'edit', link: '1' },
-                    { text: '苹果2', icon: 'edit', link: '2' },
-                    '3',
-                    '4',
-                ],
-            },
-        ],
+        prefix: '/threejs/',
+        link: '/threejs/',
     },
     {
         text: 'Github主页',

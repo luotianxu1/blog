@@ -2,6 +2,7 @@
 title: JS面试题
 icon: markdown
 order: 2
+date: 2023-02-17
 category:
   - 面试
 tag:
@@ -967,7 +968,6 @@ microtask主要包含：Promise.then、MutaionObserver、process.nextTick(Node.j
 
 ```js
 console.log('script start')
-
 setTimeout(function () {
     console.log('setTimeout1')
     new Promise(function (resolve) {
@@ -981,31 +981,25 @@ setTimeout(function () {
         console.log('then2')
     })
 })
-
 new Promise(function (resolve) {
     console.log('promise1')
     resolve()
 }).then(function () {
     console.log('then1')
 })
-
 setTimeout(function () {
     console.log('setTimeout2')
 })
 console.log(2)
-
 queueMicrotask(() => {
     console.log('queueMicrotask1')
 })
-
 new Promise(function (resolve) {
     resolve()
 }).then(function () {
     console.log('then3')
 })
-
 console.log('script end')
-
 // script start
 // promise1
 // 2

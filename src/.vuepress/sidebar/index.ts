@@ -1,22 +1,18 @@
 import { sidebar } from 'vuepress-theme-hope'
 
 export const MySidebar = sidebar({
-    '/': [
-        '',
+    '/interview/': [
         {
-            text: '如何使用',
+            text: '面试',
             icon: 'creative',
-            prefix: 'demo/',
-            link: 'demo/',
             children: 'structure',
         },
+    ],
+    '/threejs/': [
         {
-            text: '面试题',
+            text: 'threejs',
             icon: 'creative',
-            prefix: 'interview/',
-            link: 'interview/',
             children: 'structure',
         },
-        'slides',
     ],
 })

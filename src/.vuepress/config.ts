@@ -1,5 +1,6 @@
 import { defineUserConfig } from 'vuepress'
 import { searchProPlugin } from 'vuepress-plugin-search-pro'
+import { autoCatalogPlugin } from 'vuepress-plugin-auto-catalog'
 import theme from './theme.js'
 
 export default defineUserConfig({
@@ -18,5 +19,6 @@ export default defineUserConfig({
             // 索引全部内容
             indexContent: true,
         }),
+        autoCatalogPlugin(),
     ],
 })
