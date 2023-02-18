@@ -15,4 +15,11 @@ export const MySidebar = sidebar({
             children: 'structure',
         },
     ],
+    '/other/': [
+        {
+            text: '其他',
+            icon: 'creative',
+            children: 'structure',
+        },
+    ],
 })

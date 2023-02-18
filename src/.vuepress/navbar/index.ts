@@ -20,6 +20,12 @@ export const MyNavbar = navbar([
         link: '/threejs/',
     },
     {
+        text: '其他',
+        icon: 'edit',
+        prefix: '/other/',
+        link: '/other/',
+    },
+    {
         text: 'Github主页',
         icon: 'github',
         link: 'https://github.com/luotianxu1/',
