@@ -1,0 +1,81 @@
+---
+title: 网络面试题
+icon: markdown
+order: 4
+date: 2023-02-20
+category:
+    - 面试
+tag:
+    - 网络
+---
+
+## HTTP与HTTPS的区别
+
+- 加密： HTTPS 是 HTTP 协议的更加安全的版本，通过使用SSL/TLS进行加密传输的数据；
+- 连接方式： HTTP（三次握手）和 HTTPS （三次握手+数字证书）连接方式不一样；
+- 端口： HTTP 默认的端口是 80和 HTTPS 默认端口是 443
+
+## HTTP状态码
+
+|分类|分类描述|
+|:--|:--:|
+|1**|信息，服务器收到请求，需要请求者继续执行操作|
+|2**|成功，操作被成功接受并处理|
+|3**|重定向，需要进一步的操作以完成请求|
+|4**|客户端错误，请求包含语法错误或无法完成请求|
+|5**|服务器错误，服务器在处理请求的过程中发生了错误|
+
+101 切换请求协议，从 HTTP 切换到 WebSocket
+200 请求成功，有响应体，服务器成功返回网页
+301 永久重定向：会缓存
+302 临时重定向：不会缓存
+304 协商缓存命中
+403 服务器禁止访问
+404 资源未找到，请求的网页不存在
+400 请求错误
+500 服务器端错误
+503 服务器繁忙
+
+## axios取消请求
+
+- 使用 CancelToken
+
+```js
+const { CancelToken, isCanCel } = axios;
+const source = CancelToken.source();
+
+axios.get('/user/12345', {
+  cancelToken: source.token
+}).catch(thrown => {
+  if (isCancel(thrown)) {
+    // 获取 取消请求 的相关信息
+    console.log('Request canceled', thrown.message);
+  } else {
+    // 处理其他异常
+  }
+});
+
+axios.post('/user/12345', {
+  name: 'new name'
+}, {
+  cancelToken: source.token
+})
+
+// 取消请求。参数是可选的，参数传递一个取消请求的相关信息，在 catch 钩子函数里能获取到
+source.cancel('Operation canceled by the user.');
+```
+
+- 给构造函数 CancelToken 传递一个 executor 函数作为参数。这种方法的好处是，可以用同一个 cancel token 来取消多个请求
+
+```js
+const CancelToken = axios.CancelToken;
+let cancel;
+axios.get('/user/12345', {
+  cancelToken: new CancelToken(function executor(c) {
+    // 参数 c 也是个函数
+    cancel = c;
+  })
+});
+// 取消请求，参数用法同上
+cancel();
+```

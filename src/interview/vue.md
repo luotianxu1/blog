@@ -4,17 +4,18 @@ icon: markdown
 order: 3
 date: 2023-02-17
 category:
-  - 面试
+    - 面试
 tag:
-  - Vue
+    - Vue
 ---
+
 <!-- more -->
 
-## MVVM原理
+## MVVM 原理
 
 - Model: 模型持有所有的数据、状态和程序逻辑
 - View: 负责界面的布局和显示
-- ViewModel：负责模型和界面之间的交互，是Model和View的桥梁
+- ViewModel：负责模型和界面之间的交互，是 Model 和 View 的桥梁
 
 ## 单页和多页的区别及优缺点
 
@@ -33,16 +34,14 @@ tag:
 2. 初次加载比较慢
 3. 页面复杂度高
 
-## 对import Vue from "vue"的理解
+## 对 import Vue from "vue"的理解
 
 ```js
-function Vue (options) {
-  if (process.env.NODE_ENV !== 'production' &&
-    !(this instanceof Vue)
-  ) {
-    warn('Vue is a constructor and should be called with the `new` keyword')
-  }
-  this._init(options)
+function Vue(options) {
+    if (process.env.NODE_ENV !== 'production' && !(this instanceof Vue)) {
+        warn('Vue is a constructor and should be called with the `new` keyword')
+    }
+    this._init(options)
 }
 initMixin(Vue)
 stateMixin(Vue)
@@ -51,31 +50,31 @@ lifecycleMixin(Vue)
 renderMixin(Vue)
 ```
 
-我们开发中引入的Vue其实就是这个构造函数，而且这个构造函数只能通过new Vue的方式进行使用，否则会在控制台打印警告信息。定义完后，还会通过initMixin(Vue)、stateMixin(Vue)、eventsMixin(Vue)、lifecycleMixin(Vue)和renderMixin(Vue)的方式为Vue原型中混入方法。我们通过import Vue from "Vue"引入的本质上就是一个原型上挂在了好多方法的构造函数。
+我们开发中引入的 Vue 其实就是这个构造函数，而且这个构造函数只能通过 new Vue 的方式进行使用，否则会在控制台打印警告信息。定义完后，还会通过 initMixin(Vue)、stateMixin(Vue)、eventsMixin(Vue)、lifecycleMixin(Vue)和 renderMixin(Vue)的方式为 Vue 原型中混入方法。我们通过 import Vue from "Vue"引入的本质上就是一个原型上挂在了好多方法的构造函数。
 
-## 对new Vue的理解
+## 对 new Vue 的理解
 
 ```js
 // main.js文件
-import Vue from "vue";
+import Vue from 'vue'
 var app = new Vue({
-  el: '#app',
-  data() {
-    return {
-      msg: 'hello Vue~'
-    }
-  },
-  template: `<div>{{msg}}</div>`,
+    el: '#app',
+    data() {
+        return {
+            msg: 'hello Vue~',
+        }
+    },
+    template: `<div>{{msg}}</div>`,
 })
 
-console.log(app);
+console.log(app)
 ```
 
-new Vue就是对构造函数Vue进行实例化，执行结果如下：
+new Vue 就是对构造函数 Vue 进行实例化，执行结果如下：
 ![An image](/img/vue/vue.jpg)
-可以看出实例化后的实例中包含了很多属性，用来对当前app进行描述，当然复杂的Vue项目这个app将会是一个树结构，通过$parent和$children维护父子关系。
+可以看出实例化后的实例中包含了很多属性，用来对当前 app 进行描述，当然复杂的 Vue 项目这个 app 将会是一个树结构，通过$parent和$children 维护父子关系。
 
-new Vue的过程中还会执行this._init方法进行初始化处理。
+new Vue 的过程中还会执行 this.\_init 方法进行初始化处理。
 
 ## 响应式原理
 
@@ -227,6 +226,43 @@ function defineReactive(obj, key, val) {
 
 Vue.set 方法是 vue 中的一个补丁方法（正常我们添加属性是不会触发更新的，我们数组无法监控到索引和长度）
 如何实现的 我们给每一个对象都增添了一个 dep 属性 当属性添加或者删除时，手动触发对象本身 dep 来进行更新
+
+## props、methods、data、computed 的执行顺序
+
+```js
+function initState(vm) {
+    vm._watchers = []
+    var opts = vm.$options
+    if (opts.props) {
+        initProps(vm, opts.props)
+    }
+    if (opts.methods) {
+        initMethods(vm, opts.methods)
+    }
+    if (opts.data) {
+        initData(vm)
+    } else {
+        observe((vm._data = {}), true /* asRootData */)
+    }
+    if (opts.computed) {
+        initComputed(vm, opts.computed)
+    }
+    if (opts.watch && opts.watch !== nativeWatch) {
+        initWatch(vm, opts.watch)
+    }
+}
+```
+
+以上为 vue 的部分源码，可以看出判断顺序：
+props > methods > data > computed > watch
+
+## vue 中 data 和 method 可以同名吗
+
+```js
+if (methods && hasOwn(methods, key)) {
+    warn(`Method "${key}" has already been defined as a data property.`, vm)
+}
+```
 
 ## 为什么要虚拟 DOM
 
@@ -428,7 +464,7 @@ const Comp = {
 
 vue2 中 v-for 优先级更高，在编译的时候会将 v-for 渲染成\_l 函数 v-if 会变成三元表达式。v-if 和 v-for 不能同时使用。如果同时遇到的时候，应该考虑先用计算属性处理数据，在进行 v-for，可以减少循环次数。vue3 中则完全相反，v-if 的优先级高于 v-for
 
-## v-if和v-show
+## v-if 和 v-show
 
 - v-if 是真正的条件渲染，因为它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建；也是惰性的：如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块。适用于在运行时很少改变条件，不需要频繁切换条件的场景。v-if 在编译的时候会变成三元表达式
 
@@ -568,7 +604,7 @@ keep-alive 是 Vue 内置的一个组件，可以使被包含的组件保留状�
 - .stop 阻止冒泡
 - .prevet 阻止默认行为
 - .capture 内部元素触发的事件先在次处理
-- .self 只有在event.target是当前元素时触发
+- .self 只有在 event.target 是当前元素时触发
 - .once 事件只会触发一次
 - .passive 立即触发默认行为
 - .native 把当前元素作为原生标签看待
@@ -598,9 +634,9 @@ keep-alive 是 Vue 内置的一个组件，可以使被包含的组件保留状�
 
 ## Vue.use
 
-- 作用：Vue.use被用来安装Vue.js插件，例如vue-router、vuex、element-ui。
-- install方法：如果插件是一个对象，必须提供 install 方法。如果插件是一个函数，它会被作为install方法。install方法调用时，会将Vue作为参数传入。
-- 调用时机：该方法需要在调用 new Vue() 之前被调用。
+- 作用：Vue.use 被用来安装 Vue.js 插件，例如 vue-router、vuex、element-ui。
+- install 方法：如果插件是一个对象，必须提供  install  方法。如果插件是一个函数，它会被作为 install 方法。install 方法调用时，会将 Vue 作为参数传入。
+- 调用时机：该方法需要在调用  new Vue()  之前被调用。
 - 特点：当 install 方法被同一个插件多次调用，插件将只会被安装一次。
 
 ## vue 中使用了哪些设计模式
@@ -621,12 +657,12 @@ keep-alive 是 Vue 内置的一个组件，可以使被包含的组件保留状�
 - hash: 使用 URL hash 值来作路由。支持所有浏览器，包括不支持 HTML5 History Api 的浏览器；
 - history : 依赖 HTML5 History API 和服务器配置。具体可以查看 HTML5 History 模式；
 
-## vue路由传参
+## vue 路由传参
 
-- params传参
+- params 传参
 
 ```js
-this.$router.push({name:'index',params:{id:item.id}})
+this.$router.push({ name: 'index', params: { id: item.id } })
 
 this.$route.params.id
 ```
@@ -634,7 +670,7 @@ this.$route.params.id
 - 路由属性传参
 
 ```js
-this.$router.push({name: '/index/${item.id}'})
+this.$router.push({ name: '/index/${item.id}' })
 
 // 路由配置 {path:'/index:id'}
 ```
@@ -647,7 +683,7 @@ this.$router.push({name: '/index/${item.id}'})
 this.$router.push({
     name: 'index',
     query: {
-        id:item.id
-    }
+        id: item.id,
+    },
 })
 ```

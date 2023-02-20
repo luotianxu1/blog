@@ -4,9 +4,9 @@ icon: markdown
 order: 2
 date: 2023-02-17
 category:
-  - 面试
+    - 面试
 tag:
-  - javascript
+    - javascript
 ---
 
 <!-- more -->
@@ -113,6 +113,44 @@ consolg.log(a, window.a) // 10,10
 - 箭头函数没有 arguments
 - 箭头函数不能用 call，bind，apply 去改变 this 的指向
 - this 指向外层第一个函数的 this
+
+## Symbol
+
+Symbol 是 ES6 中引入的一种新的基本数据类型，用于表示一个独一无二的值。它是 JavaScript 中的第七种数据类型，与 undefined、null、Number（数值）、String（字符串）、Boolean（布尔值）、Object（对象）并列。
+
+- 不能与其他的数据进行比较以及运算（唯一性）
+
+```js
+let a1 = Symbol('11')
+let a2 = Symbol('11')
+console.log(a1 === a2) // flase
+```
+
+![An image](/img/js/symbol.jpg)
+
+- 不能与其他数据进行运算
+
+```js
+let result = a2 + 100 //报错
+let result = a2 > 100 //报错
+let result = a1 + a1 //报错
+```
+
+- 隐藏性，for···in 不能访问,使用 Object.getOwnPropertySymbols 方法可以进行访问
+
+```js
+let a = Symbol('Nan')
+let obj = {
+    [a]: 'Chen',
+}
+console.log(obj)//{Symbol(Nan): "Chen"}
+for (const option in obj) {
+    console.log(obj[option]) //啥都没有
+}
+let array = Object.getOwnPropertySymbols(obj)
+console.log(array) //[Symbol(Nan)]
+console.log(obj[array[0]]) //Chen
+```
 
 ## null 与 undefind
 
@@ -265,9 +303,9 @@ console.log(res) // ['a1', 'b1', 'c1']
 
 ## new 操作具体做了什么
 
-1. 先创建一个空对象
-2. 把空对象和构造函数通过原型链进行链接
-3. 把构造函数的 this 绑定到新的空对象身上
+1. 先创建一个空对象`{}`
+2. 把空对象和构造函数通过原型链进行链接`son.__proto__ = Father.prototype`
+3. 把构造函数的 this 绑定到新的空对象身上`Father.call(this)`
 4. 根据构建函数返回的类型判断，如果是值类型，则返回对象，如果是引用类型，就要返回这个引用类型
 
 ```js
@@ -295,8 +333,10 @@ console.log(p1)
 ## 原型与原型链
 
 原型就是一个普通对象，他是构造函数的实例共享属性和方法；所有实例中引用的原型都是同一个对象。使用 prototype 可以把方法挂载原型上，内存只保存一份
-**proto**可以理解为指针。实例对象中的属性，指向了构造函数的原型（protortpe）
+__proto__可以理解为指针。实例对象中的属性，指向了构造函数的原型（protortpe）
 一个实例对象在调用属性和方法的时候，会一次从实例本身、构造函数原型、原型的原型上去查找
+
+![An image](/img/js/proto.jpg)
 
 ## 继承
 
@@ -304,6 +344,114 @@ console.log(p1)
 2. 借用构造函数继承
 3. 组合式继承
 4. ES6 的 class 继承
+
+- 原型继承
+
+```js
+function Super(){ this.a=1 }
+Super.prototype.say = function(){ console.log(‘hhh’) }
+function Sub(){}
+Sub.prototype = new Super()
+
+const test = new Sub()
+console.log( test.say() )// hhh
+```
+
+优点：通过原型继承多个引用类型的属性和方法
+缺点：Sub原型变成了Super的实例，如果Super的实例某个属性是引用值，该引用值就会被应用到所有Sub创建的实例中去，会有污染问题。
+
+- 盗用构造函数(构造函数模式+call)
+
+```js
+function Super = function(){ this.a = 1 }
+function Sub = function(){
+       Super.call(this)
+       this.b = 2
+}
+
+const test = new Sub()
+```
+
+优点：每个实例都会有自己的a属性，哪怕是引用值也不会被污染
+缺点：Super构造函数中的方法在每个实例上都要创建一遍（除非该方法声明提到全局）；Sub的实例无法访问Super原型上的方法
+
+- 组合继承(原型继承+盗用构造函数继承)
+
+```js
+function Super(){ this.a=[1,2] }
+Super.prototype.say = function(){ console.log(‘hhh’) }
+function Sub(){
+    Super.call(this)
+    this b=2
+}
+Sub.prototype = new Super()
+ 
+const test1 = new Sub()
+console.log( test1.say() )// hhh
+test1.a.push(3)
+console.log(test1.a)// [1,2,3]
+const test2 = new Sub()
+console.log(test2.a)// [1,2]
+```
+
+优点：集合了【原型继承】和【盗用构造函数继承】的优点
+缺点：存在效率问题，Super始终会被调用两次
+
+- 原型式继承
+
+```js
+// es5
+const obj = { a:1 }
+function createObj(o){
+    const Fn(){}
+    Fn.prototype = o
+    return new Fn()
+}
+const test = createObj(obj)
+
+// es6
+const obj = { a:1 }
+const test = Object.create(obj)
+```
+
+优点：对一个对象进行浅克隆创建另一个对象，同时继承该对象的原型属性
+缺点：由于是浅克隆，所以实例共享的对象属性如果是引用值，会受污染。
+
+- 寄生式继承(构造函数模式+工厂模式)
+
+```js
+function createObj(o){
+    let clone = objectCopy(o)
+    clone.say=function(){
+        console.log(‘hhh’)
+    }
+    return clone
+}
+
+const obj = { a:1 }
+const test = createObj(obj)
+```
+
+优点：根据一个对象克隆创建另一个对象，并增强对象
+缺点：同【盗用构造函数继承】方法在每个实例上都要创建一遍
+
+- 寄生式组合继承(盗用构造函数继承 + 原型式继承)
+
+```js
+function Super(){ this.a=[1,2] }
+Super.prototype.say = function(){ console.log(‘hhh’) }
+function Sub(){
+    Super.call(this)
+    this b=2
+}
+
+Sub.prototype = Object.create(Super.prototype)
+Sub.prototype.constructor = Sub
+
+const test = new Sub()
+```
+
+优点：集合了【原型式继承】和【盗用构造函数继承】的优点，效率比【组合继承】更高。
 
 ## this 指向
 
@@ -637,41 +785,41 @@ Function.prototype.MyBind = function (context) {
 
 ```js
 function Foo() {
-  getName = function () {
-    console.log(1);
-  };
-  return this;
+    getName = function () {
+        console.log(1)
+    }
+    return this
 }
 Foo.getName = function () {
-  console.log(2);
+    console.log(2)
 }
 Foo.prototype.getName = function () {
-  console.log(3);
+    console.log(3)
 }
-var getName = function () { 
-  console.log(4);
+var getName = function () {
+    console.log(4)
 }
 function getName() {
-  console.log(5)
+    console.log(5)
 }
-Foo.getName();
-getName();
+Foo.getName()
+getName()
 Foo().getName()
-getName();
-new Foo.getName(); 
+getName()
+new Foo.getName()
 new Foo().getName()
 new new Foo().getName()
 ```
 
-- 执行 Foo.getName(), 执行Foo函数对象上的的静态方法。打印出 2
-- 执行 getName()， 就是执行的getName变量的函数。打印 4
-  - 为什么这里是 执行的 变量getName，而不是函数getName呢。这得归功于js的预编译js在执行之前进行预编译，会进行 函数提升 和 变量提升,所以函数和变量都进行提升了，但是函数声明的优先级最高，会被提升至当前作用域最顶端。当在执行到后面的时候会导致getName被重新赋值，就会把执行结果为 4 的这个函数赋值给变量
-- 执行 Foo().getName()， 调用Foo执行后返回值上的getName方法。 Foo函数执行了，里面会给外面的getName函数重新赋值，并返回了this。 也就是执行了this.getName。所以打印出了 1
-- 执行 getName()， 由于上一步，函数被重新赋值。所以这次的结果和上次的结果是一样的，还是为1
-- 执行 new Foo.getName()， 这个 new 其实就是new了Foo上面的静态方法getName 所以是2。 当然如果你们在这个函数里面打印this的话，会发现指向的是一个新对象 也就是new出来的一个新对象
+- 执行 Foo.getName(), 执行 Foo 函数对象上的的静态方法。打印出 2
+- 执行 getName()， 就是执行的 getName 变量的函数。打印 4
+  - 为什么这里是 执行的 变量 getName，而不是函数 getName 呢。这得归功于 js 的预编译 js 在执行之前进行预编译，会进行 函数提升 和 变量提升,所以函数和变量都进行提升了，但是函数声明的优先级最高，会被提升至当前作用域最顶端。当在执行到后面的时候会导致 getName 被重新赋值，就会把执行结果为 4 的这个函数赋值给变量
+- 执行 Foo().getName()， 调用 Foo 执行后返回值上的 getName 方法。 Foo 函数执行了，里面会给外面的 getName 函数重新赋值，并返回了 this。 也就是执行了 this.getName。所以打印出了 1
+- 执行 getName()， 由于上一步，函数被重新赋值。所以这次的结果和上次的结果是一样的，还是为 1
+- 执行 new Foo.getName()， 这个 new 其实就是 new 了 Foo 上面的静态方法 getName 所以是 2。 当然如果你们在这个函数里面打印 this 的话，会发现指向的是一个新对象 也就是 new 出来的一个新对象
   - 可以把 Foo.getName()看成一个整体，因为这里 . 的优先级比 new 高
-- 执行 new Foo().getName()，这里函数执行 new Foo() 会返回一个对象，然后调用这个对象原型上的getName方法， 所以结果是 3
-- 执行 new new Foo().getName(), 这个和上一次的结果是一样，上一个函数调用后并咩有返回值，所以在进行new的时候也没有意义了。 最终结果也是3
+- 执行 new Foo().getName()，这里函数执行 new Foo() 会返回一个对象，然后调用这个对象原型上的 getName 方法， 所以结果是 3
+- 执行 new new Foo().getName(), 这个和上一次的结果是一样，上一个函数调用后并咩有返回值，所以在进行 new 的时候也没有意义了。 最终结果也是 3
 
 ## 防抖
 
@@ -856,6 +1004,15 @@ console.log(adder5(10))
 
 ## 深拷贝与浅拷贝
 
+JSON.stringify()缺点
+
+1. 如果obj里面有时间对象，则JSON.stringify后再JSON.parse的结果，时间将只是字符串的形式，而不是对象的形式。
+2. 如果obj里面有RegExp，则打印出来是空对象。
+3. 如果对象中有函数或者undefined，则会直接被丢掉。
+4. 如果json里有对象是由构造函数生成的，则会丢掉对象的constructon。
+5. 如果对象中存在循环引用的情况也无法正确实现深拷贝。
+6. 如果对象中存在NAN，则序列化后会变成null。
+
 ```js
 let arr = [1, 2, 3]
 let newArr = [...arr]
@@ -881,10 +1038,6 @@ obj1.name = '王五'
 console.log(obj)
 console.log(obj1)
 // 只能实现第一层，当有多层的时候还是浅拷贝
-```
-
-```js
-JSON.parse(JSON.stringify(arr)) // 深拷贝 function => "function"
 ```
 
 ```js
@@ -935,30 +1088,30 @@ addEventListener('click',函数名,true/false) 默认是 false(事件冒泡)true
 
 > 任务队列
 
-- JS分为同步任务和异步任务
+- JS 分为同步任务和异步任务
 - 同步任务都在主线程上执行，形成一个执行栈
 - 主线程之外，事件触发线程管理着一个任务队列，只要异步任务有了运行结果，就在任务队列之中放置一个事件。
-- 一旦执行栈中的所有同步任务执行完毕（此时JS引擎空闲），系统就会读取任务队列，将可运行的异步任务添加到可执行栈中，开始执行。
+- 一旦执行栈中的所有同步任务执行完毕（此时 JS 引擎空闲），系统就会读取任务队列，将可运行的异步任务添加到可执行栈中，开始执行。
 
 > 宏任务
 
-可以理解是每次执行栈执行的代码就是一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行）。浏览器为了能够使得JS内部(macro)task与DOM任务能够有序的执行，会在一个(macro)task执行结束后，在下一个(macro)task 执行开始前，对页面进行重新渲染。
+可以理解是每次执行栈执行的代码就是一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行）。浏览器为了能够使得 JS 内部(macro)task 与 DOM 任务能够有序的执行，会在一个(macro)task 执行结束后，在下一个(macro)task 执行开始前，对页面进行重新渲染。
 
-task主要包含：script(整体代码)、setTimeout、setInterval、I/O、UI交互事件、postMessage、MessageChannel、setImmediate(Node.js 环境)
+task 主要包含：script(整体代码)、setTimeout、setInterval、I/O、UI 交互事件、postMessage、MessageChannel、setImmediate(Node.js 环境)
 
 > 微任务
 
-可以理解是在当前 task 执行结束后立即执行的任务。也就是说，在当前task任务后，下一个task之前，在渲染之前。所以它的响应速度相比setTimeout（setTimeout是task）会更快，因为无需等渲染。也就是说，在某一个macrotask执行完后，就会将在它执行期间产生的所有microtask都执行完毕（在渲染前）。
+可以理解是在当前 task 执行结束后立即执行的任务。也就是说，在当前 task 任务后，下一个 task 之前，在渲染之前。所以它的响应速度相比 setTimeout（setTimeout 是 task）会更快，因为无需等渲染。也就是说，在某一个 macrotask 执行完后，就会将在它执行期间产生的所有 microtask 都执行完毕（在渲染前）。
 
-microtask主要包含：Promise.then、MutaionObserver、process.nextTick(Node.js 环境)
+microtask 主要包含：Promise.then、MutaionObserver、process.nextTick(Node.js 环境)
 
 > 运行机制
 
 - 执行一个宏任务（栈中没有就从事件队列中获取）
 - 执行过程中如果遇到微任务，就将它添加到微任务的任务队列中
 - 宏任务执行完毕后，立即执行当前微任务队列中的所有微任务（依次执行）
-- 当前宏任务执行完毕，开始检查渲染，然后GUI线程接管渲染
-- 渲染完毕后，JS线程继续接管，开始下一个宏任务（从事件队列中获取）
+- 当前宏任务执行完毕，开始检查渲染，然后 GUI 线程接管渲染
+- 渲染完毕后，JS 线程继续接管，开始下一个宏任务（从事件队列中获取）
 
 ![An image](/img/js/task.jpg)
 
@@ -1397,7 +1550,7 @@ token：验证身份的令牌，一般就是用户通过账号密码登录后，
 ## 手写实现 sleep
 
 ```js
-(async () => {
+;(async () => {
     console.log('start')
     await sleep(3000)
     console.log('end')
@@ -1415,9 +1568,10 @@ token：验证身份的令牌，一般就是用户通过账号密码登录后，
 ## 找到仅在两个数组中出现过一次的数据
 
 ```js
-var a = [1, 2, 4], b = [1, 3, 8, 4]
+var a = [1, 2, 4],
+    b = [1, 3, 8, 4]
 const newArr = a.concat(b).filter((item, _, arr) => {
-  return arr.indexOf(item) === arr.lastIndexOf(item)
+    return arr.indexOf(item) === arr.lastIndexOf(item)
 })
 ```
 
@@ -1433,6 +1587,67 @@ V8 可以独立运行，也可以嵌入到任何 C++应用程序中
 - 标记整理和标记清除相似，不同的式回收期间同时会将保留的存储对象搬运汇集到连续的内存空间，从而整合空闲空间，避免内存碎片化。
 - 分代收集，对象被分成两组：“新的”和“旧的”。许多对象出现，完成他们的工作并很快死去，他们可以很快被清理。那些长期存活的对象会变得“老旧”，而且被检查的频次也会减少。
 - 增量收集，如果有许多对象，并且我们试图一次遍历并标记整个对象集，则可能需要一些时间，并在执行过程中带来明显的延迟。所以引擎试图将垃圾收集工作分成几部分来做，然后将这几部分会逐一进行处理，这样会有许多微笑的延迟而不是一个大的延迟。
+
+## 垃圾回收
+
+### 为什么回收
+
+我们知道写代码时创建一个基本类型、对象、函数……都是需要占用内存的，但是我们并不关注这些，因为这是引擎为我们分配的，我们不需要显式手动的去分配内存。JavaScript 的引用数据类型是保存在堆内存中的，然后在栈内存中保存一个对堆内存中实际对象的引用，所以，JavaScript 中对引用数据类型的操作都是操作对象的引用而不是实际的对象。可以简单理解为，栈内存中保存了一个地址，这个地址和堆内存中的实际值是相关的。
+
+那上面代码首先我们声明了一个变量 test，它引用了对象 {name: 'isboyjc'}，接着我们把这个变量重新赋值了一个数组对象，也就变成了该变量引用了一个数组，那么之前的对象引用关系就没有了，如下图
+![An image](/img/js/recovery.jpg)
+没有了引用关系，也就是无用的对象，这个时候假如任由它搁置，一个两个还好，多了的话内存也会受不了，所以就需要被清理（回收）。
+
+### 回收策略
+
+在 JavaScript 内存管理中有一个概念叫做 可达性，就是那些以某种方式可访问或者说可用的值，它们被保证存储在内存中，反之不可访问则需回收。
+至于如何回收，其实就是怎样发现这些不可达的对象（垃圾）它并给予清理的问题， JavaScript 垃圾回收机制的原理说白了也就是定期找出那些不再用到的内存（变量），然后释放其内存。
+
+- 标记清除算法
+
+标记清除（Mark-Sweep），目前在 JavaScript引擎 里这种算法是最常用的，到目前为止的大多数浏览器的 JavaScript引擎 都在采用标记清除算法，只是各大浏览器厂商还对此算法进行了优化加工，且不同浏览器的 JavaScript引擎 在运行垃圾回收的频率上有所差异。
+
+就像它的名字一样，此算法分为 标记 和 清除 两个阶段，标记阶段即为所有活动对象做上标记，清除阶段则把没有标记（也就是非活动对象）销毁。
+
+整个标记清除算法大致过程就像下面这样
+
+1. 垃圾收集器在运行时会给内存中的所有变量都加上一个标记，假设内存中所有对象都是垃圾，全标记为0
+2. 然后从各个根对象开始遍历，把不是垃圾的节点改成1
+3. 清理所有标记为0的垃圾，销毁并回收它们所占用的内存空间
+4. 最后，把所有内存中对象标记修改为0，等待下一轮垃圾回收
+
+优点
+
+标记清除算法的优点只有一个，那就是实现比较简单，打标记也无非打与不打两种情况，这使得一位二进制位（0和1）就可以为其标记，非常简单
+
+缺点
+
+标记清除算法有一个很大的缺点，就是在清除之后，剩余的对象内存位置是不变的，也会导致空闲内存空间是不连续的，出现了 内存碎片（如下图），并且由于剩余空闲内存不是一整块，它是由不同大小内存组成的内存列表，这就牵扯出了内存分配的问题
+
+![An image](/img/js/recovery1.jpg)
+
+假设我们新建对象分配内存时需要大小为 size，由于空闲内存是间断的、不连续的，则需要对空闲内存列表进行一次单向遍历找出大于等于 size 的块才能为其分配（如下图）
+
+![An image](/img/js/recovery2.jpg)
+
+那如何找到合适的块呢？我们可以采取下面三种分配策略
+
+1. First-fit，找到大于等于 size 的块立即返回
+2. Best-fit，遍历整个空闲列表，返回大于等于 size 的最小分块
+3. Worst-fit，遍历整个空闲列表，找到最大的分块，然后切成两部分，一部分 size 大小，并将该部分返回
+
+这三种策略里面 Worst-fit 的空间利用率看起来是最合理，但实际上切分之后会造成更多的小块，形成内存碎片，所以不推荐使用，对于 First-fit 和 Best-fit 来说，考虑到分配的速度和效率 First-fit 是更为明智的选择。
+
+综上所述，标记清除算法或者说策略就有两个很明显的缺点
+
+- 内存碎片化，空闲内存块是不连续的，容易出现很多空闲内存块，还可能会出现分配所需内存过大的对象时找不到合适的块
+- 分配速度慢，因为即便是使用 First-fit 策略，其操作仍是一个 O(n) 的操作，最坏情况是每次都要遍历到最后，同时因为碎片化，大对象的分配效率会更慢
+
+归根结底，标记清除算法的缺点在于清除之后剩余的对象位置不变而导致的空闲内存不连续，所以只要解决这一点，两个缺点都可以完美解决了。而标记整理（Mark-Compact）算法 就可以有效地解决，它的标记阶段和标记清除算法没有什么不同，只是标记结束后，标记整理算法会将活着的对象（即不需要清理的对象）向内存的一端移动，最后清理掉边界的内存（如下图）
+
+![An image](/img/js/recovery3.jpg)
+
+- 引用计数算法
 
 ## 包管理工具
 
