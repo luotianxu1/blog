@@ -271,6 +271,114 @@ let b = a.filter((current, index, array) => {
 console.log(b) //[1, 2, 3, 4]
 ```
 
+## Map（字典）
+
+Map对象保存键值对，并且能够记住键的原始插入顺序。任何值（对象或者原始值）都可以作为一个键或一个值。
+
+- Map对象这种数据结构和和对象类型，都已键值对的形式存储数据，即 key-vlue 形式。
+- Map对象存储的数据是有序的，而我们平常使用的对象是无序的，所以通常当我们需要使用对象形式（键值对）存储数据且需要有序时，采用Map对象进行存储。
+- Map对象的键值可以是任意类型，我们平时使用的对象只能使用字符串作为键。
+
+> 基本使用
+
+```js
+let defaultMap = new Map([['name', '张三'], ['age', 20]]);
+```
+
+![An image](/img/js/Map.jpg)
+
+```js
+myMap.set('name', '小猪课堂'); // 字符串作为键
+myMap.set(12, '会飞的猪'); // number 类型作为键
+myMap.set({}, '知乎'); // 对象类型作为键
+```
+
+![An image](/img/js/Map2.jpg)
+
+> 获取长度
+
+```js
+let myMapSize = myMap.size;
+```
+
+> 获取值
+
+```js
+let objKey = {};
+myMap.set('name', '小猪课堂'); // 字符串作为键
+let name = myMap.get('name');
+console.log(name); // 小猪课堂 会飞的猪 知乎
+```
+
+> 删除某个值
+
+```js
+myMap.delete('name');
+```
+
+> 判断某个值是否存在
+
+```js
+myMap.has('name'); // 返回 bool 值
+```
+
+## Set（集合）
+
+Set对象允许你存储任何类型的唯一值，无论是原始值或者是对象引用。
+
+- Set对象是一个类数组对象，它长得就很像数组。
+- Set对象存储的值是不重复的，所以我们通常使用它来实现数组去重。
+- Set对象存储的数据不是键值对的形式，而且它可以存储任何类型的数据。
+
+> 基本使用
+
+```js
+let defaultSet = new Set(['张三', 12, true]);
+```
+
+![An image](/img/js/Set.jpg)
+
+> 插入数据
+
+```js
+mySet.add(1);
+```
+
+> 获取长度
+
+```js
+let mySetSize = mySet.size;
+```
+
+> 获取值
+
+由于Set对象存储的不是键值对形式，所以未提供get方法获取值，我们通常遍历它获取值：
+
+```js
+mySet.forEach((item) => {
+  console.log(item)
+})
+```
+
+> 删除某个值
+
+```js
+mySet.delete(1);
+```
+
+> 判断某个值是否存在
+
+```js
+mySet.has(1); // 返回Boolean值
+```
+
+## Map与Set的区别
+
+- Map和Set查找速度都非常快，时间复杂度为O(1)，而数组查找的时间复杂度为O(n)。
+- Map对象初始化的值为一个二维数组，Set对象初始化的值为一维数组。
+- Map对象和Set对象都不允许键重复（可以将Set对象的键想象成值）。
+- Map对象的键是不能改的，但是值能改，Set对象只能通过迭代器来更改值。
+
 ## forEach()与 map()
 
 - forEach
@@ -1754,6 +1862,104 @@ V8 的垃圾回收策略主要基于分代式垃圾回收机制，V8 中将堆�
 采用三色标记法后我们在恢复执行时就好办多了，可以直接通过当前内存中有没有灰色节点来判断整个标记是否完成，如没有灰色节点，直接进入清理阶段，如还有灰色标记，恢复时直接从灰色的节点开始继续执行就可以。
 
 三色标记法的 mark 操作可以渐进执行的而不需每次都扫描整个内存空间，可以很好的配合增量回收进行暂停恢复的一些操作，从而减少 全停顿 的时间。
+
+- 写屏障(增量中修改引用)
+
+一次完整的 GC 标记分块暂停后，执行任务程序时内存中标记好的对象引用关系被修改了，增量中修改引用，可能不太好理解，我们举个例子（如图）
+
+![An image](/img/js/recovery9.jpg)
+
+假如我们有A、B、C三个对象依次引用，在第一次增量分段中全部标记为黑色（活动对象），而后暂停开始执行应用程序也就是 JavaScript 脚本，在脚本中我们将对象 B 的指向由对象 C 改为了对象 D ，接着恢复执行下一次增量分段
+
+这时其实对象C已经无引用关系了，但是目前它是黑色（代表活动对象）此一整轮GC是不会清理C的，不过我们可以不考虑这个，因为就算此轮不清理等下一轮GC也会清理，这对我们程序运行并没有太大影响
+我们再看新的对象 D 是初始的白色，按照我们上面所说，已经没有灰色对象了，也就是全部标记完毕接下来要进行清理了，新修改的白色对象D将在次轮GC的清理阶段被回收，还有引用关系就被回收，后面我们程序里可能还会用到对象D呢，这肯定是不对的
+
+为了解决这个问题，V8增量回收使用 写屏障 (Write-barrier) 机制，即一旦有黑色对象引用白色对象，该机制会强制将引用的白色对象改为灰色，从而保证下一次增量GC标记阶段可以正确标记，这个机制也被称作 强三色不变性
+
+那在我们上图的例子中，将对象B的指向由对象C改为对象D后，白色对象D会被强制改为灰色
+
+- 增量标记与惰性清理的优缺？
+
+增量标记与惰性清理的出现，使得主线程的停顿时间大大减少了，让用户与浏览器交互的过程变得更加流畅。但是由于每个小的增量标记之间执行了 JavaScript 代码，堆中的对象指针可能发生了变化，需要使用写屏障技术来记录这些引用关系的变化，所以增量标记缺点也很明显：
+首先是并没有减少主线程的总暂停的时间，甚至会略微增加，其次由于写屏障机制的成本，增量标记可能会降低应用程序的吞吐量。
+
+#### 并发回收(Concurrent)
+
+它指的是主线程在执行 JavaScript 的过程中，辅助线程能够在后台完成执行垃圾回收的操作，辅助线程在执行垃圾回收的时候，主线程也可以自由执行而不会被挂起（如下图）。
+
+![An image](/img/js/recovery10.jpg)
+
+辅助线程在执行垃圾回收的时候，主线程也可以自由执行而不会被挂起，这是并发的优点，但同样也是并发回收实现的难点，因为它需要考虑主线程在执行 JavaScript  时，堆中的对象引用关系随时都有可能发生变化，这时辅助线程之前做的一些标记或者正在进行的标记就会要有所改变，所以它需要额外实现一些读写锁机制来控制这一点。
+
+## 内存泄漏
+
+### 内存泄漏的几种情况
+
+- 意外的全局变量
+
+```js
+function foo(arg) {
+    bar = "this is a hidden global variable";
+}
+```
+
+bar没被声明,会变成一个全局变量,在页面关闭之前不会被释放。
+
+```js
+function foo() {
+    this.variable = "potential accidental global";
+}
+// foo 调用自己，this 指向了全局对象（window）
+foo();
+```
+
+在 JavaScript 文件头部加上 'use strict'，可以避免此类错误发生。启用严格模式解析 JavaScript ，避免意外的全局变量。
+
+- 被遗忘的计时器或回调函数
+
+```js
+var someResource = getData();
+setInterval(function() {
+    var node = document.getElementById('Node');
+    if(node) {
+        // 处理 node 和 someResource
+        node.innerHTML = JSON.stringify(someResource));
+    }
+}, 1000);
+```
+
+这样的代码很常见，如果id为Node的元素从DOM中移除，该定时器仍会存在，同时，因为回调函数中包含对someResource的引用，定时器外面的someResource也不会被释放。
+
+- 闭包
+
+```js
+function bindEvent(){
+  var obj=document.createElement('xxx')
+  obj.onclick=function(){
+    // Even if it is a empty function
+  }
+}
+```
+
+闭包可以维持函数内局部变量，使其得不到释放。上例定义事件回调时，由于是函数内定义函数，并且内部函数--事件回调引用外部函数，形成了闭包。
+
+```js
+// 将事件处理函数定义在外面
+function bindEvent() {
+  var obj = document.createElement('xxx')
+  obj.onclick = onclickHandler
+}
+// 或者在定义事件处理函数的外部函数中，删除对dom的引用
+function bindEvent() {
+  var obj = document.createElement('xxx')
+  obj.onclick = function() {
+    // Even if it is a empty function
+  }
+  obj = null
+}
+```
+
+- 没有清理的DOM元素引用
 
 ## 包管理工具
 

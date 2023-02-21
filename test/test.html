@@ -8,9 +8,9 @@
     </head>
     <body>
         <script>
-            const a = Symbol()
-            const b = Symbol()
-            console.log(a === b) // false
+            let defaultSet = new Set(['张三', 12, true])
+            defaultSet.add(1)
+            console.log(defaultSet)
         </script>
     </body>
 </html>
