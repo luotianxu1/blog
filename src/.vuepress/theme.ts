@@ -52,7 +52,7 @@ export default hopeTheme({
     ],
     lastUpdated: true, // 显示页面最后更新时间
     contributors: true, // 显示页面贡献者
-    editLink: true, // 展示编辑此页链接
+    editLink: false, // 展示编辑此页链接
     footer: '', // 页脚内容
     copyright: 'Copyright © <罗天旭>', // 版权信息
     displayFooter: true, // 显示页脚

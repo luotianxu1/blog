@@ -1,8 +1,8 @@
 ---
 title: 浏览器输入URL过程
 icon: markdown
-order: 1
-date: 2023-02-17
+order: 7
+date: 2023-02-23
 category:
   - 面试
 tag:
