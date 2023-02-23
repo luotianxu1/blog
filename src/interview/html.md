@@ -40,11 +40,11 @@ tag:
 - 在 HTML 中所有元素都可以看成是一个盒子
 - 盒子的组成：内容 content、内边距 padding、边框 border、外边距 margin
 - 盒模型的类型：
-    &emsp; 标准和模型（margin+border+padding+content）
-    &emsp; IE 盒模型（margin+content(border+padding)）
+  - 标准和模型（margin+border+padding+content）
+  - IE 盒模型（margin+content(border+padding)）
 - 控制盒模型模式：
-    `box-sizing: content-box;`默认值、标准盒模型
-    `box-sizing：border-box;`表示 IE 盒模型（怪异盒模型）
+  - `box-sizing: content-box;`默认值、标准盒模型
+  - `box-sizing：border-box;`表示 IE 盒模型（怪异盒模型）
 
 ## padding 与 margin 有什么不同
 
@@ -66,6 +66,17 @@ margin 作用于外部对象
 5. 列表的属性 list-style
 6. 页面样式属性 page
 7. 声音的样式属性
+
+## CSS权重计算
+
+！important > 内联样式 > ID > 类属性、属性选择器或者伪类选择器 > 标签选择器
+
+![An image](/img/html/css.jpg)
+
+![An image](/img/html/css2.jpg)
+
+最终从A开始逐层比较，A => B =>C =>D 哪个大优先哪个样式生效，否则后面覆盖前面样式，这也
+是为什么有的嵌套多层样式可以实现覆盖的原因。样式名称也有就近原则，作用在当前标签的能覆盖继承来的样式。最终将这几个条件合并起来就是css的权重问题和计算规则。
 
 ## 隐藏元素的方法
 
@@ -202,6 +213,12 @@ transform: scale(0.5);
     display: inline-block;
 }
 ```
+
+## rgba() 和 opacity 的透明效果有什么不同？
+
+- opacity 作用于元素，以及元素内的所有内容的透明度
+- rgba() 只作用于元素的颜色或其背景色。（设置 rgba 透明的元素的子元素不会继承透明效
+果！）
 
 ## 重排重绘区别
 
@@ -407,3 +424,20 @@ BFC 就是页面上的一个隔离独立容器，容器里面的子元素不会�
   - VSCode插件
 
 > flex 的弹性布局
+
+## iframe有那些缺点
+
+- iframe 会阻塞主页面的 Onload 事件
+- 搜索引擎的检索程序无法解读这种页面， 不利于 SEO
+- iframe 和主页面共享连接池，而浏览器对相同域的连接有限制，所以会影响页面的并行加载
+
+## 网页制作会用到的图片格式有哪些
+
+png-8，png-24，jpeg，gif，svg。
+
+但是上面的那些都不是面试官想要的最后答案。面试官希望听到是Webp。（是否有关注新技术，新鲜
+事物）
+
+科普一下Webp：WebP格式，谷歌（google）开发的一种旨在加快图片加载速度的图片格式。图片压缩
+体积大约只有JPEG的2/3，并能节省大量的服务器带宽资源和数据空间。Facebook Ebay等知名网站已经
+开始测试并使用WebP格式。在质量相同的情况下，WebP格式图像的体积要比JPEG格式图像小40%

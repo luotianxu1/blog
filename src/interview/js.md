@@ -26,7 +26,7 @@ Sting: concat() length slice() split()
 
 ## 基本数据类型和引用数据类型
 
-- 基本数据类型： String Number Boolean undefined null，基本数据类型保存在内存中，保存的就是一个具体的值
+- 基本数据类型： String Number Boolean undefined null Bigint Symbol，基本数据类型保存在内存中，保存的就是一个具体的值
 - 引用数据类型（复杂数据类型）：Object Function Array，引用数据类型保存在堆内存中，声明一个引用类型的变量，它保存的是引用类型数据的地址。假如声明两个引用类型同时指向了一个地址的时候，修改其中一个那么另外一个也会改变。
 
 ```js
@@ -37,100 +37,6 @@ let obj1 = obj
 obj1.name = '李四'
 console.log(obj.name) //李四
 ```
-
-## ES6 新特性
-
-1. 新增块级作用域（let、const）
-2. 新增定义类的语法糖（class）
-3. 新增了一种基本数据类型（symbol）
-4. 新增了结构赋值
-5. 新增了函数参数的默认值
-6. 新增数组 API
-7. 对象和数组新增了扩展运算符
-8. Promise
-9. 新增模块化（import export）
-10. 新增 set 和 map 数据结构
-11. 新增 generator
-12. 新增箭头函数
-
-## var、let、const
-
-- var
-
-1. 声明提升
-2. 变量覆盖
-3. 没有块作用域
-4. 不存在暂时性死区
-
-```js
-// 声明提升
-console.log(name) //ltx
-var name = 'ltx'
-```
-
-```js
-// 变量覆盖
-var name = '123'
-var name = '456'
-console.log(name) // '456'
-```
-
-```js
-// 没有块作用域
-function fn2() {
-    for (var i = 0; i < 5; i++) {}
-    console.log(i) // 5
-}
-fn(2)
-```
-
-```js
-var a = 0
-consolg.log(a, window.a) // 0,0
-if (true) {
-    consolg.log(a, window.a) // fn,0
-    a = 10
-    consolg.log(a, window.a) // 10,0
-    function a() {} // 提升 隐式操作
-    consolg.log(a, window.a) // 10,10
-    a = 20
-    consolg.log(a, window.a) // 20,10
-}
-consolg.log(a, window.a) // 10,10
-```
-
-- const
-
-1. const 声明之后必须赋值
-2. const 定义的值不能修改
-3. const 支持块级作用域不存在声明提升和变量覆盖
-4. 存在暂时性死区
-
-## 暂时性死区
-
-在代码块内，使用let命令声明变量之前，该变量都是不可用的。这在语法上，称为“暂时性死区”（temporal dead zone，简称 TDZ）
-
-```js
-let a = 'a'
-function log() {
-  console.log(a)
-  let a = 'b'
-
-}
-log() // ReferenceError: a is not defined
-```
-
-在本实例中，变量a的作用域，一个是全局作用域，另一个是函数作用域，已经被确定。也就是说函数内部的a此时已经确定为函数内部的作用域。
-
-在执行阶段时，根据作用域链原则，函数内部会先寻找函数内部的作用域变量， 既然a在函数中已经被确定，那么就不会向全局作用域去寻找a了。默认函数内部a是已经定义的。但函数顺序执行的时候，访问a的同时并没有在访问之前声明a，也就是树在当前作用域下，没有找到a的生命和定义，就会出现 为定义的错误了。
-
-## 箭头函数
-
-- 不能作为构造函数使用，不能用 new
-- 箭头函数没有原型
-- 箭头函数没有 arguments
-- 箭头函数不能用 call，bind，apply 去改变 this 的指向
-- this 指向外层第一个函数的 this
 
 ## Symbol
 
@@ -237,6 +143,100 @@ console.log(opt.call('aaa')) //[object String]
 console.log(opt.call([])) //[object Array]
 console.log(opt.call({})) //[object Object]
 ```
+
+## ES6 新特性
+
+1. 新增块级作用域（let、const）
+2. 新增定义类的语法糖（class）
+3. 新增了一种基本数据类型（symbol）
+4. 新增了结构赋值
+5. 新增了函数参数的默认值
+6. 新增数组 API
+7. 对象和数组新增了扩展运算符
+8. Promise
+9. 新增模块化（import export）
+10. 新增 set 和 map 数据结构
+11. 新增 generator
+12. 新增箭头函数
+
+## var、let、const
+
+- var
+
+1. 声明提升
+2. 变量覆盖
+3. 没有块作用域
+4. 不存在暂时性死区
+
+```js
+// 声明提升
+console.log(name) //ltx
+var name = 'ltx'
+```
+
+```js
+// 变量覆盖
+var name = '123'
+var name = '456'
+console.log(name) // '456'
+```
+
+```js
+// 没有块作用域
+function fn2() {
+    for (var i = 0; i < 5; i++) {}
+    console.log(i) // 5
+}
+fn(2)
+```
+
+```js
+var a = 0
+consolg.log(a, window.a) // 0,0
+if (true) {
+    consolg.log(a, window.a) // fn,0
+    a = 10
+    consolg.log(a, window.a) // 10,0
+    function a() {} // 提升 隐式操作
+    consolg.log(a, window.a) // 10,10
+    a = 20
+    consolg.log(a, window.a) // 20,10
+}
+consolg.log(a, window.a) // 10,10
+```
+
+- const
+
+1. const 声明之后必须赋值
+2. const 定义的值不能修改
+3. const 支持块级作用域不存在声明提升和变量覆盖
+4. 存在暂时性死区
+
+## 暂时性死区
+
+在代码块内，使用let命令声明变量之前，该变量都是不可用的。这在语法上，称为“暂时性死区”（temporal dead zone，简称 TDZ）
+
+```js
+let a = 'a'
+function log() {
+  console.log(a)
+  let a = 'b'
+
+}
+log() // ReferenceError: a is not defined
+```
+
+在本实例中，变量a的作用域，一个是全局作用域，另一个是函数作用域，已经被确定。也就是说函数内部的a此时已经确定为函数内部的作用域。
+
+在执行阶段时，根据作用域链原则，函数内部会先寻找函数内部的作用域变量， 既然a在函数中已经被确定，那么就不会向全局作用域去寻找a了。默认函数内部a是已经定义的。但函数顺序执行的时候，访问a的同时并没有在访问之前声明a，也就是树在当前作用域下，没有找到a的生命和定义，就会出现 为定义的错误了。
+
+## 箭头函数
+
+- 不能作为构造函数使用，不能用 new
+- 箭头函数没有原型
+- 箭头函数没有 arguments
+- 箭头函数不能用 call，bind，apply 去改变 this 的指向
+- this 指向外层第一个函数的 this
 
 ## Promise
 
@@ -1203,11 +1203,36 @@ console.log(obj)
 console.log(newObjC)
 ```
 
-## 内存泄漏
+## 异步编程的实现方式
 
-JS 里已经分配内存地址的对象，但是由于长时间没有释放或者没办法清除，造成长期占用内存的现象，会让内存资源大幅浪费，最终导致运行速度慢，甚至崩溃的情况
+- 回调函数
 
-一些未声明直接赋值的变量、一些未清空的定时器、过度的闭包、一些引用元素没有被清除
+  - 优点：简单、容易理解
+  - 缺点：不利于维护，代码耦合高
+
+- 事件监听(采用时间驱动模式，取决于某个事件是否发生)
+
+  - 优点：容易理解，可以绑定多个事件，每个事件可以指定多个回调函数
+  - 缺点：事件驱动型，流程不够清晰
+
+- 发布/订阅(观察者模式)
+
+类似于事件监听，但是可以通过‘消息中心‘，了解现在有多少发布者，多少订阅者
+
+- Promise 对象
+
+  - 优点：可以利用 then 方法，进行链式写法；可以书写错误时的回调函数；
+  - 缺点：编写和理解，相对比较难
+
+- Generator 函数
+
+  - 优点：函数体内外的数据交换、错误处理机制
+  - 缺点：流程管理不方便
+
+- async 函数
+
+  - 优点：内置执行器、更好的语义、更广的适用性、返回的是 Promise 、结构清晰。
+  - 缺点：错误处理机制
 
 ## 事件委托
 
@@ -1464,6 +1489,12 @@ console.log('end')
 
 ![An image](/img/js/thread.jpg)
 
+## 前端模块化
+
+前端模块化就是复杂的文件编程一个一个独立的模块，比如js文件等等，分成独立的模块有利于重用
+（复用性）和维护（版本迭代），这样会引来模块之间相互依赖的问题，所以有了commonJS规范，
+AMD，CMD规范等等，以及用于js打包（编译等处理）的工具webpack。
+
 ## 递归求和
 
 ```js
@@ -1705,6 +1736,15 @@ var a = [1, 2, 4],
 const newArr = a.concat(b).filter((item, _, arr) => {
     return arr.indexOf(item) === arr.lastIndexOf(item)
 })
+```
+
+## 快速打乱数组
+
+```js
+var arr = [1,2,3,4,5,6,7,8,9,10];
+arr.sort(()=> Math.random() - 0.5)
+//利用sort return 大于等于0不交换位置，小于0交换位置 
+// [5, 8, 4, 3, 2, 9, 10, 6, 1, 7]
 ```
 
 ## V8 引擎
