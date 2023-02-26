@@ -10,8 +10,8 @@ export const MyNavbar = navbar([
     {
         text: '面试题',
         icon: 'discover',
-        prefix: '/interview/',
-        link: '/interview/',
+        prefix: '/study/',
+        link: '/study/',
     },
     {
         text: 'threejs',

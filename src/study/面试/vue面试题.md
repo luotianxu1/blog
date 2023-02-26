@@ -71,7 +71,7 @@ console.log(app)
 ```
 
 new Vue 就是对构造函数 Vue 进行实例化，执行结果如下：
-![An image](/img/vue/vue.jpg)
+![An image](/img/study/interview/vue.jpg)
 可以看出实例化后的实例中包含了很多属性，用来对当前 app 进行描述，当然复杂的 Vue 项目这个 app 将会是一个树结构，通过$parent和$children 维护父子关系。
 
 new Vue 的过程中还会执行 this.\_init 方法进行初始化处理。

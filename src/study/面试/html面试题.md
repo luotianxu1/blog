@@ -75,9 +75,9 @@ margin 作用于外部对象
 
 ！important > 内联样式 > ID > 类属性、属性选择器或者伪类选择器 > 标签选择器
 
-![An image](/img/html/css.jpg)
+![ ](/img/study/interview/css.jpg)
 
-![An image](/img/html/css2.jpg)
+![ ](/img/study/interview/css2.jpg)
 
 最终从A开始逐层比较，A => B =>C =>D 哪个大优先哪个样式生效，否则后面覆盖前面样式，这也
 是为什么有的嵌套多层样式可以实现覆盖的原因。样式名称也有就近原则，作用在当前标签的能覆盖继承来的样式。最终将这几个条件合并起来就是css的权重问题和计算规则。
@@ -344,7 +344,7 @@ BFC 就是页面上的一个隔离独立容器，容器里面的子元素不会�
 />
 ```
 
-![An image](/img/html/viewport.jpg)
+![ ](/img/study/interview/viewport.jpg)
 
 ### 适配方案
 
@@ -356,7 +356,7 @@ BFC 就是页面上的一个隔离独立容器，容器里面的子元素不会�
 
   - 方案一： 媒体查询
     rem 单位是相对于 html 与元素的 font-size 来设置的，那么我们需要在不同的屏幕下有不同的尺寸，可以动态的修改 html 的 font-size。
-  ![An image](/img/html/rem.jpg)
+  ![ ](/img/study/interview/rem.jpg)
   缺点：
    1. 针对不同的屏幕编写大量媒体查询
    2. 不能实时改变
