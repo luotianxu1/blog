@@ -1,12 +1,12 @@
 ---
-title: 浏览器输入URL过程
+title: 输入URL过程
 icon: markdown
 order: 1
 date: 2023-02-23
 category:
   - 浏览器
 tag:
-  - URL
+  - 页面渲染
 ---
 
 ## 大致流程
@@ -19,6 +19,20 @@ tag:
 6. 渲染页面
 
 ## 一、URL解析
+
+URL（Uniform Resource Locator），统一资源定位符，用于定位互联网上资源，俗称网址。
+比如 <http://www.w3school.com.cn/html/index.asp>，遵守以下的语法规则：
+
+scheme://host.domain:port/path/filename
+
+各部分解释如下：
+
+- scheme - 定义因特网服务的类型。常见的协议有 http、https、ftp、file，其中最常见的类型是 http，而 https 则是进行加密的网络传输。
+- host - 定义域主机（http 的默认主机是 www）
+- domain - 定义因特网域名，比如 w3school.com.cn
+- port - 定义主机上的端口号（http 的默认端口号是 80）
+- path - 定义服务器上的路径（如果省略，则文档必须位于网站的根目录中）。
+- filename - 定义文档/资源的名称
 
 ### 1、地址解析
 
@@ -216,6 +230,8 @@ TCP/IP 分为四层，在发送数据时，每层都要对数据进行封装：
 
 > 注意：渲染树会忽略那些不需要渲染的节点，比如设置了display:none的节点。
 
+![ ](/img/study/browser/url8.jpg)
+
 - 计算
 
 通过计算让任何尺寸值都减少到三个可能之一：auto、百分比、px，比如把rem转化为px。
@@ -239,23 +255,14 @@ TCP/IP 分为四层，在发送数据时，每层都要对数据进行封装：
 1. CSS 会阻塞 JS 执行
 2. JS 会阻塞后面的 DOM 解析
 
+![ ](/img/study/browser/url9.jpg)
+
 为了避免这种情况，应该以下原则：
 
 1. CSS 资源排在 JavaScript 资源前面
 2. JS 放在 HTML 最底部，也就是`</body>`前
 
-另外，如果要改变阻塞模式，可以使用 defer 与 async
-
-```js
-<script src="a.js"></script>
-```
-
-浏览器会做如下处理
-
-1. 停止解析 document.
-2. 请求 a.js
-3. 执行 a.js 中的脚本
-4. 继续解析 document
+如果要改变阻塞模式，可以使用 defer 与 async
 
 ```js
 <script src="d.js" defer></script>

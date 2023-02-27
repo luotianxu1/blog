@@ -227,6 +227,39 @@ function defineReactive(obj, key, val) {
 Vue.set 方法是 vue 中的一个补丁方法（正常我们添加属性是不会触发更新的，我们数组无法监控到索引和长度）
 如何实现的 我们给每一个对象都增添了一个 dep 属性 当属性添加或者删除时，手动触发对象本身 dep 来进行更新
 
+## vm.$set()怎么解决对象新增属性不能响应的问题
+
+```js
+export function set (target: Array<any> | Object, key: any, val: any): any {
+  // target 为数组
+  if (Array.isArray(target) && isValidArrayIndex(key)) {
+    // 修改数组的长度, 避免索引>数组长度导致splcie()执行有误
+    target.length = Math.max(target.length, key)
+    // 利用数组的splice变异方法触发响应式  
+    target.splice(key, 1, val)
+    return val
+  }
+  // key 已经存在，直接修改属性值  
+  if (key in target && !(key in Object.prototype)) {
+    target[key] = val
+    return val
+  }
+  const ob = (target: any).__ob__
+  // target 本身就不是响应式数据, 直接赋值
+  if (!ob) {
+    target[key] = val
+    return val
+  }
+  // 对属性进行响应式处理
+  defineReactive(ob.value, key, val)
+  ob.dep.notify()
+  return val
+}
+```
+
+- 如果目标是数组，直接使用数组的 splice 方法触发相应式；
+- 如果目标是对象，会先判读属性是否存在、对象是否是响应式，最终如果要对属性进行响应式处理，则是通过调用 defineReactive 方法进行响应式处理（ defineReactive 方法就是 Vue 在初始化对象时，给对象属性采用 Object.defineProperty 动态添加 getter 和 setter 的功能所调用的方法）
+
 ## props、methods、data、computed 的执行顺序
 
 ```js
