@@ -8,7 +8,7 @@ export const MyNavbar = navbar([
         link: '/',
     },
     {
-        text: '面试题',
+        text: '基础',
         icon: 'discover',
         prefix: '/study/',
         link: '/study/',

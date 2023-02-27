@@ -113,35 +113,110 @@ console.log(abc())
 
 ## 数据类型检测方式
 
-- typeof() 对于基本数据类型没问题，遇到引用数据类型不管用
+- typeof
+
+返回一个表示数据类型的字符串，返回结果包括：number、boolean、string、symbol、object、undefined、function等7种数据类型，但不能判断null、array等
 
 ```js
-console.log(typeof 555) // number
-console.log(typeof [1, 2, 3]) // object
+typeof Symbol(); // symbol 有效
+typeof ''; // string 有效
+typeof 1; // number 有效
+typeof true; //boolean 有效
+typeof undefined; //undefined 有效
+typeof new Function(); // function 有效
+typeof null; //object 无效
+typeof [] ; //object 无效
+typeof new Date(); //object 无效
+typeof new RegExp(); //object 无效
 ```
 
-- instanceof() 只能判断引用数据类型，不能判断基本数据类型
+- instanceof
+
+instanceof 是用来判断A是否为B的实例，表达式为：A instanceof B，如果A是B的实例，则返回true,否则返回false。instanceof 运算符用来测试一个对象在其原型链中是否存在一个构造函数的 prototype 属性。
 
 ```js
-console.log([] instanceof Array) // true
-console.log('string' instanceof String) // false
+[] instanceof Array; //true
+{} instanceof Object;//true
+new Date() instanceof Date;//true
+new RegExp() instanceof RegExp//true
 ```
 
-- constructor 几乎可以判断基本数据类型和引用数据类型,如果声明了一个构造函数，并把它的原型指向了 Array
+关于数组的类型判断，还可以用ES6新增Array.isArray()
 
 ```js
-console.log('abc'.constructor === String) // true
+Array.isArray([]);   // true
+```
+
+弊端
+
+对于基本数据类型来说，字面量方式创建出来的结果和实例方式创建的是有一定的区别的
+
+```js
+console.log(1 instanceof Number)//false
+console.log(new Number(1) instanceof Number)//true
+```
+
+从严格意义上来讲，只有实例创建出来的结果才是标准的对象数据类型值，也是标准的Number这个类的一个实例；对于字面量方式创建出来的结果是基本的数据类型值，不是严谨的实例，但是由于JS的松散特点，导致了可以使用Number.prototype上提供的方法。
+
+只要在当前实例的原型链上，我们用其检测出来的结果都是true。在类的原型继承中，我们最后检测出来的结果未必准确。
+
+```js
+var arr = [1, 2, 3];
+console.log(arr instanceof Array) // true
+console.log(arr instanceof Object);  // true
+function fn(){}
+console.log(fn instanceof Function)// true
+console.log(fn instanceof Object)// true
+```
+
+不能检测null 和 undefined
+
+对于特殊的数据类型null和undefined，他们的所属类是Null和Undefined，但是浏览器把这两个类保护起来了，不允许我们在外面访问使用。
+
+- constructor
+
+constructor作用和instanceof非常相似。但constructor检测 Object与instanceof不一样，还可以处理基本数据类型的检测。
+
+```js
+var aa=[1,2];
+console.log(aa.constructor===Array);//true
+console.log(aa.constructor===RegExp);//false
+console.log((1).constructor===Number);//true
+var reg=/^$/;
+console.log(reg.constructor===RegExp);//true
+console.log(reg.constructor===Object);//false 
+```
+
+弊端
+
+null 和 undefined 是无效的对象，因此是不会有 constructor 存在的，这两种类型的数据需要通过其他方式来判断。
+
+函数的 constructor 是不稳定的，这个主要体现在把类的原型进行重写，在重写的过程中很有可能出现把之前的constructor给覆盖了，这样检测出来的结果就是不准确的
+
+```js
+function Fn(){}
+Fn.prototype = new Array()
+var f = new Fn
+console.log(f.constructor)//Array
 ```
 
 - Object.prototype.toString.call()
 
+Object.prototype.toString.call() 最准确最常用的方式。首先获取Object原型上的toString方法，让方法执行，让toString方法中的this指向第一个参数的值。
+
 ```js
-var opt = Object.prototype.toString
-console.log(opt.call(2)) //[object Number]
-console.log(opt.call(true)) //[object Boolean]
-console.log(opt.call('aaa')) //[object String]
-console.log(opt.call([])) //[object Array]
-console.log(opt.call({})) //[object Object]
+Object.prototype.toString.call('') ;   // [object String]
+Object.prototype.toString.call(1) ;    // [object Number]
+Object.prototype.toString.call(true) ; // [object Boolean]
+Object.prototype.toString.call(undefined) ; // [object Undefined]
+Object.prototype.toString.call(null) ; // [object Null]
+Object.prototype.toString.call(new Function()) ; // [object Function]
+Object.prototype.toString.call(new Date()) ; // [object Date]
+Object.prototype.toString.call([]) ; // [object Array]
+Object.prototype.toString.call(new RegExp()) ; // [object RegExp]
+Object.prototype.toString.call(new Error()) ; // [object Error]
+Object.prototype.toString.call(document) ; // [object HTMLDocument]
+Object.prototype.toString.call(window) ; //[object global] window是全局对象global的引用
 ```
 
 ## ES6 新特性
