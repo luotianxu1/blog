@@ -8,17 +8,34 @@
     </head>
     <body>
         <script>
-            let arr = [
-                1,
-                3,
-                {
-                    username: ' kobe',
-                },
-                function () {},
-            ]
-            let arr4 = JSON.parse(JSON.stringify(arr))
-            arr4[2].username = 'duncan'
-            console.log(arr, arr4)
+            function loadImg(src) {
+                var promise = new Promise(function (resolve, reject) {
+                    var img = document.createElement('img')
+                    img.onload = function () {
+                        resolve(img)
+                    }
+                    img.onerror = function () {
+                        reject('图片加载失败')
+                    }
+                    img.src = src
+                })
+                return promise
+            }
+            var src = 'https://www.imooc.com/static/img/index/logo_new.png'
+            var result = loadImg(src)
+            result
+                .then(
+                    function (img) {
+                        console.log(1, img.width)
+                        return img
+                    },
+                    function () {
+                        console.log('error 1')
+                    }
+                )
+                .then(function (img) {
+                    console.log(2, img.height)
+                })
         </script>
     </body>
 </html>
