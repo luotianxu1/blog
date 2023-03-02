@@ -50,7 +50,7 @@ let a2 = Symbol('11')
 console.log(a1 === a2) // flase
 ```
 
-![ ](/img/study/interview/symbol.jpg)
+![ ](/img/interview/symbol.jpg)
 
 - 不能与其他数据进行运算
 
