@@ -1,6 +1,6 @@
 ---
-title: threejs
-icon: markdown
+title: CSS
+icon: css
 index: false
 article: false
 timeline: false

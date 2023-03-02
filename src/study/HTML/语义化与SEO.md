@@ -1,5 +1,5 @@
 ---
-title: 语义化
+title: 语义化与SEO
 icon: markdown
 order: 1
 date: 2023-02-25

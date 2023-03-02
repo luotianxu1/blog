@@ -4,21 +4,28 @@ export const MySidebar = sidebar({
     '/study/': [
         {
             text: '基础',
-            icon: 'creative',
+            icon: 'zaixianxuexi',
+            children: 'structure',
+        },
+    ],
+    '/interview/': [
+        {
+            text: '面试',
+            icon: 'mianshi',
             children: 'structure',
         },
     ],
     '/threejs/': [
         {
             text: 'threejs',
-            icon: 'creative',
+            icon: 'threejs',
             children: 'structure',
         },
     ],
     '/other/': [
         {
             text: '其他',
-            icon: 'creative',
+            icon: 'qita',
             children: 'structure',
         },
     ],

@@ -3,25 +3,31 @@ import { navbar } from 'vuepress-theme-hope'
 export const MyNavbar = navbar([
     {
         text: '主页',
-        icon: 'discover',
+        icon: 'zhuye',
         prefix: '/',
         link: '/',
     },
     {
         text: '基础',
-        icon: 'discover',
+        icon: 'zaixianxuexi',
         prefix: '/study/',
         link: '/study/',
     },
     {
+        text: '面试',
+        icon: 'mianshi',
+        prefix: '/interview/',
+        link: '/interview/',
+    },
+    {
         text: 'threejs',
-        icon: 'edit',
+        icon: 'threejs',
         prefix: '/threejs/',
         link: '/threejs/',
     },
     {
         text: '其他',
-        icon: 'edit',
+        icon: 'qita',
         prefix: '/other/',
         link: '/other/',
     },
