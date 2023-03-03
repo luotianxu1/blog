@@ -71,7 +71,7 @@ export default hopeTheme({
             // "/config/page.html": "1234"
         },
     },
-    iconAssets: '//at.alicdn.com/t/c/font_3926889_xvrlsaiw7oh.css', // 字体图标资源链接
+    iconAssets: '//at.alicdn.com/t/c/font_3926889_wtbxab9n9fr.css', // 字体图标资源链接
     iconPrefix: 'iconfont icon-',
     // page meta
     metaLocales: {

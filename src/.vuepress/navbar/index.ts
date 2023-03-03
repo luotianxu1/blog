@@ -26,6 +26,12 @@ export const MyNavbar = navbar([
         link: '/threejs/',
     },
     {
+        text: '项目',
+        icon: 'xiangmu',
+        prefix: '/project/',
+        link: '/project/',
+    },
+    {
         text: '其他',
         icon: 'qita',
         prefix: '/other/',
