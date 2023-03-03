@@ -22,6 +22,13 @@ export const MySidebar = sidebar({
             children: 'structure',
         },
     ],
+    '/project/': [
+        {
+            text: 'project',
+            icon: 'threejs',
+            children: 'structure',
+        },
+    ],
     '/other/': [
         {
             text: '其他',
