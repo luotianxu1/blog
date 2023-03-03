@@ -33,6 +33,12 @@ npm run dev
 
 ![ ](/img/project/vue1.jpg)
 
+## 安装scss
+
+```npm
+npm install sass --save-dev
+```
+
 ## git
 
 ### 初始化 git 本地仓库
@@ -345,3 +351,7 @@ AutoImport 中 enabled 配置第一次运行时改为 true，后面即可改回 
     "exclude": ["node_modules"]
 }
 ```
+
+## github地址
+
+<https://github.com/luotianxu1/vue3-base>

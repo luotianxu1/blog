@@ -27,7 +27,7 @@ export const MyNavbar = navbar([
     },
     {
         text: '项目',
-        icon: 'threejs',
+        icon: 'xiangmu',
         prefix: '/project/',
         link: '/project/',
     },
