@@ -24,7 +24,7 @@ export const MySidebar = sidebar({
     ],
     '/project/': [
         {
-            text: 'project',
+            text: '项目',
             icon: 'xiangmu',
             children: 'structure',
         },
