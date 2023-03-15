@@ -9,8 +9,6 @@ tag:
     - 材质
 ---
 
-<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/meshLambertMaterial"/>
-
 ## MeshLambertMaterial
 
 一种非光泽表面的材质，没有镜面高光。
@@ -18,6 +16,8 @@ tag:
 该材质使用基于非物理的Lambertian模型来计算反射率。 这可以很好地模拟一些表面（例如未经处理的木材或石材），但不能模拟具有镜面高光的光泽表面（例如涂漆木材）。
 
 由于反射率和光照模型的简单性，MeshPhongMaterial，MeshStandardMaterial或者MeshPhysicalMaterial 上使用这种材质时会以一些图形精度为代价，得到更高的性能。
+
+<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/meshLambertMaterial"/>
 
 ## 构造器
 

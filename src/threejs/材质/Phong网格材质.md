@@ -9,8 +9,6 @@ tag:
     - 材质
 ---
 
-<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/meshPhongMaterial"/>
-
 ## MeshPhongMaterial
 
 一种用于具有镜面高光的光泽表面的材质。
@@ -18,6 +16,8 @@ tag:
 该材质使用非物理的Blinn-Phong模型来计算反射率。 与MeshLambertMaterial中使用的Lambertian模型不同，该材质可以模拟具有镜面高光的光泽表面（例如涂漆木材）。
 
 在MeshStandardMaterial或MeshPhysicalMaterial上使用此材质时，性能通常会更高 ，但会牺牲一些图形精度。
+
+<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/meshPhongMaterial"/>
 
 ## 构造器
 
