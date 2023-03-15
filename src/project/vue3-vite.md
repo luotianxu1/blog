@@ -229,6 +229,20 @@ npx husky add .husky/pre-commit
  }
 ```
 
+## mac获取权限
+
+对于 liux 或者 macos 系统中，可能会出现 因为没有将钩子 '.husky/pre-commit' 设置为可执行 钩子被忽略的错误。
+
+执行
+
+```text
+chmod +x .husky/pre-commit
+```
+
+```text
+chmod +x .husky/commit-msg
+```
+
 ## 统一编辑器配置
 
 根目录下新增`.editorconfig`文件
