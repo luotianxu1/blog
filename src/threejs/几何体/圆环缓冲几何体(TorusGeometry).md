@@ -9,8 +9,6 @@ tag:
     - 几何体
 ---
 
-<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/torusGeometry"/>
-
 ## TorusGeometry
 
 ```js
@@ -19,6 +17,8 @@ const material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
 const torus = new THREE.Mesh( geometry, material );
 scene.add( torus );
 ```
+
+<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/torusGeometry"/>
 
 ## 构造器
 
