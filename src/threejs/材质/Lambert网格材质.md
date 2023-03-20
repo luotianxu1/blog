@@ -29,7 +29,7 @@ parameters - (可选)用于定义材质外观的对象，具有一个或多个�
 
 ## 属性
 
-共有属性请参见其基类Material
+共有属性请参见其基类[Material](/threejs/材质/材质.md)
 
 ### .alphaMap : Texture
 
@@ -161,4 +161,4 @@ alpha贴图是一张灰度纹理，用于控制整个表面的不透明度。（
 
 ## 方法
 
-共有方法请参见其基类Material
+共有方法请参见其基类[Material](/threejs/材质/材质.md)

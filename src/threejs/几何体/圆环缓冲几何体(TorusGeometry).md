@@ -44,7 +44,7 @@ scene.add( torus );
 
 ## 属性
 
-共有属性请参见其基类BufferGeometry
+共有属性请参见其基类[BufferGeometry](/threejs/几何体/BufferGeometry.md)
 
 ### .parameters
 
@@ -52,4 +52,4 @@ scene.add( torus );
 
 ## 方法
 
-共有方法请参见其基类BufferGeometry
+共有方法请参见其基类[BufferGeometry](/threejs/几何体/BufferGeometry.md)

@@ -9,34 +9,14 @@ heroFullScreen: true
 tagline: 搬砖
 projects:
   - icon: project
-    name: 项目名称
-    desc: 项目详细描述
-    link: https://你的项目链接
+    name: 练习案例
+    desc: threejs案例
+    link: https://luotainxu-demo.netlify.app/#/home
 
-  - icon: link
-    name: 链接名称
-    desc: 链接详细描述
-    link: https://链接地址
-
-  - icon: book
-    name: 书籍名称
-    desc: 书籍详细描述
-    link: https://你的书籍链接
-
-  - icon: article
-    name: 文章名称
-    desc: 文章详细描述
-    link: https://你的文章链接
-
-  - icon: friend
-    name: 伙伴名称
-    desc: 伙伴详细介绍
-    link: https://你的伙伴链接
-
-  - icon: /logo.svg
-    name: 自定义项目
-    desc: 自定义详细介绍
-    link: https://你的自定义链接
+  - icon: project
+    name: vue3基础框架
+    desc: vue3基础框架
+    link: https://github.com/luotianxu1/vue3-base
 
 ---
 
