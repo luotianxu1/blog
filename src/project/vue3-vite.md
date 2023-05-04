@@ -33,7 +33,7 @@ npm run dev
 
 ![ ](/img/project/vue1.jpg)
 
-## 安装scss
+## 安装 scss
 
 ```npm
 npm install sass --save-dev
@@ -229,7 +229,7 @@ npx husky add .husky/pre-commit
  }
 ```
 
-## mac获取权限
+## mac 获取权限
 
 对于 liux 或者 macos 系统中，可能会出现 因为没有将钩子 '.husky/pre-commit' 设置为可执行 钩子被忽略的错误。
 
@@ -293,7 +293,7 @@ npm install -D unplugin-vue-components unplugin-auto-import
 import { defineConfig } from 'vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import { createStyleImportPlugin,ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
     // ...
@@ -304,6 +304,19 @@ export default defineConfig({
         }),
         Components({
             resolvers: [ElementPlusResolver()],
+        }),
+        // 自动引入element-plus样式
+        createStyleImportPlugin({
+            resolves: [ElementPlusResolve()],
+            libs: [
+                {
+                    libraryName: 'element-plus',
+                    esModule: true,
+                    resolveStyle: (name) => {
+                        return `element-plus/theme-chalk/${name}.css`
+                    },
+                },
+            ],
         }),
     ],
 })
@@ -366,6 +379,6 @@ AutoImport 中 enabled 配置第一次运行时改为 true，后面即可改回 
 }
 ```
 
-## github地址
+## github 地址
 
 <https://github.com/luotianxu1/vue3-base>
