@@ -50,7 +50,7 @@ lifecycleMixin(Vue)
 renderMixin(Vue)
 ```
 
-我们开发中引入的 Vue 其实就是这个构造函数，而且这个构造函数只能通过 new Vue 的方式进行使用，否则会在控制台打印警告信息。定义完后，还会通过 initMixin(Vue)、stateMixin(Vue)、eventsMixin(Vue)、lifecycleMixin(Vue)和 renderMixin(Vue)的方式为 Vue 原型中混入方法。我们通过 import Vue from "Vue"引入的本质上就是一个原型上挂在了好多方法的构造函数。
+我们开发中引入的 Vue 其实就是这个构造函数，而且这个构造函数只能通过 new Vue 的方式进行使用，否则会在控制台打印警告信息。定义完后，还会通过 initMixin(Vue)、stateMixin(Vue)、eventsMixin(Vue)、lifecycleMixin(Vue)和renderMixin(Vue)的方式为 Vue 原型中混入方法。我们通过 import Vue from "Vue"引入的本质上就是一个原型上挂在了好多方法的构造函数。
 
 ## 对 new Vue 的理解
 
