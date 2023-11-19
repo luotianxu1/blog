@@ -1,5 +1,5 @@
 ---
-title: home安装mysql
+title: homeBrew安装mysql
 icon: markdown
 order: 1
 date: 2023-10-22
@@ -10,6 +10,8 @@ tag:
 ---
 
 # 安装
+
+安装
 
 ```
 brew install mysql
