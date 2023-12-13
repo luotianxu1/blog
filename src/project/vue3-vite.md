@@ -76,8 +76,8 @@ git push --set-upstream origin master
 ### 安装依赖
 
 ```npm
-npm install -g commitizen@4.2.4
-pnpm i cz-customizable@6.3.0 -D
+npm install -g commitizen
+pnpm add cz-customizable -D
 ```
 
 ### 修改 package.json
@@ -139,7 +139,7 @@ module.exports = {
 ### 安装依赖
 
 ```npm
- pnpm i @commitlint/config-conventional@12.1.4 @commitlint/cli@12.1.4 husky@7.0.1 -D
+ pnpm add @commitlint/config-conventional @commitlint/cli husky -D
 ```
 
 ### 初始化
