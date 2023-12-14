@@ -1,6 +1,6 @@
 ---
 title: DOM事件机制
-icon: markdown
+icon: javascript
 order: 9
 date: 2023-03-01
 category:

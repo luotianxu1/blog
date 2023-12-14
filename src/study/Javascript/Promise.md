@@ -1,6 +1,6 @@
 ---
 title: Promise
-icon: markdown
+icon: javascript
 order: 5
 date: 2023-03-01
 category:

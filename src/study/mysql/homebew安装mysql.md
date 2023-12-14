@@ -1,6 +1,6 @@
 ---
 title: homeBrew安装mysql
-icon: markdown
+icon: mysql
 order: 1
 date: 2023-10-22
 category:

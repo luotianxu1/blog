@@ -1,8 +1,7 @@
 ---
-title: Mysql
-icon: mysql
+title: Typescript
+icon: typescript
 index: false
 article: false
 timeline: false
 ---
-

@@ -1,6 +1,6 @@
 ---
 title: mixin混入原理
-icon: markdown
+icon: vue
 order: 8
 date: 2023-09-11
 category:
