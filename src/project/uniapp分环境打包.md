@@ -1,6 +1,6 @@
 ---
 title: uniapp分环境打包
-icon: markdown
+icon: uniapp
 order: 6
 date: 2023-07-10
 category:

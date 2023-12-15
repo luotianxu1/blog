@@ -1,6 +1,6 @@
 ---
 title: Git相关
-icon: markdown
+icon: git
 order: 4
 date: 2023-06-15
 category:

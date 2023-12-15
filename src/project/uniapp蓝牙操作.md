@@ -1,6 +1,6 @@
 ---
 title: uniapp蓝牙
-icon: markdown
+icon: uniapp
 order: 7
 date: 2023-08-29
 category:

@@ -1,6 +1,6 @@
 ---
 title: Eslint
-icon: markdown
+icon: eslint
 order: 5
 date: 2023-06-15
 category:

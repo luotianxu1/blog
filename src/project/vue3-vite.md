@@ -1,6 +1,6 @@
 ---
 title: vue3+vite基础模板
-icon: markdown
+icon: vue
 order: 1
 date: 2023-03-03
 category:
