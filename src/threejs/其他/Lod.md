@@ -9,7 +9,7 @@ tag:
     - Lod
 ---
 
-<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/lod"/>
+<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/other/lod"/>
 
 ## 添加 Lod
 

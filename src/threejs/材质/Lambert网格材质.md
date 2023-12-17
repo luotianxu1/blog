@@ -17,7 +17,7 @@ tag:
 
 由于反射率和光照模型的简单性，MeshPhongMaterial，MeshStandardMaterial或者MeshPhysicalMaterial 上使用这种材质时会以一些图形精度为代价，得到更高的性能。
 
-<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/meshLambertMaterial"/>
+<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/material/meshLambertMaterial"/>
 
 ## 构造器
 

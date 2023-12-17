@@ -18,7 +18,7 @@ const torus = new THREE.Mesh( geometry, material );
 scene.add( torus );
 ```
 
-<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/torusGeometry"/>
+<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/geometry/torusGeometry"/>
 
 ## 构造器
 

@@ -17,7 +17,7 @@ tag:
 
 在MeshStandardMaterial或MeshPhysicalMaterial上使用此材质时，性能通常会更高 ，但会牺牲一些图形精度。
 
-<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/meshPhongMaterial"/>
+<IFrame url="https://luotainxu-demo.netlify.app/#/threejs/material/meshPhongMaterial"/>
 
 ## 构造器
 
