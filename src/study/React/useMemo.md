@@ -1,7 +1,7 @@
 ---
 title: useMemo
 icon: react
-order: 10
+order: 11
 date: 2024-01-24
 category:
     - React
