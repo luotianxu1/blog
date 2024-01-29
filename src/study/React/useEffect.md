@@ -206,30 +206,30 @@ useEffect(() => {
 
 在某些情况下，当组件首次渲染时，我们不希望立即执行某些操作。这些操作可能包括发送网络请求、触发某些动画或其他任务。而是只有在某个值或依赖项发生变化后，我们才希望执行这些任务。
 
-假设我们有一个count状态，我们希望当count值发生变化时显示一个通知，但不希望在组件首次加载时显示这个通知。
+假设我们有一个 count 状态，我们希望当 count 值发生变化时显示一个通知，但不希望在组件首次加载时显示这个通知。
 
 ```jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react'
 
 function Counter() {
-    const [count, setCount] = useState(0);
-    const mounted = useRef(false);
+    const [count, setCount] = useState(0)
+    const mounted = useRef(false)
 
     useEffect(() => {
         if (mounted.current) {
-            alert('Count value changed!');
+            alert('Count value changed!')
         } else {
-            mounted.current = true;
+            mounted.current = true
         }
-    }, [count]);
+    }, [count])
 
     return (
         <div>
             <button onClick={() => setCount(count + 1)}>Increase</button>
             <p>Count: {count}</p>
         </div>
-    );
+    )
 }
 
-export default Counter;
+export default Counter
 ```

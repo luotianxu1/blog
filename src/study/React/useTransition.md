@@ -32,7 +32,7 @@ const [isPending, startTransition] = useTransition()
 - 不能用于控制文本输入。因为输入框是需要实时更新的，如果用 useTransition 降低了渲染优先级，可能造成输入“卡顿”。
 - 不要在 startTransition 内部使用 setTimeout，如果一定要用 setTimeout，你可以在 startTransition 外层使用
 
-```jsx
+````jsx
     startTransition(() => {
     // ❌ Setting state *after* startTransition call
     setTimeout(() => {
@@ -48,120 +48,135 @@ startTransition(() => {
 setPage('/about');
 });
 }, 1000);
-```
+````
 
 ## 示例
 
-### 有无useTransition的对比
+### 有无 useTransition 的对比
 
-想象一个场景，页面上有多个tab，其中一个请求耗时较长，我们快速点击tab切换内容，但总是会在请求耗时的tab上卡顿一下，代码如下：
+想象一个场景，页面上有多个 tab，其中一个请求耗时较长，我们快速点击 tab 切换内容，但总是会在请求耗时的 tab 上卡顿一下，代码如下：
 
 ```jsx
-import React, { useState, memo } from 'react';
+import React, { useState, memo } from 'react'
 
 const TabContainer = () => {
-  const [tab, setTab] = useState('about');
+    const [tab, setTab] = useState('about')
 
- // 核心：切换选项卡
-  function selectTab(nextTab) {
-    setTab(nextTab);
-  }
+    // 核心：切换选项卡
+    function selectTab(nextTab) {
+        setTab(nextTab)
+    }
 
-  return (
-    <div>
-      <div>
-        <TabButton isActive={tab === 'about'} onClick={() => selectTab('about')}>About</TabButton>
-        <TabButton isActive={tab === 'posts'} onClick={() => selectTab('posts')}>Posts (slow)</TabButton>
-        <TabButton isActive={tab === 'contact'} onClick={() => selectTab('contact')}>Contact</TabButton>
-      </div>
-      <hr />
-      {tab === 'about' && <AboutTab />}
-      {tab === 'posts' && <PostsTab />}
-      {tab === 'contact' && <ContactTab />}
-    </div>
-  );
-};
+    return (
+        <div>
+            <div>
+                <TabButton
+                    isActive={tab === 'about'}
+                    onClick={() => selectTab('about')}
+                >
+                    About
+                </TabButton>
+                <TabButton
+                    isActive={tab === 'posts'}
+                    onClick={() => selectTab('posts')}
+                >
+                    Posts (slow)
+                </TabButton>
+                <TabButton
+                    isActive={tab === 'contact'}
+                    onClick={() => selectTab('contact')}
+                >
+                    Contact
+                </TabButton>
+            </div>
+            <hr />
+            {tab === 'about' && <AboutTab />}
+            {tab === 'posts' && <PostsTab />}
+            {tab === 'contact' && <ContactTab />}
+        </div>
+    )
+}
 
 const PostsTab = memo(() => {
-  let items = [];
-  for (let i = 0; i < 500; i++) {
-    items.push(<SlowPost key={i} index={i} />);
-  }
-  return <ul>{items}</ul>;
-});
+    let items = []
+    for (let i = 0; i < 500; i++) {
+        items.push(<SlowPost key={i} index={i} />)
+    }
+    return <ul>{items}</ul>
+})
 
 const SlowPost = ({ index }) => {
-  let startTime = performance.now();
-  while (performance.now() - startTime < 10) { }
-  return <li>Post on weijunext.com #{index + 1}</li>;
-};
+    let startTime = performance.now()
+    while (performance.now() - startTime < 10) {}
+    return <li>Post on weijunext.com #{index + 1}</li>
+}
 
 // 省略非关键代码
 // ……
 
-export default TabContainer;
+export default TabContainer
 ```
 
-如果我们想用useTransition保持UI的响应，只需要用startTransition包裹切换选项卡的set
+如果我们想用 useTransition 保持 UI 的响应，只需要用 startTransition 包裹切换选项卡的 set
 
 ```jsx
-const [isPending, startTransition] = React.useTransition();
+const [isPending, startTransition] = React.useTransition()
 
 function selectTab(nextTab) {
-  startTransition(() => {
-    setTab(nextTab);      
-  });
+    startTransition(() => {
+        setTab(nextTab)
+    })
 }
 ```
 
-这样我们快速切换tab，无论点到哪一个tab都不会卡顿。
+这样我们快速切换 tab，无论点到哪一个 tab 都不会卡顿。
 
-### useTransition和Suspense实现路由流畅切换
+### useTransition 和 Suspense 实现路由流畅切换
 
-当与路由结合使用时，React.Suspense允许我们延迟渲染新的路由内容，直到所需的数据被完全加载。而useTransition则允许我们可控地开始这种可能导致UI变化的过渡——导航到新页面。
+当与路由结合使用时，React.Suspense 允许我们延迟渲染新的路由内容，直到所需的数据被完全加载。而 useTransition 则允许我们可控地开始这种可能导致 UI 变化的过渡——导航到新页面。
 
 ```jsx
-import React, { useState } from 'react';
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
+import React, { useState } from 'react'
+import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
 
-const [location, setLocation] = useState(window.location);
-const [isPending, startTransition] = React.unstable_useTransition();
+const [location, setLocation] = useState(window.location)
+const [isPending, startTransition] = React.unstable_useTransition()
 
 // 使用 startTransition 来更新 location 状态，能够延迟显示新页面的内容，直到数据加载完毕
 function handleNavigation(newLocation) {
-  startTransition(() => {
-    setLocation(newLocation);
-  });
+    startTransition(() => {
+        setLocation(newLocation)
+    })
 }
 
 // 主应用组件
 function App() {
-  return (
-    <div>
-      <BrowserRouter>
-        {/* 导航 */}
-        <nav>
-          <CustomLink to="/about">About</CustomLink>
-          <CustomLink to="/contact">Contact</CustomLink>
-        </nav>
+    return (
+        <div>
+            <BrowserRouter>
+                {/* 导航 */}
+                <nav>
+                    <CustomLink to='/about'>About</CustomLink>
+                    <CustomLink to='/contact'>Contact</CustomLink>
+                </nav>
 
-        {/* 使用 React.Suspense 来处理组件的懒加载 */}
-        <React.Suspense fallback={<LoadingIndicator />}>
-          <Switch location={location}>
-            <Route path="/about" component={AboutPage} />
-            <Route path="/contact" component={ContactPage} />
-            {/* ...其他路由... */}
-          </Switch>
-        </React.Suspense>
+                {/* 使用 React.Suspense 来处理组件的懒加载 */}
+                <React.Suspense fallback={<LoadingIndicator />}>
+                    <Switch location={location}>
+                        <Route path='/about' component={AboutPage} />
+                        <Route path='/contact' component={ContactPage} />
+                        {/* ...其他路由... */}
+                    </Switch>
+                </React.Suspense>
 
-        {/* 使用 isPending 显示或隐藏全局加载指示器 */}
-        {isPending && <LoadingIndicator />}
-      </BrowserRouter>
-    </div>
-  );
+                {/* 使用 isPending 显示或隐藏全局加载指示器 */}
+                {isPending && <LoadingIndicator />}
+            </BrowserRouter>
+        </div>
+    )
 }
 
-export default App;
+export default App
 ```
 
 通过这种方式，我们可以优雅地处理路由切换，并确保在数据加载时为用户提供一个流畅的体验。
