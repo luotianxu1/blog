@@ -18,12 +18,7 @@ export default hopeTheme({
     navbarAutoHide: 'mobile', // 向下滚动时自动隐藏导航栏
     hideSiteNameOnMobile: true, // 在移动视图下隐藏站点名称
     // 主题色选择器
-    themeColor: {
-        blue: '#2196f3',
-        red: '#f26d6d',
-        green: '#3eaf7c',
-        orange: '#fb9b5f',
-    },
+    themeColor: true,
     darkmode: 'switch', // 深色模式
     fullscreen: true, // 全屏
     // 自定义导航栏布局
@@ -69,6 +64,7 @@ export default hopeTheme({
             // "/guide/": ["1234", "5678"],
             // 这只会加密 config/page.html
             // "/config/page.html": "1234"
+            '/interview/': ['luotx'],
         },
     },
     iconAssets: '//at.alicdn.com/t/c/font_3926889_56pydlf2405.css', // 字体图标资源链接
