@@ -10,16 +10,7 @@ tag:
 ---
 
 
-## H5C3 新特性
-
-> H5 新特性
-
-1. 语义化标签
-2. 音频视频
-3. 画布 canvas
-4. 数据存储 localstorage sessionstorage
-5. 表单控件 email url search
-6. 拖拽释放 API
+## CSS3 新特性
 
 > CSS3 新特性
 
@@ -34,27 +25,6 @@ tag:
 9. 背景的属性
 10. 2D 和 3D
 
-## padding 与 margin 有什么不同
-
-padding 针对自身
-margin 作用于外部对象
-
-## CSS 选择器优先级
-
-> CSS 特性： 继承性、层叠性、优先级
-
-!important > 行内样式 > id > 类/伪类/属性 > 标签 > 全局选择器
-
-## CSS 属性哪个属性可以继承
-
-1. 字体 font
-2. 文本 text-align、line-height、color
-3. 元素可见性 visitility:hidden
-4. 表格布局属性 border-apacing
-5. 列表的属性 list-style
-6. 页面样式属性 page
-7. 声音的样式属性
-
 ## CSS权重计算
 
 ！important > 内联样式 > ID > 类属性、属性选择器或者伪类选择器 > 标签选择器
@@ -65,6 +35,59 @@ margin 作用于外部对象
 
 最终从A开始逐层比较，A => B =>C =>D 哪个大优先哪个样式生效，否则后面覆盖前面样式，这也
 是为什么有的嵌套多层样式可以实现覆盖的原因。样式名称也有就近原则，作用在当前标签的能覆盖继承来的样式。最终将这几个条件合并起来就是css的权重问题和计算规则。
+
+> CSS 特性： 继承性、层叠性、优先级
+
+!important > 行内样式 > id > 类/伪类/属性 > 标签 > 全局选择器
+
+## CSS中可继承与不可继承属性有哪些
+
+### 无继承的属性
+
+- display：规定元素应该生成的框的类型
+- 文本属性：
+  - vertical-align：垂直文本对齐
+  - text-decoration：规定添加到文本的装饰
+  - text-shadow：文本阴影效果
+  - white-space：空白符的处理
+  - unicode-bidi：设置文本的方向
+- 盒子模型的属性：width、 height、margin、 border、padding
+- 背景属性：background、background-color、background-image、background-repeat、background-position. background-attachment
+- 定位属性：float、clear、position、 top、right. bottom、left、min-width、min-height、max-width, max-height, overflow. clip, z-index
+- 生成内容属性：content、counter-reset、 counter-increment了.轮廓样式属性：outline-style、outline-width、 outline-color、outline
+- 页面样式属性：size、page-break-before、page-break-after
+- 声音样式属性：pause-before、pause-after、pause、cue-before、cue-after、cue、play-during
+
+### 可继承的属性
+
+- 字体系列属性
+  - font-family：字体系列
+  - font-weight：字体的粗细
+  - font-size：字体的大小
+  - font-style：字体的风格
+
+- 文本系列属性
+  - text-indent：文本缩进
+  - text-align：文本水平对齐
+  - line-height：行高
+  - word-spacing：单词之间的间距
+  - letter-spacing：中文或者字母之间的间距
+  - text-transform：控制文本大小写（就是uppercase、lowercase、capitalize这三个）
+  - color：文本颜色
+
+- 元素可见性
+  - visibility：控制元素显示隐藏
+
+- 列表布局属性
+  - list-style：列表风格，包括list-style-type、list-style-image等
+
+- 光标厲性
+  - cursor：光标显示为何种形态
+
+## padding 与 margin 有什么不同
+
+padding 针对自身
+margin 作用于外部对象
 
 ## 隐藏元素的方法
 
