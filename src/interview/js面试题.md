@@ -9,8 +9,6 @@ tag:
     - Javascript
 ---
 
-<!-- more -->
-
 ## js 由哪三部分组成
 
 1. ECMAScript：JS 的核心内容，描述了语言的基础语法，比如 var，for
@@ -23,201 +21,6 @@ String Boolean Number Array Object Function Math Date RegExp
 Math: abs()绝对值 sqrt()开平方 max() min()
 Date: new Data() getYear()
 Sting: concat() length slice() split()
-
-## 基本数据类型和引用数据类型
-
-- 基本数据类型： String Number Boolean undefined null Bigint Symbol，基本数据类型保存在内存中，保存的就是一个具体的值
-- 引用数据类型（复杂数据类型）：Object Function Array，引用数据类型保存在堆内存中，声明一个引用类型的变量，它保存的是引用类型数据的地址。假如声明两个引用类型同时指向了一个地址的时候，修改其中一个那么另外一个也会改变。
-
-```js
-let obj = {
-    name: '张三',
-}
-let obj1 = obj
-obj1.name = '李四'
-console.log(obj.name) //李四
-```
-
-## Symbol
-
-Symbol 是 ES6 中引入的一种新的基本数据类型，用于表示一个独一无二的值。它是 JavaScript 中的第七种数据类型，与 undefined、null、Number（数值）、String（字符串）、Boolean（布尔值）、Object（对象）并列。
-
-- 不能与其他的数据进行比较以及运算（唯一性）
-
-```js
-let a1 = Symbol('11')
-let a2 = Symbol('11')
-console.log(a1 === a2) // flase
-```
-
-![ ](/img/interview/symbol.jpg)
-
-- 不能与其他数据进行运算
-
-```js
-let result = a2 + 100 //报错
-let result = a2 > 100 //报错
-let result = a1 + a1 //报错
-```
-
-- 隐藏性，for···in 不能访问,使用 Object.getOwnPropertySymbols 方法可以进行访问
-
-```js
-let a = Symbol('Nan')
-let obj = {
-    [a]: 'Chen',
-}
-console.log(obj)//{Symbol(Nan): "Chen"}
-for (const option in obj) {
-    console.log(obj[option]) //啥都没有
-}
-let array = Object.getOwnPropertySymbols(obj)
-console.log(array) //[Symbol(Nan)]
-console.log(obj[array[0]]) //Chen
-```
-
-## null 与 undefind
-
-- undefined
-
-1. 已声明，为赋值
-2. 对象某个属性不存在
-3. 函数调用缺少参数
-4. 函数默认的返回值
-
-```js
-// 1、已声明，为赋值
-let o
-console.log(o) // undefined
-
-// 2、对象某个属性不存在
-let obj = {}
-console.log(obj.a) // undefined
-
-// 3、函数调用缺少参数
-function fn(a, b) {
-    console.log(a, b)
-}
-fn(4) // 4,undefined
-
-// 4、函数默认的返回值
-function abc() {}
-console.log(abc())
-```
-
-- null
-
-1. 手动释放内存
-2. 作为函数的参数（此参数不是对象）
-3. 原型链的顶端
-
-## 数据类型检测方式
-
-- typeof
-
-返回一个表示数据类型的字符串，返回结果包括：number、boolean、string、symbol、object、undefined、function等7种数据类型，但不能判断null、array等
-
-```js
-typeof Symbol(); // symbol 有效
-typeof ''; // string 有效
-typeof 1; // number 有效
-typeof true; //boolean 有效
-typeof undefined; //undefined 有效
-typeof new Function(); // function 有效
-typeof null; //object 无效
-typeof [] ; //object 无效
-typeof new Date(); //object 无效
-typeof new RegExp(); //object 无效
-```
-
-- instanceof
-
-instanceof 是用来判断A是否为B的实例，表达式为：A instanceof B，如果A是B的实例，则返回true,否则返回false。instanceof 运算符用来测试一个对象在其原型链中是否存在一个构造函数的 prototype 属性。
-
-```js
-[] instanceof Array; //true
-{} instanceof Object;//true
-new Date() instanceof Date;//true
-new RegExp() instanceof RegExp//true
-```
-
-关于数组的类型判断，还可以用ES6新增Array.isArray()
-
-```js
-Array.isArray([]);   // true
-```
-
-弊端
-
-对于基本数据类型来说，字面量方式创建出来的结果和实例方式创建的是有一定的区别的
-
-```js
-console.log(1 instanceof Number)//false
-console.log(new Number(1) instanceof Number)//true
-```
-
-从严格意义上来讲，只有实例创建出来的结果才是标准的对象数据类型值，也是标准的Number这个类的一个实例；对于字面量方式创建出来的结果是基本的数据类型值，不是严谨的实例，但是由于JS的松散特点，导致了可以使用Number.prototype上提供的方法。
-
-只要在当前实例的原型链上，我们用其检测出来的结果都是true。在类的原型继承中，我们最后检测出来的结果未必准确。
-
-```js
-var arr = [1, 2, 3];
-console.log(arr instanceof Array) // true
-console.log(arr instanceof Object);  // true
-function fn(){}
-console.log(fn instanceof Function)// true
-console.log(fn instanceof Object)// true
-```
-
-不能检测null 和 undefined
-
-对于特殊的数据类型null和undefined，他们的所属类是Null和Undefined，但是浏览器把这两个类保护起来了，不允许我们在外面访问使用。
-
-- constructor
-
-constructor作用和instanceof非常相似。但constructor检测 Object与instanceof不一样，还可以处理基本数据类型的检测。
-
-```js
-var aa=[1,2];
-console.log(aa.constructor===Array);//true
-console.log(aa.constructor===RegExp);//false
-console.log((1).constructor===Number);//true
-var reg=/^$/;
-console.log(reg.constructor===RegExp);//true
-console.log(reg.constructor===Object);//false 
-```
-
-弊端
-
-null 和 undefined 是无效的对象，因此是不会有 constructor 存在的，这两种类型的数据需要通过其他方式来判断。
-
-函数的 constructor 是不稳定的，这个主要体现在把类的原型进行重写，在重写的过程中很有可能出现把之前的constructor给覆盖了，这样检测出来的结果就是不准确的
-
-```js
-function Fn(){}
-Fn.prototype = new Array()
-var f = new Fn
-console.log(f.constructor)//Array
-```
-
-- Object.prototype.toString.call()
-
-Object.prototype.toString.call() 最准确最常用的方式。首先获取Object原型上的toString方法，让方法执行，让toString方法中的this指向第一个参数的值。
-
-```js
-Object.prototype.toString.call('') ;   // [object String]
-Object.prototype.toString.call(1) ;    // [object Number]
-Object.prototype.toString.call(true) ; // [object Boolean]
-Object.prototype.toString.call(undefined) ; // [object Undefined]
-Object.prototype.toString.call(null) ; // [object Null]
-Object.prototype.toString.call(new Function()) ; // [object Function]
-Object.prototype.toString.call(new Date()) ; // [object Date]
-Object.prototype.toString.call([]) ; // [object Array]
-Object.prototype.toString.call(new RegExp()) ; // [object RegExp]
-Object.prototype.toString.call(new Error()) ; // [object Error]
-Object.prototype.toString.call(document) ; // [object HTMLDocument]
-Object.prototype.toString.call(window) ; //[object global] window是全局对象global的引用
-```
 
 ## ES6 新特性
 
@@ -287,23 +90,60 @@ consolg.log(a, window.a) // 10,10
 3. const 支持块级作用域不存在声明提升和变量覆盖
 4. 存在暂时性死区
 
+![ ](/img/interview/let.jpg)
+
+## const 对象的属性可以修改吗
+
+const 保证的并不是变量的值不能改动，而是变量指向的那个内存地址不能改动。对于基本类型的数据（数值、字符串、布尔值），其值就保存在变量指向的那个内存地址，因此等同于常量。但对于引用类型的数据（主要是对象和数组）来说，变量指向数据的内存地址，保存的只是一个指针，const 只能保证这个指针是固定不变的，至于它指向的数据结构是不是可变的，就完全不能控制了。
+
+## 为什么 0.1+0.2！==0.3，如何让其相等
+
+在开发过程中遇到类以这样的问题：
+
+```js
+let n1=0.1,n2=0.2
+conso1e.1og(n1+n2)//0.30000000000000004
+```
+
+这里得到的不是想要的结果，要想等于 0.3，就要把它进行转化：
+
+```js
+;(n1 + n2).toFixed(2) //注意，toFixed为四舍五入
+```
+
+toFixed(num)方法可把 Number 四舍五入为指定小数位数的数字。那为什么会出现这样的结果呢？
+
+计算机是通过二进制的方式存储数据的，所以计算机计算 0.1+0.2 的时候，实际上是计算的两个数的二进制的和。0.1 的二进制是 0.0001100110011001100...(1100 循环)，0.2 的二进制是：0.00110011001100...(1100 循环)，这两个数的二进制都是无限循环的数。那 JavaScript 是如何处理无限循环的二进制小数呢？
+
+一般我们认为数字包括整数和小数，但是在 JavaScript 中只有一种数字类型：Number,它的实现遵循 IEEE754 标准，使用 64 位固定长度来表示，也就是标准的 double 双精度浮点数。在二进制科学表示法中，双精度浮点数的小数部分最多只能保留 52 位，再加上前面的 1，其实就是保留 53 位有效数字，剩余的需要舍去，遵从“0 舍 1 入"的原则。
+
+根据这个原则，0.1 和 0.2 的二进制数相加，再转化为十进制数就是：0.30000000000000004。
+
+一个直接的解决方法就是设置一个误差范围，通常称为“机器精度”。对 JavaScript 来说，这个值通常为 2-52，在 ES6 中，提供了 Number.EPSILON 属性，而它的值就是 2-52，只要判断 0.1+0.2-0.3 是否小于 Number..EPSILON,如果小于，就可以判断为 0.1+0.2===0.3
+
+```js
+function numberepsilon(argl,arg2){
+    return Math.abs (argl arg2)<Number.EPSILON;
+    console.log(numberepsilon(0.1 0.2,0.3));//true
+}
+```
+
 ## 暂时性死区
 
-在代码块内，使用let命令声明变量之前，该变量都是不可用的。这在语法上，称为“暂时性死区”（temporal dead zone，简称 TDZ）
+在代码块内，使用 let 命令声明变量之前，该变量都是不可用的。这在语法上，称为“暂时性死区”（temporal dead zone，简称 TDZ）
 
 ```js
 let a = 'a'
 function log() {
-  console.log(a)
-  let a = 'b'
-
+    console.log(a)
+    let a = 'b'
 }
 log() // ReferenceError: a is not defined
 ```
 
-在本实例中，变量a的作用域，一个是全局作用域，另一个是函数作用域，已经被确定。也就是说函数内部的a此时已经确定为函数内部的作用域。
+在本实例中，变量 a 的作用域，一个是全局作用域，另一个是函数作用域，已经被确定。也就是说函数内部的 a 此时已经确定为函数内部的作用域。
 
-在执行阶段时，根据作用域链原则，函数内部会先寻找函数内部的作用域变量， 既然a在函数中已经被确定，那么就不会向全局作用域去寻找a了。默认函数内部a是已经定义的。但函数顺序执行的时候，访问a的同时并没有在访问之前声明a，也就是树在当前作用域下，没有找到a的生命和定义，就会出现 为定义的错误了。
+在执行阶段时，根据作用域链原则，函数内部会先寻找函数内部的作用域变量， 既然 a 在函数中已经被确定，那么就不会向全局作用域去寻找 a 了。默认函数内部 a 是已经定义的。但函数顺序执行的时候，访问 a 的同时并没有在访问之前声明 a，也就是树在当前作用域下，没有找到 a 的生命和定义，就会出现 为定义的错误了。
 
 ## 箭头函数
 
@@ -313,22 +153,74 @@ log() // ReferenceError: a is not defined
 - 箭头函数不能用 call，bind，apply 去改变 this 的指向
 - this 指向外层第一个函数的 this
 
-## Promise
+## 箭头函数与普通函数的区别
 
-解决回调地狱的问题
-自身上有 all，reject，resolve，race 方法
-原型上有 then，catch
-三种状态：pending 初始状态，fulfilled 操作成功，rejected 操作失败
-状态： pending -> fulfilled; pending -> rejected 一旦发生，状态就会凝固，不会再变
-无法取消 Promise，一旦创建他就会立即执行，不能中途取消
-如果不设置回调，promise 内部抛出的错误就无法反馈到外面
-若当前处于 pending 窗台，无法得只目前在那个阶段
+- 箭头函数处比普通函数更加简洁
+  - 如果没有参数，就直接写一个空括号即可
+  - 如果只有一个参数，可以省去参数的括号
+  - 如果有多个参数，用逗号分割
+  - 如果函数体的返回值只有一句，可以省略大括号
+  - 如果函数体不需要返回值，且只有一句话，可以给这个语句前面加一个 Void 关键字。最常见的就是调用一个函数：`let fn ()=void doesNotReturn()`
+- 箭头函数没有自己的 this
+    箭头函数不会创建自己的 this,所以它没有自己的 this,它只会在自己作用域的上一层继承 this。所以箭头函数中 ths 的指向在它在定义时已经确定了，之后不会改变。
+- 箭头函数继承来的 this 指向永远不会改变
 
-- resolve 参数
+```js
+var id ='GLOBAL';
+var obj={
+    id:'OBJ',
+    a:function(){
+        console.log(this.id);
+    },
+    b:0=>{
+        console.log(this.id);
+    }
+};
+obj.a();//'0BJ'
+obj.b();//'GLOBAL'
+new obj.a()//undefined
+new obj.b()//Uncaught TypeError:obj.b is not a constructor
+```
 
-1. 普通的值或者对象 pending -> fulfilled
-2. 传入一个 promise，那么当前的 Promise 的状态会由传入的 Promise 来决定，相当于状态进行了移交
-3. 传入一个对象，并且这个对象由实现 then 方法，那么也会执行该 then 方法，并且由该 then 方法决定后续状态
+对象 obj 的方法 b 是使用箭头函数定义的，这个函数中的 ts 就永远指向它定义时所处的全局执行环境中的 this,即便这个函数是作为对象 obj 的方法调用，this 依旧指向 Window 对象。需要注意，定义对象的大括号引是无法形成一个单独的执行环境的，它依旧是处于全局执行环境中。
+
+- call()、apply()、bind()等方法不能改变箭头函数中 this 的指向
+
+```js
+var id='Global';
+let fun1 =()=>{
+    console.log(this.id)
+}
+fun1()
+//'G1oba1'
+fn1.ca11({id:’0bj'})
+//'G1oba1'
+fun1.apply ({id:'Obj'})
+//'Global'
+fun1.bind({id:'Obj'})();//'Global
+```
+
+- 箭头函数不能作为构造函数使用构造函数在 new 的步骤在上面已经说过了，实际上第二步就是将函数中的 this 指向该对象。但是由于箭头函数时没有自己的 this 的，且 this 指向外层的执行环境，且不能改变指向，所以不能当做构造函数使用。
+- 箭头函数没有自己的 arguments
+    箭头函数没有自己的 arguments 对象。在箭头函数中问 arguments 实际上获得的是它外层函数的 arguments 值。
+- 箭头函数没有 prototype
+- 箭头函数不能用作 Generatori 函数，不能使用 veild 关键字
+
+## 如何提取高度嵌套的对象里的指定属性？
+
+```js
+const school = {
+    classes: {
+        stu: {
+            name: 'Bob',
+            age: 24,
+        },
+    },
+}
+
+const {classes:{stu:{name} }} = school
+console.log(name)
+```
 
 ## 操作数组的方法
 
@@ -366,24 +258,27 @@ console.log(b) //[1, 2, 3, 4]
 
 ## Map（字典）
 
-Map对象保存键值对，并且能够记住键的原始插入顺序。任何值（对象或者原始值）都可以作为一个键或一个值。
+Map 对象保存键值对，并且能够记住键的原始插入顺序。任何值（对象或者原始值）都可以作为一个键或一个值。
 
-- Map对象这种数据结构和和对象类型，都已键值对的形式存储数据，即 key-vlue 形式。
-- Map对象存储的数据是有序的，而我们平常使用的对象是无序的，所以通常当我们需要使用对象形式（键值对）存储数据且需要有序时，采用Map对象进行存储。
-- Map对象的键值可以是任意类型，我们平时使用的对象只能使用字符串作为键。
+- Map 对象这种数据结构和和对象类型，都已键值对的形式存储数据，即 key-vlue 形式。
+- Map 对象存储的数据是有序的，而我们平常使用的对象是无序的，所以通常当我们需要使用对象形式（键值对）存储数据且需要有序时，采用 Map 对象进行存储。
+- Map 对象的键值可以是任意类型，我们平时使用的对象只能使用字符串作为键。
 
 > 基本使用
 
 ```js
-let defaultMap = new Map([['name', '张三'], ['age', 20]]);
+let defaultMap = new Map([
+    ['name', '张三'],
+    ['age', 20],
+])
 ```
 
 ![ ](/img/interview/Map.jpg)
 
 ```js
-myMap.set('name', '小猪课堂'); // 字符串作为键
-myMap.set(12, '会飞的猪'); // number 类型作为键
-myMap.set({}, '知乎'); // 对象类型作为键
+myMap.set('name', '小猪课堂') // 字符串作为键
+myMap.set(12, '会飞的猪') // number 类型作为键
+myMap.set({}, '知乎') // 对象类型作为键
 ```
 
 ![ ](/img/interview/Map2.jpg)
@@ -391,42 +286,42 @@ myMap.set({}, '知乎'); // 对象类型作为键
 > 获取长度
 
 ```js
-let myMapSize = myMap.size;
+let myMapSize = myMap.size
 ```
 
 > 获取值
 
 ```js
-let objKey = {};
-myMap.set('name', '小猪课堂'); // 字符串作为键
-let name = myMap.get('name');
-console.log(name); // 小猪课堂 会飞的猪 知乎
+let objKey = {}
+myMap.set('name', '小猪课堂') // 字符串作为键
+let name = myMap.get('name')
+console.log(name) // 小猪课堂 会飞的猪 知乎
 ```
 
 > 删除某个值
 
 ```js
-myMap.delete('name');
+myMap.delete('name')
 ```
 
 > 判断某个值是否存在
 
 ```js
-myMap.has('name'); // 返回 bool 值
+myMap.has('name') // 返回 bool 值
 ```
 
 ## Set（集合）
 
-Set对象允许你存储任何类型的唯一值，无论是原始值或者是对象引用。
+Set 对象允许你存储任何类型的唯一值，无论是原始值或者是对象引用。
 
-- Set对象是一个类数组对象，它长得就很像数组。
-- Set对象存储的值是不重复的，所以我们通常使用它来实现数组去重。
-- Set对象存储的数据不是键值对的形式，而且它可以存储任何类型的数据。
+- Set 对象是一个类数组对象，它长得就很像数组。
+- Set 对象存储的值是不重复的，所以我们通常使用它来实现数组去重。
+- Set 对象存储的数据不是键值对的形式，而且它可以存储任何类型的数据。
 
 > 基本使用
 
 ```js
-let defaultSet = new Set(['张三', 12, true]);
+let defaultSet = new Set(['张三', 12, true])
 ```
 
 ![ ](/img/interview/Set.jpg)
@@ -434,43 +329,43 @@ let defaultSet = new Set(['张三', 12, true]);
 > 插入数据
 
 ```js
-mySet.add(1);
+mySet.add(1)
 ```
 
 > 获取长度
 
 ```js
-let mySetSize = mySet.size;
+let mySetSize = mySet.size
 ```
 
 > 获取值
 
-由于Set对象存储的不是键值对形式，所以未提供get方法获取值，我们通常遍历它获取值：
+由于 Set 对象存储的不是键值对形式，所以未提供 get 方法获取值，我们通常遍历它获取值：
 
 ```js
 mySet.forEach((item) => {
-  console.log(item)
+    console.log(item)
 })
 ```
 
 > 删除某个值
 
 ```js
-mySet.delete(1);
+mySet.delete(1)
 ```
 
 > 判断某个值是否存在
 
 ```js
-mySet.has(1); // 返回Boolean值
+mySet.has(1) // 返回Boolean值
 ```
 
-## Map与Set的区别
+## Map 与 Set 的区别
 
-- Map和Set查找速度都非常快，时间复杂度为O(1)，而数组查找的时间复杂度为O(n)。
-- Map对象初始化的值为一个二维数组，Set对象初始化的值为一维数组。
-- Map对象和Set对象都不允许键重复（可以将Set对象的键想象成值）。
-- Map对象的键是不能改的，但是值能改，Set对象只能通过迭代器来更改值。
+- Map 和 Set 查找速度都非常快，时间复杂度为 O(1)，而数组查找的时间复杂度为 O(n)。
+- Map 对象初始化的值为一个二维数组，Set 对象初始化的值为一维数组。
+- Map 对象和 Set 对象都不允许键重复（可以将 Set 对象的键想象成值）。
+- Map 对象的键是不能改的，但是值能改，Set 对象只能通过迭代器来更改值。
 
 ## forEach()与 map()
 
@@ -534,7 +429,7 @@ console.log(p1)
 ## 原型与原型链
 
 原型就是一个普通对象，他是构造函数的实例共享属性和方法；所有实例中引用的原型都是同一个对象。使用 prototype 可以把方法挂载原型上，内存只保存一份
-__proto__可以理解为指针。实例对象中的属性，指向了构造函数的原型（protortpe）
+**proto**可以理解为指针。实例对象中的属性，指向了构造函数的原型（protortpe）
 一个实例对象在调用属性和方法的时候，会一次从实例本身、构造函数原型、原型的原型上去查找
 
 ![ ](/img/interview/proto.jpg)
@@ -559,7 +454,7 @@ console.log( test.say() )// hhh
 ```
 
 优点：通过原型继承多个引用类型的属性和方法
-缺点：Sub原型变成了Super的实例，如果Super的实例某个属性是引用值，该引用值就会被应用到所有Sub创建的实例中去，会有污染问题。
+缺点：Sub 原型变成了 Super 的实例，如果 Super 的实例某个属性是引用值，该引用值就会被应用到所有 Sub 创建的实例中去，会有污染问题。
 
 ### 盗用构造函数(构造函数模式+call)
 
@@ -573,8 +468,8 @@ function Sub = function(){
 const test = new Sub()
 ```
 
-优点：每个实例都会有自己的a属性，哪怕是引用值也不会被污染
-缺点：Super构造函数中的方法在每个实例上都要创建一遍（除非该方法声明提到全局）；Sub的实例无法访问Super原型上的方法
+优点：每个实例都会有自己的 a 属性，哪怕是引用值也不会被污染
+缺点：Super 构造函数中的方法在每个实例上都要创建一遍（除非该方法声明提到全局）；Sub 的实例无法访问 Super 原型上的方法
 
 ### 组合继承(原型继承+盗用构造函数继承)
 
@@ -596,7 +491,7 @@ console.log(test2.a)// [1,2]
 ```
 
 优点：可以在子类构造函数中向父类传参数,父类的引用属性不会被共享
-缺点：子类不能访问父类原型上定义的方法（即不能访问Parent.prototype上定义的方法），因此所有方法属性都写在构造函数中，每次创建实例都会初始化
+缺点：子类不能访问父类原型上定义的方法（即不能访问 Parent.prototype 上定义的方法），因此所有方法属性都写在构造函数中，每次创建实例都会初始化
 
 ### 原型式继承
 
@@ -1138,7 +1033,7 @@ function a() {
 
 1. 可以读取函数内部的变量
 2. 可以使变量的值长期保存在内存中，生命周期比较长。
-3. 可用来实现JS模块（JQuery库等）
+3. 可用来实现 JS 模块（JQuery 库等）
 
 ## 柯里化
 
@@ -1213,12 +1108,12 @@ console.log(adder5(10))
 
 JSON.stringify()缺点
 
-1. 如果obj里面有时间对象，则JSON.stringify后再JSON.parse的结果，时间将只是字符串的形式，而不是对象的形式。
-2. 如果obj里面有RegExp，则打印出来是空对象。
-3. 如果对象中有函数或者undefined，则会直接被丢掉。
-4. 如果json里有对象是由构造函数生成的，则会丢掉对象的constructon。
+1. 如果 obj 里面有时间对象，则 JSON.stringify 后再 JSON.parse 的结果，时间将只是字符串的形式，而不是对象的形式。
+2. 如果 obj 里面有 RegExp，则打印出来是空对象。
+3. 如果对象中有函数或者 undefined，则会直接被丢掉。
+4. 如果 json 里有对象是由构造函数生成的，则会丢掉对象的 constructon。
 5. 如果对象中存在循环引用的情况也无法正确实现深拷贝。
-6. 如果对象中存在NAN，则序列化后会变成null。
+6. 如果对象中存在 NAN，则序列化后会变成 null。
 
 ```js
 let arr = [1, 2, 3]
@@ -1566,9 +1461,9 @@ console.log('end')
 
 ## 前端模块化
 
-前端模块化就是复杂的文件编程一个一个独立的模块，比如js文件等等，分成独立的模块有利于重用
-（复用性）和维护（版本迭代），这样会引来模块之间相互依赖的问题，所以有了commonJS规范，
-AMD，CMD规范等等，以及用于js打包（编译等处理）的工具webpack。
+前端模块化就是复杂的文件编程一个一个独立的模块，比如 js 文件等等，分成独立的模块有利于重用
+（复用性）和维护（版本迭代），这样会引来模块之间相互依赖的问题，所以有了 commonJS 规范，
+AMD，CMD 规范等等，以及用于 js 打包（编译等处理）的工具 webpack。
 
 ## 递归求和
 
@@ -1816,9 +1711,9 @@ const newArr = a.concat(b).filter((item, _, arr) => {
 ## 快速打乱数组
 
 ```js
-var arr = [1,2,3,4,5,6,7,8,9,10];
-arr.sort(()=> Math.random() - 0.5)
-//利用sort return 大于等于0不交换位置，小于0交换位置 
+var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+arr.sort(() => Math.random() - 0.5)
+//利用sort return 大于等于0不交换位置，小于0交换位置
 // [5, 8, 4, 3, 2, 9, 10, 6, 1, 7]
 ```
 
@@ -1837,6 +1732,10 @@ V8 可以独立运行，也可以嵌入到任何 C++应用程序中
 
 ## 垃圾回收
 
+### 概念
+
+JavaScript代码运行时，需要分配内存空间来储存变量和值。当变量不在参与运行时，就需要系统收回被占用的内存空间，这就是垃圾回收。
+
 ### 为什么回收
 
 我们知道写代码时创建一个基本类型、对象、函数……都是需要占用内存的，但是我们并不关注这些，因为这是引擎为我们分配的，我们不需要显式手动的去分配内存。JavaScript 的引用数据类型是保存在堆内存中的，然后在栈内存中保存一个对堆内存中实际对象的引用，所以，JavaScript 中对引用数据类型的操作都是操作对象的引用而不是实际的对象。可以简单理解为，栈内存中保存了一个地址，这个地址和堆内存中的实际值是相关的。
@@ -1845,6 +1744,12 @@ V8 可以独立运行，也可以嵌入到任何 C++应用程序中
 ![ ](/img/interview/recovery.jpg)
 没有了引用关系，也就是无用的对象，这个时候假如任由它搁置，一个两个还好，多了的话内存也会受不了，所以就需要被清理（回收）。
 
+### 回收机制
+
+- Javascript具有自动垃圾回收机制，会定期对那些不再使用的变量、对象所占用的内存进行释放，原理就是找到不再使用的变量，然后释放掉其占用的内存。
+- JavaScript中存在两种变量：局部变量和全局变量。全局变量的生命周期会持续要页面卸载；而局部变量声明在函数中，它的生命周期从函数执行开始，直到函数执行结束，在这个过程中，局部变量会在堆或栈中存储它们的值，当函数执行结束后，这些局部变量不再被使用，它们所占有的空间就会被释放。
+- 当局部变量被外部函数使用时，其中一种情况就是闭包，在函数执行结束后，函数外部的变量依然指向函数内部的局部变量，此时局部变量依然在被使用，所以不会回收。
+
 ### 回收策略
 
 在 JavaScript 内存管理中有一个概念叫做 可达性，就是那些以某种方式可访问或者说可用的值，它们被保证存储在内存中，反之不可访问则需回收。
@@ -1852,20 +1757,20 @@ V8 可以独立运行，也可以嵌入到任何 C++应用程序中
 
 - 标记清除算法
 
-标记清除（Mark-Sweep），目前在 JavaScript引擎 里这种算法是最常用的，到目前为止的大多数浏览器的 JavaScript引擎 都在采用标记清除算法，只是各大浏览器厂商还对此算法进行了优化加工，且不同浏览器的 JavaScript引擎 在运行垃圾回收的频率上有所差异。
+标记清除（Mark-Sweep），目前在 JavaScript 引擎 里这种算法是最常用的，到目前为止的大多数浏览器的 JavaScript 引擎 都在采用标记清除算法，只是各大浏览器厂商还对此算法进行了优化加工，且不同浏览器的 JavaScript 引擎 在运行垃圾回收的频率上有所差异。
 
 就像它的名字一样，此算法分为 标记 和 清除 两个阶段，标记阶段即为所有活动对象做上标记，清除阶段则把没有标记（也就是非活动对象）销毁。
 
 整个标记清除算法大致过程就像下面这样
 
-1. 垃圾收集器在运行时会给内存中的所有变量都加上一个标记，假设内存中所有对象都是垃圾，全标记为0
-2. 然后从各个根对象开始遍历，把不是垃圾的节点改成1
-3. 清理所有标记为0的垃圾，销毁并回收它们所占用的内存空间
-4. 最后，把所有内存中对象标记修改为0，等待下一轮垃圾回收
+1. 垃圾收集器在运行时会给内存中的所有变量都加上一个标记，假设内存中所有对象都是垃圾，全标记为 0
+2. 然后从各个根对象开始遍历，把不是垃圾的节点改成 1
+3. 清理所有标记为 0 的垃圾，销毁并回收它们所占用的内存空间
+4. 最后，把所有内存中对象标记修改为 0，等待下一轮垃圾回收
 
 优点
 
-标记清除算法的优点只有一个，那就是实现比较简单，打标记也无非打与不打两种情况，这使得一位二进制位（0和1）就可以为其标记，非常简单
+标记清除算法的优点只有一个，那就是实现比较简单，打标记也无非打与不打两种情况，这使得一位二进制位（0 和 1）就可以为其标记，非常简单
 
 缺点
 
@@ -1906,11 +1811,11 @@ V8 可以独立运行，也可以嵌入到任何 C++应用程序中
 这种方式是不是很简单？确实很简单，不过在引用计数这种算法出现没多久，就遇到了一个很严重的问题——循环引用，即对象 A 有一个指针指向对象 B，而对象 B 也引用了对象 A ，如下面这个例子
 
 ```js
-function test(){
-  let A = new Object()
-  let B = new Object()
-  A.b = B
-  B.a = A
+function test() {
+    let A = new Object()
+    let B = new Object()
+    A.b = B
+    B.a = A
 }
 ```
 
@@ -1918,11 +1823,11 @@ function test(){
 
 我们再用标记清除的角度看一下，当函数结束后，两个对象都不在作用域中，A 和 B 都会被当作非活动对象来清除掉，相比之下，引用计数则不会释放，也就会造成大量无用内存占用，这也是后来放弃引用计数，使用标记清除的原因之一。
 
-优点:引用计数算法的优点我们对比标记清除来看就会清晰很多，首先引用计数在引用值为 0 时，也就是在变成垃圾的那一刻就会被回收，所以它可以立即回收垃圾。而标记清除算法需要每隔一段时间进行一次，那在应用程序（JS脚本）运行过程中线程就必须要暂停去执行一段时间的 GC，另外，标记清除算法需要遍历堆里的活动以及非活动对象来清除，而引用计数则只需要在引用时计数就可以了。
+优点:引用计数算法的优点我们对比标记清除来看就会清晰很多，首先引用计数在引用值为 0 时，也就是在变成垃圾的那一刻就会被回收，所以它可以立即回收垃圾。而标记清除算法需要每隔一段时间进行一次，那在应用程序（JS 脚本）运行过程中线程就必须要暂停去执行一段时间的 GC，另外，标记清除算法需要遍历堆里的活动以及非活动对象来清除，而引用计数则只需要在引用时计数就可以了。
 
 缺点:引用计数的缺点想必大家也都很明朗了，首先它需要一个计数器，而此计数器需要占很大的位置，因为我们也不知道被引用数量的上限，还有就是无法解决循环引用无法回收的问题，这也是最严重的。
 
-### V8对GC的优化
+### V8 对 GC 的优化
 
 #### 分代式垃圾回收
 
@@ -1930,7 +1835,7 @@ function test(){
 
 V8 的垃圾回收策略主要基于分代式垃圾回收机制，V8 中将堆内存分为新生代和老生代两区域，采用不同的垃圾回收器也就是不同的策略管理垃圾回收。
 
-新生代的对象为存活时间较短的对象，简单来说就是新产生的对象，通常只支持1～8M的容量，而老生代的对象为存活事件较长或常驻内存的对象，简单来说就是经历过新生代垃圾回收后还存活下来的对象，容量通常比较大。
+新生代的对象为存活时间较短的对象，简单来说就是新产生的对象，通常只支持 1 ～ 8M 的容量，而老生代的对象为存活事件较长或常驻内存的对象，简单来说就是经历过新生代垃圾回收后还存活下来的对象，容量通常比较大。
 
 ![ ](/img/interview/recovery4.jpg)
 
@@ -1938,7 +1843,7 @@ V8 的垃圾回收策略主要基于分代式垃圾回收机制，V8 中将堆�
 
 - 新生代垃圾回收
 
-新生代对象是通过一个名为 Scavenge 的算法进行垃圾回收，在 Scavenge算法 的具体实现中，主要采用了一种复制式的方法即 Cheney算法。Cheney算法中将堆内存一分为二，一个是处于使用状态的空间我们暂且称之为 使用区，一个是处于闲置状态的空间我们称之为 空闲区，如下图所示
+新生代对象是通过一个名为 Scavenge 的算法进行垃圾回收，在 Scavenge 算法 的具体实现中，主要采用了一种复制式的方法即 Cheney 算法。Cheney 算法中将堆内存一分为二，一个是处于使用状态的空间我们暂且称之为 使用区，一个是处于闲置状态的空间我们称之为 空闲区，如下图所示
 
 ![ ](/img/interview/recovery5.jpg)
 
@@ -1950,7 +1855,7 @@ V8 的垃圾回收策略主要基于分代式垃圾回收机制，V8 中将堆�
 
 相比于新生代，老生代的垃圾回收就比较容易理解了，上面我们说过，对于大多数占用空间大、存活时间长的对象会被分配到老生代里，因为老生代中的对象通常比较大，如果再如新生代一般分区然后复制来复制去就会非常耗时，从而导致回收执行效率不高，所以老生代垃圾回收器来管理其垃圾回收执行，它的整个流程就采用的就是上文所说的标记清除算法了。
 
-首先是标记阶段，从一组根元素开始，递归遍历这组根元素，遍历过程中能到达的元素称为活动对象，没有到达的元素就可以判断为非活动对象。清除阶段老生代垃圾回收器会直接将非活动对象，也就是数据清理掉。前面我们也提过，标记清除算法在清除后会产生大量不连续的内存碎片，过多的碎片会导致大对象无法分配到足够的连续内存，而V8中就采用了我们上文中说的标记整理算法来解决这一问题来优化空间。
+首先是标记阶段，从一组根元素开始，递归遍历这组根元素，遍历过程中能到达的元素称为活动对象，没有到达的元素就可以判断为非活动对象。清除阶段老生代垃圾回收器会直接将非活动对象，也就是数据清理掉。前面我们也提过，标记清除算法在清除后会产生大量不连续的内存碎片，过多的碎片会导致大对象无法分配到足够的连续内存，而 V8 中就采用了我们上文中说的标记整理算法来解决这一问题来优化空间。
 
 - 为什么需要分代式？
 
@@ -2008,14 +1913,14 @@ V8 的垃圾回收策略主要基于分代式垃圾回收机制，V8 中将堆�
 
 ![ ](/img/interview/recovery9.jpg)
 
-假如我们有A、B、C三个对象依次引用，在第一次增量分段中全部标记为黑色（活动对象），而后暂停开始执行应用程序也就是 JavaScript 脚本，在脚本中我们将对象 B 的指向由对象 C 改为了对象 D ，接着恢复执行下一次增量分段
+假如我们有 A、B、C 三个对象依次引用，在第一次增量分段中全部标记为黑色（活动对象），而后暂停开始执行应用程序也就是 JavaScript 脚本，在脚本中我们将对象 B 的指向由对象 C 改为了对象 D ，接着恢复执行下一次增量分段
 
-这时其实对象C已经无引用关系了，但是目前它是黑色（代表活动对象）此一整轮GC是不会清理C的，不过我们可以不考虑这个，因为就算此轮不清理等下一轮GC也会清理，这对我们程序运行并没有太大影响
-我们再看新的对象 D 是初始的白色，按照我们上面所说，已经没有灰色对象了，也就是全部标记完毕接下来要进行清理了，新修改的白色对象D将在次轮GC的清理阶段被回收，还有引用关系就被回收，后面我们程序里可能还会用到对象D呢，这肯定是不对的
+这时其实对象 C 已经无引用关系了，但是目前它是黑色（代表活动对象）此一整轮 GC 是不会清理 C 的，不过我们可以不考虑这个，因为就算此轮不清理等下一轮 GC 也会清理，这对我们程序运行并没有太大影响
+我们再看新的对象 D 是初始的白色，按照我们上面所说，已经没有灰色对象了，也就是全部标记完毕接下来要进行清理了，新修改的白色对象 D 将在次轮 GC 的清理阶段被回收，还有引用关系就被回收，后面我们程序里可能还会用到对象 D 呢，这肯定是不对的
 
-为了解决这个问题，V8增量回收使用 写屏障 (Write-barrier) 机制，即一旦有黑色对象引用白色对象，该机制会强制将引用的白色对象改为灰色，从而保证下一次增量GC标记阶段可以正确标记，这个机制也被称作 强三色不变性
+为了解决这个问题，V8 增量回收使用 写屏障 (Write-barrier) 机制，即一旦有黑色对象引用白色对象，该机制会强制将引用的白色对象改为灰色，从而保证下一次增量 GC 标记阶段可以正确标记，这个机制也被称作 强三色不变性
 
-那在我们上图的例子中，将对象B的指向由对象C改为对象D后，白色对象D会被强制改为灰色
+那在我们上图的例子中，将对象 B 的指向由对象 C 改为对象 D 后，白色对象 D 会被强制改为灰色
 
 - 增量标记与惰性清理的优缺？
 
@@ -2028,7 +1933,7 @@ V8 的垃圾回收策略主要基于分代式垃圾回收机制，V8 中将堆�
 
 ![ ](/img/interview/recovery10.jpg)
 
-辅助线程在执行垃圾回收的时候，主线程也可以自由执行而不会被挂起，这是并发的优点，但同样也是并发回收实现的难点，因为它需要考虑主线程在执行 JavaScript  时，堆中的对象引用关系随时都有可能发生变化，这时辅助线程之前做的一些标记或者正在进行的标记就会要有所改变，所以它需要额外实现一些读写锁机制来控制这一点。
+辅助线程在执行垃圾回收的时候，主线程也可以自由执行而不会被挂起，这是并发的优点，但同样也是并发回收实现的难点，因为它需要考虑主线程在执行 JavaScript 时，堆中的对象引用关系随时都有可能发生变化，这时辅助线程之前做的一些标记或者正在进行的标记就会要有所改变，所以它需要额外实现一些读写锁机制来控制这一点。
 
 ## 内存泄漏
 
@@ -2038,7 +1943,7 @@ V8 的垃圾回收策略主要基于分代式垃圾回收机制，V8 中将堆�
 
 ```js
 function foo(arg) {
-    bar = "this is a hidden global variable";
+    bar = 'this is a hidden global variable'
 }
 ```
 
@@ -2046,10 +1951,10 @@ function foo(arg) {
 
 ```js
 function foo() {
-    this.variable = "potential accidental global";
+    this.variable = 'potential accidental global'
 }
 // foo 调用自己，this 指向了全局对象（window）
-foo();
+foo()
 ```
 
 在 JavaScript 文件头部加上 'use strict'，可以避免此类错误发生。启用严格模式解析 JavaScript ，避免意外的全局变量。
@@ -2067,16 +1972,16 @@ setInterval(function() {
 }, 1000);
 ```
 
-这样的代码很常见，如果id为Node的元素从DOM中移除，该定时器仍会存在，同时，因为回调函数中包含对someResource的引用，定时器外面的someResource也不会被释放。
+这样的代码很常见，如果 id 为 Node 的元素从 DOM 中移除，该定时器仍会存在，同时，因为回调函数中包含对 someResource 的引用，定时器外面的 someResource 也不会被释放。
 
 - 闭包
 
 ```js
-function bindEvent(){
-  var obj=document.createElement('xxx')
-  obj.onclick=function(){
-    // Even if it is a empty function
-  }
+function bindEvent() {
+    var obj = document.createElement('xxx')
+    obj.onclick = function () {
+        // Even if it is a empty function
+    }
 }
 ```
 
@@ -2085,20 +1990,20 @@ function bindEvent(){
 ```js
 // 将事件处理函数定义在外面
 function bindEvent() {
-  var obj = document.createElement('xxx')
-  obj.onclick = onclickHandler
+    var obj = document.createElement('xxx')
+    obj.onclick = onclickHandler
 }
 // 或者在定义事件处理函数的外部函数中，删除对dom的引用
 function bindEvent() {
-  var obj = document.createElement('xxx')
-  obj.onclick = function() {
-    // Even if it is a empty function
-  }
-  obj = null
+    var obj = document.createElement('xxx')
+    obj.onclick = function () {
+        // Even if it is a empty function
+    }
+    obj = null
 }
 ```
 
-- 没有清理的DOM元素引用
+- 没有清理的 DOM 元素引用
 
 ## 包管理工具
 

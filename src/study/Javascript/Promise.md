@@ -13,17 +13,23 @@ tag:
 
 ### 原理
 
-Promise 是一种对异步操作的封装，可以通过独立的接口添加在异步操作执行成功、失败时执行的方法。
+Promis是异步编程的一种解决方案，它是一个对象，可以获取异步操作的消息，他的出现大大改善了异步编程的困境，避免了地狱回调，它比传统的解决方案回调函数和事件更合理和更强大。所谓Promise,简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。从语法上说，Promise是一个对象，从它可以获取异步操作的消息。Promise提供统一的API,各种异步操作都可以用同样的方法进行处理。
 
 Promise 中有几个状态：
 
-- pending: 初始状态, 非 fulfilled 或 rejected；
-- fulfilled: 成功的操作，为表述方便，fulfilled 使用 resolved 代替；
+- pending: 初始状态
+- fulfilled: 成功的操作，为表述方便，fulfilled 使用 resolved 代替
 - rejected: 失败的操作。
 
 ![ ](/img/study/javascript/promise.jpg)
 
 pending 可以转化为 fulfilled 或 rejected 并且只能转化一次，也就是说如果 pending 转化到 fulfilled 状态，那么就不能再转化到 rejected。并且 fulfilled 和 rejected 状态只能由 pending 转化而来，两者之间不能互相转换。
+
+### 缺点
+
+- 无法取消Promise,一旦新建它就会立即执行，无法中途取消。
+- 如果不设置回调函数，Promise内部抛出的错误，不会反应到外部。
+- 当处于pending状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）。
 
 ### 基本语法
 
