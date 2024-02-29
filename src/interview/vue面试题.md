@@ -9,13 +9,36 @@ tag:
     - Vue
 ---
 
-<!-- more -->
+## MVVM、MVC、MVP的区别
 
-## MVVM 原理
+MVC、MVP 和MVVM 是三种常见的软件架构设计模式，主要通过分离关注点的方式来组织代码结构，优化开发效率。
 
-- Model: 模型持有所有的数据、状态和程序逻辑
-- View: 负责界面的布局和显示
-- ViewModel：负责模型和界面之间的交互，是 Model 和 View 的桥梁
+在开发单页面应用时，往往一个路由页面对应了一个脚本文件，所有的页面逻辑都在一个脚本文件里。页面的這染、数据的获取，对用户事件的响应所有的应用逻辑都混合在一起，这样在开发简单项目时，可能看不出什么问题，如果项目变得复杂，那么整个文件就会变得元长、混乱，这样对项目开发和后期的项目维护是非常不利的。
+
+### MVC
+
+MVC 通过分离Model、View和Controller的方式来组织代码结构。其中View负责页面的显示逻辑，Model负责存储页面的业务数据，以及对相应数据的操作。并且view和Model应用了观察者模式，当Model层发生改变的时候它会通知有关 View 层更新页面。Controller 层是view层和Model层的纽带，它主要负责用户与应用的响应操作，当用户与页面产生交互的时候，Controller中的事件触发器就开始工作了，通过调用Model层，来完成对Modlel的修改，然后Model层再去通知View层更新。
+
+![MVC](/img/interview/mvc.jpg)
+
+### MVVM
+
+MVVM 分为 Model、 View、 ViewModel:
+
+- Model代表数据模型，数据和业务逻辑都在Model层中定义
+- View代表U视图，负责数据的展示
+- viewMode负责监听Model中数据的改变并且控制视图的更新，处理用户交互操作
+
+Model和View并无直接关联，而是通过viewModel来进行联系的，Model和ViewModel之间有着双向数据绑定的联系。因此当Modlel中的数据改变时会触发View层的刷新，View中由于用户交互操作而改变的数据也会在Model中同步。
+
+这种模式实现了 Model和View的数据自动同步，因此开发者只需要专注于数据的维护操作即可，而不需要自己操作DOM。
+
+![MVVM](/img/interview/mvvm.jpg)
+
+### MVP
+
+MVP模式与MVC唯一不同的在于Presenter和Controller。在MVC模式中使用观察者模式，来实现当Model层数据发生变化的时候，通知View层的更新。这样View层和Model层耦合在一起，当项目逻辑变得复杂的时候，可能会造成代码的混乱，并且可能会对代码的复用性造成一些问题。MVP的模式通过使用Presenter来实现对View层和Model层的解轉。MVC 中的
+Controler只知道Model的接口，因此它没有办法控制View层的更新，MVP模式中，View层，的接口暴露给了Presenter因此可以在Presenter中将Model的变化和View的变化绑定在一起，以此来实现view和Model的同步更新。这样就实现了对view和Model的解耜，Presenter还包含了其他的响应逻辑。
 
 ## 单页和多页的区别及优缺点
 
@@ -33,6 +56,10 @@ tag:
 1. 不利于 SEO
 2. 初次加载比较慢
 3. 页面复杂度高
+
+## Vue的基本原理
+
+当一个vue实例创建时，vue会遍历data中的属性，用 Object.defineProperty（vue3,0使用proxy）将它们转为 getter/setter， 并且在内部追踪相关依赖，在属性被访问和修改时通知变化。每个组件实例都有相应的 watcher 程序实例，它会在组件渲染的过程中把属性记录为依赖，之后当依赖项的setter被调用时，会通知watcher重新计算，从而致使它关联的组件得以更新。
 
 ## 对 import Vue from "vue"的理解
 
@@ -81,7 +108,8 @@ new Vue 的过程中还会执行 this.\_init 方法进行初始化处理。
 1. 所谓数据响应式就是能够使数据变化可以被检测并对这种变化做出响应的机制。
 2. MVVM 框架中要解决的一个核心问题是连接数据层和视图层，通过数据驱动应用，数据变化，视图更新，要做到这点的就需要对数据做响应式处理，这样一旦数据发生变化就可以立即做出更新处理。
 3. 以 vue 为例说明，通过数据响应式加上虚拟 DOM 和 patch 算法，开发人员只需要操作数据，关心业务，完全不用接触繁琐的 DOM 操作，从而大大提升开发效率，降低开发难度。
-4. vue2 中的数据响应式会根据数据类型来做不同处理，如果是对象则采用 Object.defineProperty()的方式定义数据拦截，当数据被访问或发生变化时，我们感知并作出响应；如果是数组则通过覆盖数组对象原型的 7 个变更方法，使这些方法可以额外的做更新通知，从而作出响应。这种机制很好的解决了数据响应化的问题，但在实际使用中也存在一些缺点：比如初始化时的递归遍历会造成性能损失；新增或删除属性时需要用户使用 Vue.set/delete 这样特殊的 api 才能生效；对于 es6 中新产生的 Map、Set 这些数据结构不支持等问题。 5.为了解决这些问题，vue3 重新编写了这一部分的实现：利用 ES6 的 Proxy 代理要响应化的数据，它有很多好处，编程体验是一致的，不需要使用特殊 api，初始化性能和内存消耗都得到了大幅改善；另外由于响应化的实现代码抽取为独立的 reactivity 包，使得我们可以更灵活的使用它，第三方的扩展开发起来更加灵活了。
+4. vue2 中的数据响应式会根据数据类型来做不同处理，如果是对象则采用 Object.defineProperty()的方式定义数据拦截，当数据被访问或发生变化时，我们感知并作出响应；如果是数组则通过覆盖数组对象原型的 7 个变更方法，使这些方法可以额外的做更新通知，从而作出响应。这种机制很好的解决了数据响应化的问题，但在实际使用中也存在一些缺点：比如初始化时的递归遍历会造成性能损失；新增或删除属性时需要用户使用 Vue.set/delete 这样特殊的 api 才能生效；对于 es6 中新产生的 Map、Set 这些数据结构不支持等问题。
+5. 为了解决这些问题，vue3 重新编写了这一部分的实现：利用 ES6 的 Proxy 代理要响应化的数据，它有很多好处，编程体验是一致的，不需要使用特殊 api，初始化性能和内存消耗都得到了大幅改善；另外由于响应化的实现代码抽取为独立的 reactivity 包，使得我们可以更灵活的使用它，第三方的扩展开发起来更加灵活了。
 
 > 源码层面 initData -> observe ->defineReactive 方法（内部对所有属性进行重写）递归增加对象中的对象，增加 getter 和 setter
 > 我们在使用 Vue 的时候，如果层级过深（考虑优化）如果数据不是响应式的就不要放在 data 中。属性取值的时候应该尽量避免多次取值。如果有些对象是放到 data 中，但是不是响应式的可以考虑采用 Object.freeze()来冻结函数
@@ -112,11 +140,69 @@ vm.$set(vm.items, indexOfItem, newValue)
 vm.items.splice(newLength)
 ```
 
+## 使用Object.defineProperty()来进行数据劫持有什么缺点？
+
+在对一些属性进行操作时，使用这种方法无法拦截，比如通过下标方式修改数组数据或者给对象新增属性，这都不能触发组件的重新渲染，因为Object.defineProperty不能拦截到这些操作。更精确的来说，对于数组而言，大部分操作都是拦截不到的，只是vue内部通过重写函数的方式解決了这个问题。
+
+在vue3.0中已经不使用这种方式了，而是通过使用Proxy对对象进行代理，从而实现数据劫持。使用Proxy的好处是它可以完美的监听到任何方式的数据改变，唯一的缺点是兼容性的问题，因为Proxy是ES6的语法。
+
 ## 如何进行依赖收集
 
 -所谓的依赖收集（观察者模式）被观察者指代是数据，观察者（watcher 有 3 种 渲染 watcher 计算属性 用户 wather） -一个 watcher 中可能对应着多个数据，watcher 中需要保存 dep（重新渲染的时候可以让属性重新记录 waitcher）计算属性也会用到
 
 > 多对多的关系 一个 dep 对应多个 watcher，一个 watcher 有多个 dep。默认渲染的时候会进行依赖收集
+
+## 双向数据绑定的原理
+
+vuejs 是采用数据劫持结合发布者-订阅者模式的方式，通过Object.defineProperty0来劫持各个属性的setter， getter，在数据变动时发布消息给订阅者，触发相应的监听回调。主要分为以下几个步骤：
+
+1. 需要observe的数据对象进行递归遍历，包括子属性对象的属性，都加上setter和getter这样的话，给这个对象的某个值赋值，就会触发setter，那么就能监听到了数据变化
+2. compile解析模板指令，将模板中的变量替换成数据，然后初始化渲染页面视因，并将每个指令对应的节点绑定更新函数，添加监听数据的订阅者，一旦数据有变动，收到通知，更新视图
+3. Watcher订丁阅者是Observer和Compile之间通信的桥梁，主要做的事情是：
+   - 在自身实例化时往属性 订阅器(dep)里面添加自己
+   - 自身必须有一个update()方法
+   - 待属性变动dep.notice()通知时，能调用自身的updat0方法，并触发Compile中邬定的回调，则功成身退。
+4. MVVM作为数据绑定的入口，整合Observer、Compile和Watcher三者，通过Observer来监听自己的model数据变化，通过Compile来解析编译模板指令，最终利用Watcher搭起Observer和Compile之间的通信桥梁，达到数据变化 一＞视图更新；视图交互变化（input）一＞数据model变更的双向绑定效果。
+
+![ ](/img/interview/vue2.jpg)
+
+## vue.set 方法如何实现
+
+Vue.set 方法是 vue 中的一个补丁方法（正常我们添加属性是不会触发更新的，我们数组无法监控到索引和长度）
+如何实现的 我们给每一个对象都增添了一个 dep 属性 当属性添加或者删除时，手动触发对象本身 dep 来进行更新
+
+## vm.$set()怎么解决对象新增属性不能响应的问题
+
+```js
+export function set (target: Array<any> | Object, key: any, val: any): any {
+  // target 为数组
+  if (Array.isArray(target) && isValidArrayIndex(key)) {
+    // 修改数组的长度, 避免索引>数组长度导致splcie()执行有误
+    target.length = Math.max(target.length, key)
+    // 利用数组的splice变异方法触发响应式  
+    target.splice(key, 1, val)
+    return val
+  }
+  // key 已经存在，直接修改属性值  
+  if (key in target && !(key in Object.prototype)) {
+    target[key] = val
+    return val
+  }
+  const ob = (target: any).__ob__
+  // target 本身就不是响应式数据, 直接赋值
+  if (!ob) {
+    target[key] = val
+    return val
+  }
+  // 对属性进行响应式处理
+  defineReactive(ob.value, key, val)
+  ob.dep.notify()
+  return val
+}
+```
+
+- 如果目标是数组，直接使用数组的 splice 方法触发相应式；
+- 如果目标是对象，会先判读属性是否存在、对象是否是响应式，最终如果要对属性进行响应式处理，则是通过调用 defineReactive 方法进行响应式处理（ defineReactive 方法就是 Vue 在初始化对象时，给对象属性采用 Object.defineProperty 动态添加 getter 和 setter 的功能所调用的方法）
 
 ## 如何理解 vue 中模板编译原理
 
@@ -161,21 +247,34 @@ console.log(c2.data.a)
 
 ## computed 和 watch 区别
 
-- 相同点
+- 对于Computed:
+  - 它支持缓存，只有依赖的数据发生了变化，才会重新计算
+  - 不支持异步，当Computed中有异步操作时，无法监听数据的变化
+  - computed的值会默认走缓存，计算属性是基于它们的响应式依赖进行缓存的，也就是基于data声明过，或者父组件传递过来的props中的数据进行计算的。
+  - 如果一个属性是由其他属性计算而来的，这个属性依赖其他的属性，一般会使用computed
+  - 如果computed属性的属性值是函数，那么默认使用get方法，函数的返回值就是属性的属性值;在computed中，属性有一个get方法和一个set方法，当数据发生变化时，会调用set方法。
+- 对于Watch:
+  - 它不支持缓存，数据变化时，它就会触发相应的操作
+  - 支持异步监听
+  - 监听的函数接收两个参数，第一个参数是最新的值，第二个是变化之前的值
+  - 当一个属性发生变化时，就需要执行相应的操作
+  - 监听数据必须是data中声明的或者父组件传递过来的props中的数据，兰发生变化时，会触发其他操作，函数有两个的参数：
+  - immediate：组件加载立即触发回调函数
+  - deep：深度监听，发现数据内部的变化，在复杂数据类型中使用，例如数组中的对象发生变化。需要注意的是，deep无法监听到数组和对象内部的变化。
+- 总结：
+  - computed 计算属性：依赖其它属性值，井且 corputed 的值有缓存，只有它依赖的属性值发生改变，下一次获取computed 的值时才会重新计算 computed 的值。
+  - watch 侦听器：更多的是观察的作用，无缓存性，类似于某些数据的监听回调，每当监听的数据变化时都会执行回调进行后续操作。
+- 运用场景：
+  - 当需要进行数值计算,并且依赖于其它数据时，应该使用 corputed，因为可以利用 computed的缓存特性，避免每次获取值时都要重新计算。
+  - 当需要在数据变化时执行异步或开销较大的操作时，应该使用 watch，使用 watch 选项允许执行异步操作（访问一个 API），限制执行该操作的频率，并在得到最终结果前，设置中间状态。这些都是计算属性无法做到的。
 
-底层都会创建一个 watcher（用法的区别 computed 定义的属性可以在模板中使用，watch 不能在试图中使用）
+## Computed 和 Methods 的区别
 
-- 不同点
+可以将同一函数定义为一个method 或者一个计算属性。对于最终的结果，两种方式是相同的
 
-> computed： 是计算属性，依赖其它属性值，并且 computed 的值有缓存，只有它依赖的属性值发生改变，下一次获取 computed 的值时才会重新计算 computed 的值。默认不会立即执行 只有取值的时候才会执行 内部会有 dirty 属性，来控制依赖的值是否发生变化，默认计算属性需要同步返回结果（有个包就是让 computed 变成异步的）
-
-> watch： 更多的是「观察」的作用，类似于某些数据的监听回调 ，每当监听的数据变化时都会执行回调进行后续操作；默认用户会提供一个回调函数，数据变化了就调用这个回调。我们可以监控某个数据的变化，数据变化了执行某些操作
-
-- 运用场景
-
-> 当我们需要进行数值计算，并且依赖于其它数据时，应该使用 computed，因为可以利用 computed 的缓存特性，避免每次获取值时，都要重新计算；
-
-> 当我们需要在数据变化时执行异步或开销较大的操作时，应该使用 watch，使用  watch  选项允许我们执行异步操作 ( 访问一个 API )，限制我们执行该操作的频率，并在我们得到最终结果前，设置中间状态。这些都是计算属性无法做到的。
+- 不同点：
+  - computed：计算属性是基于它们的依赖进行缓存的，只有在它的相关依赖发生改变时才会重新求值；
+  - method 调用总会执行函数。
 
 ## vue 侦听器
 
@@ -222,44 +321,6 @@ function defineReactive(obj, key, val) {
 }
 ```
 
-## vue.set 方法如何实现
-
-Vue.set 方法是 vue 中的一个补丁方法（正常我们添加属性是不会触发更新的，我们数组无法监控到索引和长度）
-如何实现的 我们给每一个对象都增添了一个 dep 属性 当属性添加或者删除时，手动触发对象本身 dep 来进行更新
-
-## vm.$set()怎么解决对象新增属性不能响应的问题
-
-```js
-export function set (target: Array<any> | Object, key: any, val: any): any {
-  // target 为数组
-  if (Array.isArray(target) && isValidArrayIndex(key)) {
-    // 修改数组的长度, 避免索引>数组长度导致splcie()执行有误
-    target.length = Math.max(target.length, key)
-    // 利用数组的splice变异方法触发响应式  
-    target.splice(key, 1, val)
-    return val
-  }
-  // key 已经存在，直接修改属性值  
-  if (key in target && !(key in Object.prototype)) {
-    target[key] = val
-    return val
-  }
-  const ob = (target: any).__ob__
-  // target 本身就不是响应式数据, 直接赋值
-  if (!ob) {
-    target[key] = val
-    return val
-  }
-  // 对属性进行响应式处理
-  defineReactive(ob.value, key, val)
-  ob.dep.notify()
-  return val
-}
-```
-
-- 如果目标是数组，直接使用数组的 splice 方法触发相应式；
-- 如果目标是对象，会先判读属性是否存在、对象是否是响应式，最终如果要对属性进行响应式处理，则是通过调用 defineReactive 方法进行响应式处理（ defineReactive 方法就是 Vue 在初始化对象时，给对象属性采用 Object.defineProperty 动态添加 getter 和 setter 的功能所调用的方法）
-
 ## props、methods、data、computed 的执行顺序
 
 ```js
@@ -294,6 +355,26 @@ props > methods > data > computed > watch
 ```js
 if (methods && hasOwn(methods, key)) {
     warn(`Method "${key}" has already been defined as a data property.`, vm)
+}
+```
+
+## 过滤器的作用，如何实现一个过滤器
+
+根据过滤器的名称，过滤器是用来过滤数据的，在vue中使用flters来过滤数据，flters不会修改数据，而是过滤数据，改变用户看到的输出（计算属性computed，方法methods都是通过修改数据来处理数据格式的输出显示）。
+
+- 使用场景：
+  - 需要格式化数据的情况，比如需要处理时间、价格等数据格式的输出 / 显示。
+  - 比如后端返回一个年月日的日期字符串，前端需要展示为多少天前的数据格式，此时就可以用fliters过滤器来处理数据。
+
+过滤器是一个西数，它会把表达式中的值始终当作函数的第一个参数。过滤器用在插值表达式{{}}和v-bind 表达式 中，然后放在操作符|后面进行指示。
+例如，在显示金额，给商品价格添加单位：
+
+```js
+＜li>商品价格：{{item.price | filterprice}}</li>
+filters: {
+    filterPrice (price) {
+        return price ? ('¥'+ price)：'--''
+    }
 }
 ```
 
@@ -369,6 +450,16 @@ isSameVnode 中会根据 key 来判断两个元素是否是同一个元素，key
 
 1.key 的作用主要是为了更高效的更新虚拟 DOM。
 2.vue 在 patch 过程中判断两个节点是否是相同节点是 key 是一个必要条件，渲染一组列表时，key 往往是唯一标识，所以如果不定义 key 的话，vue 只能认为比较的两个节点是同一个，哪怕它们实际上不是，这导致了频繁更新元素，使得整个 patch 过程比较低效，影响性能。 3.实际使用中在渲染一组列表时 key 必须设置，而且必须是唯一标识，应该避免使用数组索引作为 key，这可能导致一些隐蔽的 bug；vue 中在使用相同标签元素过渡切换时，也会使用 key 属性，其目的也是为了让 vue 可以区分它们，否则 vue 只会替换其内部属性而不会触发过渡效果。 4.从源码中可以知道，vue 判断两个节点是否相同时主要判断两者的 key 和元素类型等，因此如果不设置 key，它的值就是 undefined，则可能永远认为这是两个相同节点，只能去做更新操作，这造成了大量的 dom 更新操作，明显是不可取的。
+
+## slot是什么？有什么作用？原理是什么？
+
+slot又名插槽，是vue的内容分发机制，组件内部的模板引擎使用slot元素作为承载分发内容的出口。插槽slot是子组件的一个模板标签元素，而这一个标签元素是否显示，以及怎么显示是由父组件决定的。slot又分三类，默认插槽，具名插槽和作用域插槽。
+
+- 默认插槽：又名匿名插槽，当slot没有指定name属性值的时候一个默认显示插槽，一个组件内只有有一个匿名插槽。
+- 具名插槽：带有具体名字的插槽，也就是带有name属性的slot，一个组件可以出现多个具名插槽。
+- 作用域插槽：默认插槽、具名插槽的一个变体，可以是匿名插槽，也可以是具名插槽，该插槽的的不同点是在子组件渲染作用域插槽时，可以将子组件内部的数据传递给父组件，让父组件根据子组件的传递过来的数据决定如何渲染该插槽。
+
+实现原理：当子组件vm实例化时，获取到父组件传入的slot标签的内容，存放在vm.sslot中，默认插槽为vm.$slot.default，具名插槽为vm.$slot.xxx.xxx 为插槽名，当组件执行渲染函数时候，遇到slot标签，使用$slot中的内容进行替换，此时可以为插槽传递数据，若存在数据，则可称该插槽为作用域插槽。
 
 ## 组件化的理解
 
@@ -499,18 +590,23 @@ const Comp = {
 - 可以通过name属性来实现缓存功能（keep-alive）
 - 可以通过name来识别组件
 
+## v-if、v-show、v-html的原理
+
+- v-if生成vnode的时候会忽略对应节点，render的时候就不会渲染
+- v-show会生成vnode，render的时候也会渲染成真实节点，只是在render过程中会在节点的属性中修改show属性值，也就是常说的display
+- v-html会先移除节点下的所有节点，调用html方法，通过addProp添加innerHTML属性，归根结底还是设置innerHTML为v-html的值
+
 ## v-if 和 v-for
 
 vue2 中 v-for 优先级更高，在编译的时候会将 v-for 渲染成\_l 函数 v-if 会变成三元表达式。v-if 和 v-for 不能同时使用。如果同时遇到的时候，应该考虑先用计算属性处理数据，在进行 v-for，可以减少循环次数。vue3 中则完全相反，v-if 的优先级高于 v-for
 
 ## v-if 和 v-show
 
-- v-if 是真正的条件渲染，因为它会确保在切换过程中条件块内的事件监听器和子组件适当地被销毁和重建；也是惰性的：如果在初始渲染时条件为假，则什么也不做——直到条件第一次变为真时，才会开始渲染条件块。适用于在运行时很少改变条件，不需要频繁切换条件的场景。v-if 在编译的时候会变成三元表达式
-
-- v-show 就简单得多——不管初始条件是什么，元素总是会被渲染，并且只是简单地基于 CSS 的 “display” 属性进行切换。适用于需要非常频繁切换条件的场景。v-show 会变成一个指令
-
-viisbility:hidden 不能响应时间（占位的）
-opacity 可以响应时间(透明度为 0)
+- 手段：v-if是动态的向DOM树内添加或者删除DOM元素；v-show是通过设置DOM元泰的display样式属性控制显隐；
+- 编译过程：v-if切换有一个局部编译/卸载的过程，切换过程中合适地销毁和重建内部的事件监听和子组件；v-show只是简单的基于css切换；
+- 编译条件：v-if是惰性的，如果初始条件为假，则什么也不做；只有在条件第一次变为真时才开始局部编译；v-show是在任何条件下，无论首次条件是否为真，都被编译，然后被缓存，而且DOM元素保留；
+- 性能消耗：v-if有更高的切换消耗；v-show有更高的初始渲染消耗；
+- 使用场景：v-if适合运营条件不大可能改变；v-show适合频繁切换。
 
 ## v-model 的原理
 
@@ -638,38 +734,33 @@ keep-alive 是 Vue 内置的一个组件，可以使被包含的组件保留状�
 
 ## 修饰符有哪些？
 
-> 事件修饰符
+- 事件修饰符
+  - .stop 阻止冒泡
+  - .prevet 阻止默认行为
+  - .capture 内部元素触发的事件先在次处理
+  - .self 只有在 event.target 是当前元素时触发
+  - .once 事件只会触发一次
+  - .passive 立即触发默认行为
+  - .native 把当前元素作为原生标签看待
 
-- .stop 阻止冒泡
-- .prevet 阻止默认行为
-- .capture 内部元素触发的事件先在次处理
-- .self 只有在 event.target 是当前元素时触发
-- .once 事件只会触发一次
-- .passive 立即触发默认行为
-- .native 把当前元素作为原生标签看待
+- 按键修饰符
+  - .keyup 键盘抬起
+  - .keydown 键盘按下
 
-> 按键修饰符
+- 系统修饰符
+  - .ctrl
+  - .alt
+  - .meta
 
-- .keyup 键盘抬起
-- .keydown 键盘按下
+- 鼠标修饰符
+  - .left 鼠标左键
+  - .right 鼠标右键
+  - .middle 鼠标中键
 
-> 系统修饰符
-
-- .ctrl
-- .alt
-- .meta
-
-> 鼠标修饰符
-
-- .left 鼠标左键
-- .right 鼠标右键
-- .middle 鼠标中键
-
-> 表单修饰符
-
-- .lazy 等输入完之后再显示
-- .trim 删除内容前后的空格
-- .number 输入数字或转为数字
+- 表单修饰符
+  - .lazy 等输入完之后再显示
+  - .trim 删除内容前后的空格
+  - .number 输入数字或转为数字
 
 ## Vue.use
 
