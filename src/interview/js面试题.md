@@ -9,92 +9,129 @@ tag:
     - Javascript
 ---
 
-## JS 由哪三部分组成
+## 一、数据类型
 
-1. ECMAScript：JS 的核心内容，描述了语言的基础语法，比如 var，for
-2. 文档对象模型（DOM）:它指的是把文档当做一个对象，这个对象主要定义了处理网页内容的方法和接口
-3. 浏览器对象模型（BOM）:它指的是把浏览器当做一个对象来对待，这个对象主要定义了与浏览器进行交互的法和接口。BOM 的核心是 window,而 window 对象具有双重角色，它既是通过 js 访问浏览器窗口的一个接口，又是一个 Gob!(全局)对象。这意味着在网页中定义的任何对象，变量和函数，都作为全局对象的一个属性或者方法存在。window 对象含有 I1 ocation 对象、navigator 对象、screen 对象等子对象，并且 DOM 的最根本的对象 document 对象也是 BOM 的 window 对象的子对象
+### 1.null 和 undefined 区别
 
-## JS 由哪些内置对象
+首先 Undefined 和 Null 都是基本数据类型，这两个基本数据类型分别都只有一个值，就是 undefined 和 null。
 
-- 值属性，这些全局属性返回一个简单值，这些值没有自己的属性和方法。
-    例如 Infinity、NaN、undefined、null 字面量
-- 函数属性，全局函数可以直接调用，不需要在调用时指定所属对象，执行结束后会将结果直接返回给调用者。
-    例如 eval()、parseFloat()、parselnt()等
-- 基本对象，基本对象是定义或使用其他对象的基础。基本对象包括一般对象、函数对象和错误对象。
-    例如 Object、.Function、Boolean、.Symbol、.Error 等
-- 数字和日期对象，用来表示数字、日期和执行数学计算的对象。
-    例如 Number、Math、Date
-- 字符串，用来表示和操作字符串的对象。
-    例如 String、RegExp
-- 可索引的集合对象，这些对象表示按照索引值来排序的数据集合，包括数组和类型数组，以及类数组结构的对象。
-    例如 Array
-- 使用键的集合对象，这些集合对象在存储数据时会使用到键，支持按照插入顺序来迭代元素。
-    例如 Map、Set、VeakMap、.WeakSet
-- 矢量集合，SMD 矢量集合中的数据会被组织为一个数据序列。
-    例如 SIMD 等
-- 结构化数据，这些对象用来表示和操作结构化的缓冲区数据，或使用 JSON 编码的数据。
-    例如 JSON 等
-- 控制抽象对象
-    例如 Promise、Generator 等
-- 反射
-    例如 Reflect、Proxy
-- 国际化，为了支持多语言处理而加入 ECMAScript 的对象。
-    例如 lntl、lnt.Collator 等
-- WebAssembly
-- 其他
-    例如 arguments
+undefined 代表的含义是未定义，null 代表的含义是空对象。一般变量声明了但还没有定义的时候会返回 undefined，null 主要用于赋值给一些可能会返回对象的变量，作为初始化。
 
-js 中的内置对象主要指的是在程序执行前存在全局作用域里的由 js 定义的一些全局值属性、函数和用来实例化其他对象的构造函数对象。一般经常用到的如全局变量值 NaN、undefined,全局函数如 parselnt0()、parseFloat()用来实例化对象的构造函数如 Date、Object 等，还有提供数学计算的单体内置对象如 Math 对象。
+undefined 在 JavaScript 中不是一个保留字，这意味着可以使用 undefined 来作为一个变量名，但是这样的做法是非常危险的，它会影响对 undefined 值的判断。我们可以通过一些方法获得安全的 undefined 值，比如说 void 0。
 
-## 强类型语言和弱类型语言的区别
+当对这两种类型使用 typeof 进行判断时，Null 类型化会返回 “object”，这是一个历史遗留的问题。当使用双等号对两种类型的值进行比较时会返回 true，使用三个等号时会返回 false。
 
-- 强类型语言：强类型语言也称为强类型定义语言，是一种总是强制类型定义的语言，要求变量的使用要严格符合定义，所有变量都必须先定义后使用。Java 和 C++等语言都是强制类型定义的，也就是说，一旦一个变量被指定了某个数据类型，如果不经过强制转换，那么它就永远是这个数据类型了。例如你有一个整数，如果不显式地进行转换，你不能将其视为一个字符串。
-- 弱类型语言：弱类型语言也称为弱类型定义语言，与强类型定义相反。JavaScripti 语言就属于弱类型语言。简单理解就是一种变量类型可以被忽略的语言。比如 JavaScript 是弱类型定义的，在 JavaScript 中就可以将字符串 12'和整数 3 进行连接得到字符串'123'，在相加的时候会进行强制类型转换。
+### 2.typeof null 的结果是什么，为什么？
 
-两者对比：强类型语言在速度上可能略逊色于弱类型语言，但是强类型语言带来的严谨性可以有效地帮助避免许多错误。
+typeof null 的结果是 Object。
 
-## 解释性语言和编译型语言的区别
+在 JavaScript 第一个版本中，所有值都存储在 32 位的单元中，每个单元包含一个小的 类型标签(1-3 bits) 以及当前要存储值的真实数据。类型标签存储在每个单元的低位中，共有五种数据类型：
 
-- 解释型语言
-    使用专门的解释器对源程序逐行解释成特定平台的机器码并立即执行。是代码在执行时才被解释器行行动态翻译和执行，而不是在执行之前就完成翻译。解释型语言不需要事先编译，其直接将源代码解释成机器码并立即执行，所以只要某一平台提供了相应的解释器即可运行该程序。其特点总结如下
-  - 解释型语言每次运行都需要将源代码解释称机器码并执行，效率较低；
-  - 只要平台提供相应的解释器，就可以运行源代码，所以可以方便源程序移植；
-  - JavaScript、.Python 等属于解释型语言。
-- 编译型语言
-    使用专门的编译器，针对特定的平台，将高级语言源代码一次性的编译成河被该平台硬件执行的机器码，并包装成该平台所能识别的可执行性程序的格式。在编译型语言写的程序执行之前，需要一个专门的编译过程，把源代码编译成机器语言的文件，如 eX 格式的文件，以后要再运行时，直接使用编译结果即可，如直接运行 eXe 文件。因为只需编译一次，以后运行时不需要编译，所以编译型语言执行效率高。其特点总结如下：
-  - 一次性的编译成平台相关的机器语言文件，运行时脱离开发环境，运行效率高；
-  - 与特定平台相关，一般无法移植到其他平台；
-  - C、C++等属于编译型语言。
+```text
+000: object   - 当前存储的数据指向一个对象。
+  1: int      - 当前存储的数据是一个 31 位的有符号整数。
+010: double   - 当前存储的数据指向一个双精度的浮点数。
+100: string   - 当前存储的数据指向一个字符串。
+110: boolean  - 当前存储的数据是布尔值。
+```
 
-两者主要区别在于：前者源程序编译后即可在该平台运行，后者是在运行期间才编译。所以前者运行速度快，后者跨平台性好。
+如果最低位是 1，则类型标签标志位的长度只有一位；如果最低位是 0，则类型标签标志位的长度占三位，为存储其他四种数据类型提供了额外两个 bit 的长度。
 
-## 对 JSON 的里解
+有两种特殊数据类型：
 
-JSON 是一种基于文本的轻量级的数据交换格式。它可以被任何的编程语言读取和作为数据格式来传递。
+- undefined 的值是 (-2)30(一个超出整数范围的数字)；
+- null 的值是机器码 NULL 指针(null 指针的值全是 0)
 
-在项目开发中，使用 JSON 作为前后端数据交换的方式。在前端通过将一个符合 JSON 格式的数据结构序列化为 JSON 字符串，然后将它传递到后端，后端通过 JSON 格式的字符串解析后生成对应的数据结构，以此来实现前后端数据的一个传递。
+那也就是说 null 的类型标签也是 000，和 Object 的类型标签一样，所以会被判定为 Object。
 
-因为 JSON 的语法是基于 js 的，因此很容易将 JSON 和 js 中的对象弄混，但是应该注意的是 JSON 和 js 中的对象不是一回事，JSON 中对象格式更加严格，比如说在 JSON 中属性值不能为函数，不能出现 NN 这样的属性值等，因此大多数的 js 对象是不符合 JSON 对象的格式的.
+### 3.typeof NaN 的结果是什么？
 
-在 js 中提供了两个函数来实现 js 数据结构和 JSON 格式的转换处理，
+NaN 指“不是一个数字”（not a number），NaN 是一个“警戒值”（sentinel value，有特殊用途的常规值），用于指出数字类型中的错误情况，即“执行数学运算没有成功，这是失败后返回的结果”。
 
-- JSON.stringify 函数，通过传入一个符合 JSON 格式的数据结构，将其转换为一个 JSON 字符串。如果传入的数据结构不符合 JSON 格式，那么在序列化的时候会对这些值进行对应的特殊处理，使其符合规范。在前端向后端发送数据时，可以调用这个函数将数据对象转化为 JSON 格式的字符串。
-- JSON.parse 函数，这个函数用来将 JSON 格式的字符串转换为一个 js 数据结构，如果传入的字符串不是标准的 JSON 格式的字符串的话，将会抛出错误。当从后端接收到 JSON 格式的字符串时，可以通过这个方法来将其解析为一个 js 数据结构，以此来进行数据的访问。
+```js
+typeof NaN // "number"
+```
 
-## JavaScript 脚本延迟加载的方式有哪些？
+NaN 是一个特殊值，它和自身不相等，是唯一一个非自反（自反，reflexive，即 x === x 不成立）的值。而 NaN !== NaN 为 true。
 
-延迟加载就是等页面加载完成之后再加载 JavaScript 文件。js 延迟加载有助于提高页面加载速度。
+### 4.isNaN 和 Number.isNaN 函数的区别？
 
-一般有以下几种方式：
+- 函数 isNaN 接收参数后，会尝试将这个参数转换为数值，任何不能被转换为数值的的值都会返回 true，因此非数字值传入也会返回 true ，会影响 NaN 的判断。
+- 函数 Number.isNaN 会首先判断传入参数是否为数字，如果是数字再继续判断是否为 NaN ，不会进行数据类型的转换，这种方法对于 NaN 的判断更为准确。
 
-- defer 属性：给 js 脚本添加 defer 属性，这个属性会让脚本的加载与文档的解析同步解析，然后在文档解析完成后再执行这个脚本文件，这样的话就能使页面的渲染不被阻塞。多个设置了 defer 属性的脚本按规范来说最后是顺序执行的，但是在一些浏览器中可能不是这样。
-- async 属性：给 js 脚本添加 async 属性，这个属性会使脚本异步加载，不会阻塞页面的解析过程，但是当脚本加载完成后立即执行 js 脚本，这个时候如果文档没有解析完成的话同样会阻塞。多个 a$yc 属性的脚本的执行顺序是不可预测的，一般不会按照代码的顺序依次执行。
-- 动态创建 DOM 方式：动态创建 DOM 标签的方式，可以对文档的加载事件进行监听，当文档加载完成后再动态的创建 script 标签来引入 js 脚本。
-- 使用 setTimeout 延迟方法：设置一个定时器来延迟加载 js 脚本文件
-- 让 Js 最后加载：将 js 脚本放在文档的底部，来使 js 脚本尽可能的在最后来加载执行。
+### 5.为什么 0.1+0.2！==0.3，如何让其相等
 
-## ES6 新特性
+在开发过程中遇到类以这样的问题：
+
+```js
+let n1 = 0.1,
+    n2 = 0.2
+conso1e.log(n1 + n2) //0.30000000000000004
+```
+
+这里得到的不是想要的结果，要想等于 0.3，就要把它进行转化：
+
+```js
+;(n1 + n2).toFixed(2) //注意，toFixed为四舍五入
+```
+
+toFixed(num)方法可把 Number 四舍五入为指定小数位数的数字。那为什么会出现这样的结果呢？
+
+计算机是通过二进制的方式存储数据的，所以计算机计算 0.1+0.2 的时候，实际上是计算的两个数的二进制的和。0.1 的二进制是 0.0001100110011001100...(1100 循环)，0.2 的二进制是：0.00110011001100...(1100 循环)，这两个数的二进制都是无限循环的数。那 JavaScript 是如何处理无限循环的二进制小数呢？
+
+一般我们认为数字包括整数和小数，但是在 JavaScript 中只有一种数字类型：Number,它的实现遵循 IEEE754 标准，使用 64 位固定长度来表示，也就是标准的 double 双精度浮点数。在二进制科学表示法中，双精度浮点数的小数部分最多只能保留 52 位，再加上前面的 1，其实就是保留 53 位有效数字，剩余的需要舍去，遵从“0 舍 1 入"的原则。
+
+根据这个原则，0.1 和 0.2 的二进制数相加，再转化为十进制数就是：0.30000000000000004。
+
+一个直接的解决方法就是设置一个误差范围，通常称为“机器精度”。对 JavaScript 来说，这个值通常为 2-52，在 ES6 中，提供了 Number.EPSILON 属性，而它的值就是 2-52，只要判断 0.1+0.2-0.3 是否小于 Number..EPSILON,如果小于，就可以判断为 0.1+0.2===0.3
+
+```js
+function numberepsilon(argl,arg2){
+    return Math.abs (argl arg2)<Number.EPSILON;
+    console.log(numberepsilon(0.1 0.2,0.3));//true
+}
+```
+
+### 6.JavaScript 有哪些数据类型，它们的区别？
+
+JavaScript 共有八种数据类型，分别是 Undefined、Null、Boolean、Number、String、Object、Symbol、BigInt。
+
+其中 Symbol 和 BigInt 是 ES6 中新增的数据类型：
+
+- Symbol 代表创建后独一无二且不可变的数据类型，它主要是为了解决可能出现的全局变量冲突的问题。
+- BigInt 是一种数字类型的数据，它可以表示任意精度格式的整数，使用 BigInt 可以安全地存储和操作大整数，即使这个数已经超出了 Number 能够表示的安全整数范围。
+
+这些数据可以分为原始数据类型和引用数据类型：
+
+- 栈：原始数据类型（Undefined、Null、Boolean、Number、String）
+- 堆：引用数据类型（对象、数组和函数）
+
+两种类型的区别在于存储位置的不同：
+
+- 原始数据类型直接存储在栈（stack）中的简单数据段，占据空间小、大小固定，属于被频繁使用数据，所以放入栈中存储；
+- 引用数据类型存储在堆（heap）中的对象，占据空间大、大小不固定。如果存储在栈中，将会影响程序运行的性能；引用数据类型在栈中存储了指针，该指针指向堆中该实体的起始地址。当解释器寻找引用值时，会首先检索其在栈中的地址，取得地址后从堆中获得实体。
+
+堆和栈的概念存在于数据结构和操作系统内存中，在数据结构中：
+
+- 在数据结构中，栈中数据的存取方式为先进后出。
+- 堆是一个优先队列，是按优先级来进行排序的，优先级可以按照大小来规定。
+
+在操作系统中，内存被分为栈区和堆区：
+
+- 栈区内存由编译器自动分配释放，存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的栈。
+- 堆区内存一般由开发着分配释放，若开发者不释放，程序结束时可能由垃圾回收机制回收。
+
+### 7. + 操作符什么时候用于字符串的拼接？
+
+根据 ES5 规范，如果某个操作数是字符串或者能够通过以下步骤转换为字符串的话，+ 将进行拼接操作。如果其中一个操作数是对象（包括数组），则首先对其调用 ToPrimitive 抽象操作，该抽象操作再调用 [[DefaultValue]]，以数字作为上下文。如果不能转换为字符串，则会将其转换为数字类型来进行计算。
+
+简单来说就是，如果 + 的其中一个操作数是字符串（或者通过以上步骤最终得到字符串），则执行字符串拼接，否则执行数字加法。
+
+那么对于除了加法的运算符来说，只要其中一方是数字，那么另一方就会被转为数字。
+
+## 二、ES6
+
+### 1.ES6 新特性
 
 1. 新增块级作用域（let、const）
 2. 新增定义类的语法糖（class）
@@ -109,7 +146,7 @@ JSON 是一种基于文本的轻量级的数据交换格式。它可以被任何
 11. 新增 generator
 12. 新增箭头函数
 
-## var、let、const
+### 2.var、let、const
 
 - var
 
@@ -164,11 +201,11 @@ consolg.log(a, window.a) // 10,10
 
 ![ ](/img/interview/let.jpg)
 
-## const 对象的属性可以修改吗
+### 3.const 对象的属性可以修改吗
 
 const 保证的并不是变量的值不能改动，而是变量指向的那个内存地址不能改动。对于基本类型的数据（数值、字符串、布尔值），其值就保存在变量指向的那个内存地址，因此等同于常量。但对于引用类型的数据（主要是对象和数组）来说，变量指向数据的内存地址，保存的只是一个指针，const 只能保证这个指针是固定不变的，至于它指向的数据结构是不是可变的，就完全不能控制了。
 
-## 为什么要进行变量提升，它导致了什么问题？
+### 4.为什么要进行变量提升，它导致了什么问题？
 
 变量提升的表现是，无论在函数中何处位置声明的变量，好像都被提升到了函数的首部，可以在变量声明前访问到而不会报错。
 
@@ -197,39 +234,7 @@ console.log(a)
 
 如果没有变量提升，这两行代码就会报错，但是因为有了变量提升，这段代码就河以正常执行。虽然，在可以开发过程中，可以完全避免这样写，但是有时代码很复杂的时候。可能因为疏忽而先使用后定义了，这样也不会影响正常使用。由于变量提升的存在，而会正常运行。
 
-## 为什么 0.1+0.2！==0.3，如何让其相等
-
-在开发过程中遇到类以这样的问题：
-
-```js
-let n1=0.1,n2=0.2
-conso1e.1og(n1+n2)//0.30000000000000004
-```
-
-这里得到的不是想要的结果，要想等于 0.3，就要把它进行转化：
-
-```js
-;(n1 + n2).toFixed(2) //注意，toFixed为四舍五入
-```
-
-toFixed(num)方法可把 Number 四舍五入为指定小数位数的数字。那为什么会出现这样的结果呢？
-
-计算机是通过二进制的方式存储数据的，所以计算机计算 0.1+0.2 的时候，实际上是计算的两个数的二进制的和。0.1 的二进制是 0.0001100110011001100...(1100 循环)，0.2 的二进制是：0.00110011001100...(1100 循环)，这两个数的二进制都是无限循环的数。那 JavaScript 是如何处理无限循环的二进制小数呢？
-
-一般我们认为数字包括整数和小数，但是在 JavaScript 中只有一种数字类型：Number,它的实现遵循 IEEE754 标准，使用 64 位固定长度来表示，也就是标准的 double 双精度浮点数。在二进制科学表示法中，双精度浮点数的小数部分最多只能保留 52 位，再加上前面的 1，其实就是保留 53 位有效数字，剩余的需要舍去，遵从“0 舍 1 入"的原则。
-
-根据这个原则，0.1 和 0.2 的二进制数相加，再转化为十进制数就是：0.30000000000000004。
-
-一个直接的解决方法就是设置一个误差范围，通常称为“机器精度”。对 JavaScript 来说，这个值通常为 2-52，在 ES6 中，提供了 Number.EPSILON 属性，而它的值就是 2-52，只要判断 0.1+0.2-0.3 是否小于 Number..EPSILON,如果小于，就可以判断为 0.1+0.2===0.3
-
-```js
-function numberepsilon(argl,arg2){
-    return Math.abs (argl arg2)<Number.EPSILON;
-    console.log(numberepsilon(0.1 0.2,0.3));//true
-}
-```
-
-## 暂时性死区
+### 5.暂时性死区
 
 在代码块内，使用 let 命令声明变量之前，该变量都是不可用的。这在语法上，称为“暂时性死区”（temporal dead zone，简称 TDZ）
 
@@ -246,7 +251,7 @@ log() // ReferenceError: a is not defined
 
 在执行阶段时，根据作用域链原则，函数内部会先寻找函数内部的作用域变量， 既然 a 在函数中已经被确定，那么就不会向全局作用域去寻找 a 了。默认函数内部 a 是已经定义的。但函数顺序执行的时候，访问 a 的同时并没有在访问之前声明 a，也就是树在当前作用域下，没有找到 a 的生命和定义，就会出现 为定义的错误了。
 
-## 箭头函数与普通函数的区别
+### 6.箭头函数与普通函数的区别
 
 - 箭头函数处比普通函数更加简洁
   - 如果没有参数，就直接写一个空括号即可
@@ -299,9 +304,9 @@ fun1.bind({id:'Obj'})();//'Global
 - 箭头函数没有 prototype
 - 箭头函数不能用作 Generatori 函数，不能使用 veild 关键字
 
-## 扩展运算符的作用及使用场景
+### 7.扩展运算符的作用及使用场景
 
-- 对象扩展运算符
+#### (1)对象扩展运算符
 
 对象的扩展运算符(…)用于取出参数对象中的所有可遍历属性，拷贝到当前对象之中。
 
@@ -330,7 +335,7 @@ let baz={..bar,..{a:2,b:4}}//{a:2,b:4}
 
 需要注意：扩展运算符对对象实例的拷贝属于浅拷贝
 
-- 数组扩展运算符
+#### (2)数组扩展运算符
 
 数组的扩展运算符可以将一个数组转为用逗号分隔的参数序列，且每次只能展开一层数组。
 
@@ -341,7 +346,7 @@ conso1e.log(...[1, [2, 3, 4], 5])
 //1[2,3,4]5
 ```
 
-将数组转换为参数序列
+- 将数组转换为参数序列
 
 ```js
 function add(x, y) {
@@ -351,14 +356,14 @@ const numbers = [1, 2]
 add(...numbers) //3
 ```
 
-复制数组
+- 复制数组
 
 ```js
 const arr1 = [1,2]
 const arr2 = [..arr1]
 ```
 
-合并数组
+- 合并数组
 
 ```js
 const arrl ['two','three']
@@ -366,7 +371,7 @@ const arr2 =['one',...arrl,'four','five']
 //["one","two”,"three”,"four","five"]
 ```
 
-扩展运算符与解构赋值结合起来，用于生成数组
+- 扩展运算符与解构赋值结合起来，用于生成数组
 
 ```js
 const [first, ...rest] = [1, 2, 3, 4, 5]
@@ -381,13 +386,106 @@ const [..rest,1ast]=[1,2,3,4,5]//报错
 const [first,..rest,1ast]=[1,2,3,4,5]//报错
 ```
 
-将字符串转为真正的数组
+- 将字符串转为真正的数组
 
 ```js
 ;[...'he11o'] //["h","e","1","1”,"0”]
 ```
 
-## 如何提取高度嵌套的对象里的指定属性？
+### 8.Proxy 可以实现什么功能？
+
+在 Vue3.0 中通过 Proxy 来替换原本的 Object.defineProperty 来实现数据响应式。
+
+Proxy 是 ES6 中新增的功能，它可以用来自定义对象中的操作。
+
+```js
+let p = new Proxy(target, handler)
+```
+
+target 代表需要添加代理的对象，handler 用来自定义对象中的操作，比如可以用来自定义 set 或者 get 函数。
+
+下面来通过 Proxy 来实现一个数据响应式：
+
+```js
+let onWatch = (obj, setBind, getLogger) => {
+    let handler = {
+        get(target, property, receiver) {
+            getLogger(target, property)
+            return Reflect.get(target, property, receiver)
+        },
+        set(target, property, value, receiver) {
+            setBind(value, property)
+            return Reflect.set(target, property, value)
+        },
+    }
+    return new Proxy(obj, handler)
+}
+let obj = { a: 1 }
+let p = onWatch(
+    obj,
+    (v, property) => {
+        console.log(`监听到属性${property}改变为${v}`)
+    },
+    (target, property) => {
+        console.log(`'${property}' = ${target[property]}`)
+    }
+)
+p.a = 2 // 监听到属性a改变
+p.a // 'a' = 2
+```
+
+在上述代码中，通过自定义 set 和 get 函数的方式，在原本的逻辑中插入了我们的函数逻辑，实现了在对对象任何属性进行读写时发出通知。
+
+当然这是简单版的响应式实现，如果需要实现一个 Vue 中的响应式，需要在 get 中收集依赖，在 set 派发更新，之所以 Vue3.0 要使用 Proxy 替换原本的 API 原因在于 Proxy 无需一层层递归为每个属性添加代理，一次即可完成以上操作，性能上更好，并且原本的实现有一些数据更新不能监听到，但是 Proxy 可以完美监听到任何方式的数据改变，唯一缺陷就是浏览器的兼容性不好。
+
+### 9.对对象与数组的解构的理解
+
+解构是 ES6 提供的一种新的提取数据的模式，这种模式能够从对象或数组里有针对性地拿到想要的数值。
+
+#### (1)数组的解构
+
+在解构数组时，以元素的位置为匹配条件来提取想要的数据的：
+
+```js
+const [a, b, c] = [1, 2, 3]
+```
+
+最终，a、b、c 分别被赋予了数组第 0、1、2 个索引位的值
+
+数组里的 0、1、2 索引位的元素值，精准地被映射到了左侧的第 0、1、2 个变量里去，这就是数组解构的工作模式。还可以通过给左侧变量数组设置空占位的方式，实现对数组中某几个元素的精准提取：
+
+```js
+const [a, , c] = [1, 2, 3]
+```
+
+通过把中间位留空，可以顺利地把数组第一位和最后一位的值赋给 a、c 两个变量
+
+#### (2)对象的解构
+
+对象解构比数组结构稍微复杂一些，也更显强大。在解构对象时，是以属性的名称为匹配条件，来提取想要的数据的。现在定义一个对象：
+
+```js
+const stu = {
+    name: 'Bob',
+    age: 24,
+}
+```
+
+假如想要解构它的两个自有属性，可以这样：
+
+```js
+const { name, age } = stu
+```
+
+这样就得到了 name 和 age 两个和 stu 平级的变量
+
+注意，对象解构严格以属性名作为定位依据，所以就算调换了 name 和 age 的位置，结果也是一样的：
+
+```js
+const { age, name } = stu
+```
+
+### 10.如何提取高度嵌套的对象里的指定属性？
 
 ```js
 const school = {
@@ -407,7 +505,186 @@ const {
 console.log(name)
 ```
 
-## 操作数组的方法
+### 11.对 rest 参数的理解
+
+扩展运算符被用在函数形参上时，它还可以把一个分离的参数序列整合成一个数组：
+
+```js
+function mutiple(...args) {
+    let result = 1
+    for (var val of args) {
+        result *= val
+    }
+    return result
+}
+mutiple(1, 2, 3, 4) // 24
+```
+
+这里，传入 mutiple 的是四个分离的参数，但是如果在 mutiple 函数里尝试输出 args 的值，会发现它是一个数组：
+
+```js
+function mutiple(...args) {
+    console.log(args)
+}
+mutiple(1, 2, 3, 4) // [1, 2, 3, 4]
+```
+
+### 12.ES6 中模板语法与字符串处理
+
+ES6 提出了“模板语法”的概念。在 ES6 以前，拼接字符串是很麻烦的事情：
+
+```js
+var name = 'css'
+var career = 'coder'
+var hobby = ['coding', 'writing']
+var finalString =
+    'my name is ' +
+    name +
+    ', I work as a ' +
+    career +
+    ', I love ' +
+    hobby[0] +
+    ' and ' +
+    hobby[1]
+```
+
+仅仅几个变量，写了这么多加号，还要时刻小心里面的空格和标点符号有没有跟错地方。但是有了模板字符串，拼接难度直线下降：
+
+```js
+var name = 'css'
+var career = 'coder'
+var hobby = ['coding', 'writing']
+var finalString = `my name is ${name}, I work as a ${career} I love ${hobby[0]} and ${hobby[1]}`
+```
+
+字符串不仅更容易拼了，也更易读了，代码整体的质量都变高了。这就是模板字符串的第一个优势——允许用${}的方式嵌入变量。但这还不是问题的关键，模板字符串的关键优势有两个：
+
+- 在模板字符串中，空格、缩进、换行都会被保留
+- 模板字符串完全支持“运算”式的表达式，可以在${}里完成一些计算
+
+基于第一点，可以在模板字符串里无障碍地直接写 html 代码：
+
+```js
+let list = `
+    <ul>
+        <li>列表项1</li>
+        <li>列表项2</li>
+    </ul>
+`
+console.log(message) // 正确输出，不存在报错
+```
+
+基于第二点，可以把一些简单的计算和调用丢进 ${} 来做：
+
+```js
+function add(a, b) {
+    const finalString = `${a} + ${b} = ${a + b}`
+    console.log(finalString)
+}
+add(1, 2) // 输出 '1 + 2 = 3'
+```
+
+除了模板语法外， ES6 中还新增了一系列的字符串方法用于提升开发效率：
+
+存在性判定：在过去，当判断一个字符/字符串是否在某字符串中时，只能用 indexOf > -1 来做。现在 ES6 提供了三个方法：includes、startsWith、endsWith，它们都会返回一个布尔值来告诉你是否存在。
+
+- includes：判断字符串与子串的包含关系：
+
+```js
+const son = 'haha'
+const father = 'xixi haha hehe'
+father.includes(son) // true
+```
+
+- startsWith：判断字符串是否以某个/某串字符开头：
+
+```js
+const father = 'xixi haha hehe'
+father.startsWith('haha') // false
+father.startsWith('xixi') // true
+```
+
+- endsWith：判断字符串是否以某个/某串字符结尾：
+
+```js
+const father = 'xixi haha hehe'
+father.endsWith('hehe') // true
+```
+
+- 自动重复：可以使用 repeat 方法来使同一个字符串输出多次（被连续复制多次）：
+
+```js
+const sourceCode = 'repeat for 3 times;'
+const repeated = sourceCode.repeat(3)
+console.log(repeated) // repeat for 3 times;repeat for 3 times;repeat for 3 times;
+```
+
+## 三、Javascript基础
+
+### 1.JavaScript 由哪三部分组成
+
+1. ECMAScript：JS 的核心内容，描述了语言的基础语法，比如 var，for
+2. 文档对象模型（DOM）:它指的是把文档当做一个对象，这个对象主要定义了处理网页内容的方法和接口
+3. 浏览器对象模型（BOM）:它指的是把浏览器当做一个对象来对待，这个对象主要定义了与浏览器进行交互的法和接口。BOM 的核心是 window,而 window 对象具有双重角色，它既是通过 js 访问浏览器窗口的一个接口，又是一个 Gob!(全局)对象。这意味着在网页中定义的任何对象，变量和函数，都作为全局对象的一个属性或者方法存在。window 对象含有 I1 ocation 对象、navigator 对象、screen 对象等子对象，并且 DOM 的最根本的对象 document 对象也是 BOM 的 window 对象的子对象
+
+### 2.JavaScript 由哪些内置对象
+
+- 值属性，这些全局属性返回一个简单值，这些值没有自己的属性和方法。
+    例如 Infinity、NaN、undefined、null 字面量
+- 函数属性，全局函数可以直接调用，不需要在调用时指定所属对象，执行结束后会将结果直接返回给调用者。
+    例如 eval()、parseFloat()、parselnt()等
+- 基本对象，基本对象是定义或使用其他对象的基础。基本对象包括一般对象、函数对象和错误对象。
+    例如 Object、.Function、Boolean、.Symbol、.Error 等
+- 数字和日期对象，用来表示数字、日期和执行数学计算的对象。
+    例如 Number、Math、Date
+- 字符串，用来表示和操作字符串的对象。
+    例如 String、RegExp
+- 可索引的集合对象，这些对象表示按照索引值来排序的数据集合，包括数组和类型数组，以及类数组结构的对象。
+    例如 Array
+- 使用键的集合对象，这些集合对象在存储数据时会使用到键，支持按照插入顺序来迭代元素。
+    例如 Map、Set、VeakMap、.WeakSet
+- 矢量集合，SMD 矢量集合中的数据会被组织为一个数据序列。
+    例如 SIMD 等
+- 结构化数据，这些对象用来表示和操作结构化的缓冲区数据，或使用 JSON 编码的数据。
+    例如 JSON 等
+- 控制抽象对象
+    例如 Promise、Generator 等
+- 反射
+    例如 Reflect、Proxy
+- 国际化，为了支持多语言处理而加入 ECMAScript 的对象。
+    例如 lntl、lnt.Collator 等
+- WebAssembly
+- 其他
+    例如 arguments
+
+js 中的内置对象主要指的是在程序执行前存在全局作用域里的由 js 定义的一些全局值属性、函数和用来实例化其他对象的构造函数对象。一般经常用到的如全局变量值 NaN、undefined,全局函数如 parselnt0()、parseFloat()用来实例化对象的构造函数如 Date、Object 等，还有提供数学计算的单体内置对象如 Math 对象。
+
+### 3.JavaScript 脚本延迟加载的方式有哪些？
+
+延迟加载就是等页面加载完成之后再加载 JavaScript 文件。js 延迟加载有助于提高页面加载速度。
+
+一般有以下几种方式：
+
+- defer 属性：给 js 脚本添加 defer 属性，这个属性会让脚本的加载与文档的解析同步解析，然后在文档解析完成后再执行这个脚本文件，这样的话就能使页面的渲染不被阻塞。多个设置了 defer 属性的脚本按规范来说最后是顺序执行的，但是在一些浏览器中可能不是这样。
+- async 属性：给 js 脚本添加 async 属性，这个属性会使脚本异步加载，不会阻塞页面的解析过程，但是当脚本加载完成后立即执行 js 脚本，这个时候如果文档没有解析完成的话同样会阻塞。多个 a$yc 属性的脚本的执行顺序是不可预测的，一般不会按照代码的顺序依次执行。
+- 动态创建 DOM 方式：动态创建 DOM 标签的方式，可以对文档的加载事件进行监听，当文档加载完成后再动态的创建 script 标签来引入 js 脚本。
+- 使用 setTimeout 延迟方法：设置一个定时器来延迟加载 js 脚本文件
+- 让 Js 最后加载：将 js 脚本放在文档的底部，来使 js 脚本尽可能的在最后来加载执行。
+
+### 4.对 JSON 的里解
+
+JSON 是一种基于文本的轻量级的数据交换格式。它可以被任何的编程语言读取和作为数据格式来传递。
+
+在项目开发中，使用 JSON 作为前后端数据交换的方式。在前端通过将一个符合 JSON 格式的数据结构序列化为 JSON 字符串，然后将它传递到后端，后端通过 JSON 格式的字符串解析后生成对应的数据结构，以此来实现前后端数据的一个传递。
+
+因为 JSON 的语法是基于 js 的，因此很容易将 JSON 和 js 中的对象弄混，但是应该注意的是 JSON 和 js 中的对象不是一回事，JSON 中对象格式更加严格，比如说在 JSON 中属性值不能为函数，不能出现 NN 这样的属性值等，因此大多数的 js 对象是不符合 JSON 对象的格式的.
+
+在 js 中提供了两个函数来实现 js 数据结构和 JSON 格式的转换处理，
+
+- JSON.stringify 函数，通过传入一个符合 JSON 格式的数据结构，将其转换为一个 JSON 字符串。如果传入的数据结构不符合 JSON 格式，那么在序列化的时候会对这些值进行对应的特殊处理，使其符合规范。在前端向后端发送数据时，可以调用这个函数将数据对象转化为 JSON 格式的字符串。
+- JSON.parse 函数，这个函数用来将 JSON 格式的字符串转换为一个 js 数据结构，如果传入的字符串不是标准的 JSON 格式的字符串的话，将会抛出错误。当从后端接收到 JSON 格式的字符串时，可以通过这个方法来将其解析为一个 js 数据结构，以此来进行数据的访问。
+
+### 5.操作数组的方法
 
 - push
 - pop
@@ -428,7 +705,7 @@ console.log(name)
 
 > 哪些方法会改变原数组：push、pop、unshift、shift、sort、reverse、splice
 
-## 为什么函数的 arguments 参数是类数组而不是数组？如何遍历类数组？
+### 6.为什么函数的 arguments 参数是类数组而不是数组？如何遍历类数组？
 
 arguments 是一个对象，它的属性是从 0 开始依次递增的数字，还有 callee 和 length 等属性，与数组相似；但是它却没有数组常见的方法属性，如 forEach,reduce 等，所以叫它们类数组。
 
@@ -460,7 +737,36 @@ function foo() {
 }
 ```
 
-## Map（字典）
+### 7.new 操作具体做了什么
+
+1. 首先创建了一个新的空对象`{}`
+2. 设置原型，将对象的原型设置为函数的 prototype 对象`son.__proto__ = Father.prototype`
+3. 让函数的 this 指向这个对象，执行构造函数的代码（为这个新对象添加属性）`Father.call(this)`
+4. 判断函数的返回值类型，如果是值类型，返回创建的对象。如果是引用类型，就返回这个引用类型的对象
+
+```js
+function newFun(Fun, ...args) {
+    // 创建一个新对象
+    let newObj = {}
+    // 把空对象和构造函数通过原型链进行连接
+    newObj.__proto__ = Fun.prototype
+    // 把构造函数的this绑定到新的空对象身上
+    const result = Fun.apply(newObj, args)
+    // 根据构建函数返回的类型判断，如果是值类型，则返回对象，如果是引用类型，就要返回这个引用类型
+    return result instanceof Object ? result : newObj
+}
+function Person(name) {
+    this.name = name
+}
+Person.prototype.say = function () {
+    console.log('123')
+}
+const p1 = newFun(Person, '张三')
+p1.say()
+console.log(p1)
+```
+
+### 8.Map（字典）
 
 Map 对象保存键值对，并且能够记住键的原始插入顺序。任何值（对象或者原始值）都可以作为一个键或一个值。
 
@@ -552,7 +858,7 @@ map.forEach((value, key, map) => {
 })
 ```
 
-## Set（集合）
+### 9.Set（集合）
 
 Set 对象允许你存储任何类型的唯一值，无论是原始值或者是对象引用。
 
@@ -602,43 +908,597 @@ mySet.delete(1)
 mySet.has(1) // 返回Boolean值
 ```
 
-## Map 与 Set 的区别
+### 10.Map 与 Set 的区别
 
 - Map 和 Set 查找速度都非常快，时间复杂度为 O(1)，而数组查找的时间复杂度为 O(n)。
 - Map 对象初始化的值为一个二维数组，Set 对象初始化的值为一维数组。
 - Map 对象和 Set 对象都不允许键重复（可以将 Set 对象的键想象成值）。
 - Map 对象的键是不能改的，但是值能改，Set 对象只能通过迭代器来更改值。
 
-## new 操作具体做了什么
+### 11.防抖
 
-1. 先创建一个空对象`{}`
-2. 把空对象和构造函数通过原型链进行链接`son.__proto__ = Father.prototype`
-3. 把构造函数的 this 绑定到新的空对象身上`Father.call(this)`
-4. 根据构建函数返回的类型判断，如果是值类型，则返回对象，如果是引用类型，就要返回这个引用类型
+- 事件被触发 n 秒后再执行回调，如果在这 n 秒内又被调用，则重新计时。 在一段时间内，事件只会最后触发一次。scroll 事件滚动、搜索框输入查询、表单验证、按钮提交、浏览器缩放
 
 ```js
-function newFun(Fun, ...args) {
-    // 创建一个新对象
-    let newObj = {}
-    // 把空对象和构造函数通过原型链进行连接
-    newObj.__proto__ = Fun.prototype
-    // 把构造函数的this绑定到新的空对象身上
-    const result = Fun.apply(newObj, args)
-    // 根据构建函数返回的类型判断，如果是值类型，则返回对象，如果是引用类型，就要返回这个引用类型
-    return result instanceof Object ? result : newObj
+function debounce(func, wait) {
+    let timeout
+    return function () {
+        const that = this
+        const args = arguments
+        clearTimeout(timeout)
+        timeout = setTimeout(function () {
+            func.apply(that, args)
+        }, wait)
+    }
 }
-function Person(name) {
-    this.name = name
+
+// 立即执行防抖
+function debounce(func, wait, immediate) {
+    let timeout
+    return function () {
+        const that = this
+        const args = arguments
+        clearTimeout(timeout)
+        if (immediate) {
+            const callNow = !timeout
+            timeout = setTimeout(function () {
+                timeout = null
+            }, wait)
+            if (callNow) {
+                func.apply(that, args)
+            }
+        } else {
+            timeout = setTimeout(function () {
+                func.apply(that, args)
+            }, wait)
+        }
+    }
 }
-Person.prototype.say = function () {
-    console.log('123')
+
+// 取消防抖
+function debounce(func, wait) {
+    let timeout
+    let debounced = function () {
+        const that = this
+        const args = arguments
+        clearTimeout(timeout)
+        timeout = setTimeout(function () {
+            func.apply(that, args)
+        }, wait)
+    }
+    debounced.cancel = function () {
+        clearTimeout(timeout)
+        timeout = null
+    }
+    return debounced
 }
-const p1 = newFun(Person, '张三')
-p1.say()
-console.log(p1)
 ```
 
-## 原型与原型链
+### 12.节流
+
+- 在一个单位时间内，只能触发一次函数。如果这个单位时间内触发多次函数，只有一次生效。按照一段时间的间隔来进行触发。
+
+```js
+// 时间戳 立即执行
+function throttle(func, awit) {
+    let old = 0
+    return function () {
+        const that = this
+        const args = arguments
+        let now = newDate().valueOf()
+        if (now - old > wait) {
+            func.apply(that, func)
+            old = now
+        }
+    }
+}
+
+// 使用定时器 第一次不执行，最后一次调用会执行
+function throttle(func, wait) {
+    let timeout
+    return function () {
+        const that = this
+        const args = arguments
+        if (!timeout) {
+            timeout = setTimeout(function () {
+                func.apply(that, args)
+                timeout = null
+            }, wait)
+        }
+    }
+}
+```
+
+### 13.柯里化
+
+把接收多个参数的函数，变成一个接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数，而且返回结果的新函数的技术。
+
+- 为什么需要有函数柯里化？
+
+1. 逻辑单一
+2. 函数参数复用
+
+```js
+function foo(x, y, z) {
+    console.log(x + y + z)
+}
+foo(10, 20, 30) // 60
+
+function foo2(x) {
+    return function (y) {
+        return function (z) {
+            console.log(x + y + z)
+        }
+    }
+}
+foo2(10)(20)(30) // 60
+
+let foo3 = (x) => (y) => (z) => {
+    console.log(x + y + z)
+}
+foo3(10)(20)(30) // 60
+```
+
+> 案例一
+
+```js
+// 信息一： 日志类型
+// 信息二： 日志的类型：info/debug/feature
+// 信息三： 具体信息
+function logInfo(date, type, message) {
+    console.log(`时间：${date} 类型：${type} 内容${message}`)
+}
+logInfo('2023-02-07', 'debug', '修复界面bug')
+logInfo('2023-02-07', 'debug', '修复界面bug')
+logInfo('2023-02-07', 'debug', '修复界面bug')
+
+// 柯里化
+let logInfo2 = (date) => (type) => (message) => {
+    console.log(`时间：${date} 类型：${type} 内容${message}`)
+}
+let logToday = logInfo2('2023-02-08')
+let logTodayDeBug = logToday('debug')
+let logTodayFrature = logToday('feature')
+logTodayDeBug('服务器') //时间：2023-02-08 类型：debug 内容服务器
+logTodayFrature('按钮') //时间：2023-02-08 类型：feature 内容按钮
+```
+
+> 案例二
+
+```js
+function makeAdder(count) {
+    function add(num) {
+        return count + num
+    }
+    return add
+}
+
+let adder5 = makeAdder(5)
+console.log(adder5(5))
+console.log(adder5(10))
+```
+
+### 14.深拷贝与浅拷贝
+
+JSON.stringify()缺点
+
+1. 如果 obj 里面有时间对象，则 JSON.stringify 后再 JSON.parse 的结果，时间将只是字符串的形式，而不是对象的形式。
+2. 如果 obj 里面有 RegExp，则打印出来是空对象。
+3. 如果对象中有函数或者 undefined，则会直接被丢掉。
+4. 如果 json 里有对象是由构造函数生成的，则会丢掉对象的 constructon。
+5. 如果对象中存在循环引用的情况也无法正确实现深拷贝。
+6. 如果对象中存在 NAN，则序列化后会变成 null。
+
+```js
+let arr = [1, 2, 3]
+let newArr = [...arr]
+newArr.push(4)
+console.log(arr) // [1,2,3]
+console.log(newArr) // [1,2,3,4]
+
+let arr2 = [
+    [1, 2, 3],
+    [4, 5, 6],
+]
+let newArr2 = [...arr2]
+newArr2[0].push(888)
+console.log(arr2) //[1, 2, 3, 888][4, 5, 6]
+console.log(newArr2) //[1, 2, 3, 888][4, 5, 6]
+
+let obj = {
+    name: '张三',
+    age: 18,
+}
+let obj1 = { ...obj }
+obj1.name = '王五'
+console.log(obj)
+console.log(obj1)
+// 只能实现第一层，当有多层的时候还是浅拷贝
+```
+
+```js
+// 引用数据类型（数组，对象）
+function deepClone(source) {
+    // [] => Array(基类) {} => Object
+    const targetObj = source.constructor === Array ? [] : {}
+    for (let keys in source) {
+        if (source.hasOwnProperty(keys)) {
+            // keys => 3种
+            if (source[keys] && typeof source[keys] === 'object') {
+                targetObj[keys] = deepClone(source[keys])
+            } else {
+                // 基本数据类型，直接赋值
+                targetObj[keys] = source[keys]
+            }
+        }
+    }
+    return targetObj
+}
+
+let obj = {
+    ff: 'name',
+    gg: 1,
+    obj: { str: '111', age: 12 },
+    arr: [1, 2, 3, 4],
+}
+let newObjC = deepClone(obj)
+newObjC.ff = '123'
+console.log(obj)
+console.log(newObjC)
+```
+
+### 15.事件委托
+
+利用事件冒泡的机制来实现，把子元素的事件绑定到了父元素身上，如果子元素阻止了事件冒泡，那么委托也就不成立。
+
+阻止事件冒泡： event.stopPropagation()
+addEventListener('click',函数名,true/false) 默认是 false(事件冒泡)true(事件捕获)
+
+### 16.事件循环
+
+> 任务队列
+
+- JS 分为同步任务和异步任务
+- 同步任务都在主线程上执行，形成一个执行栈
+- 主线程之外，事件触发线程管理着一个任务队列，只要异步任务有了运行结果，就在任务队列之中放置一个事件。
+- 一旦执行栈中的所有同步任务执行完毕（此时 JS 引擎空闲），系统就会读取任务队列，将可运行的异步任务添加到可执行栈中，开始执行。
+
+> 宏任务
+
+可以理解是每次执行栈执行的代码就是一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行）。浏览器为了能够使得 JS 内部(macro)task 与 DOM 任务能够有序的执行，会在一个(macro)task 执行结束后，在下一个(macro)task 执行开始前，对页面进行重新渲染。
+
+task 主要包含：script(整体代码)、setTimeout、setInterval、I/O、UI 交互事件、postMessage、MessageChannel、setImmediate(Node.js 环境)
+
+> 微任务
+
+可以理解是在当前 task 执行结束后立即执行的任务。也就是说，在当前 task 任务后，下一个 task 之前，在渲染之前。所以它的响应速度相比 setTimeout（setTimeout 是 task）会更快，因为无需等渲染。也就是说，在某一个 macrotask 执行完后，就会将在它执行期间产生的所有 microtask 都执行完毕（在渲染前）。
+
+microtask 主要包含：Promise.then、MutaionObserver、process.nextTick(Node.js 环境)
+
+> 运行机制
+
+- 执行一个宏任务（栈中没有就从事件队列中获取）
+- 执行过程中如果遇到微任务，就将它添加到微任务的任务队列中
+- 宏任务执行完毕后，立即执行当前微任务队列中的所有微任务（依次执行）
+- 当前宏任务执行完毕，开始检查渲染，然后 GUI 线程接管渲染
+- 渲染完毕后，JS 线程继续接管，开始下一个宏任务（从事件队列中获取）
+
+![ ](/img/interview/task.jpg)
+
+> 面试题
+
+- 面试题 1
+
+```js
+console.log('script start')
+setTimeout(function () {
+    console.log('setTimeout1')
+    new Promise(function (resolve) {
+        resolve()
+    }).then(function () {
+        new Promise(function (resolve) {
+            resolve()
+        }).then(function () {
+            console.log('then4')
+        })
+        console.log('then2')
+    })
+})
+new Promise(function (resolve) {
+    console.log('promise1')
+    resolve()
+}).then(function () {
+    console.log('then1')
+})
+setTimeout(function () {
+    console.log('setTimeout2')
+})
+console.log(2)
+queueMicrotask(() => {
+    console.log('queueMicrotask1')
+})
+new Promise(function (resolve) {
+    resolve()
+}).then(function () {
+    console.log('then3')
+})
+console.log('script end')
+// script start
+// promise1
+// 2
+// script end
+
+// then1
+// queueMicrotask1
+// then3
+
+// setTimeout1
+// then2
+// then4
+
+// setTimeout2
+```
+
+- 面试题 2
+
+```js
+console.log('script start')
+
+function requestData(url) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            console.log('setTimeout')
+            resolve(url)
+        }, 2000)
+    })
+}
+
+function getData() {
+    console.log('getData start')
+    requestData('why').then((res) => {
+        console.log('then1-res', res)
+    })
+    console.log('getData end')
+}
+
+getData()
+
+console.log('script end')
+
+// script start
+// getData start
+// getData end
+// script end
+// setTimeout
+// then1-res why
+```
+
+- 面试题 3
+
+```js
+console.log('script start')
+
+function requestData(url) {
+    console.log('requestData')
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            console.log('setTimeout')
+            resolve(url)
+        }, 2000)
+    })
+}
+
+async function getData() {
+    console.log('getData start')
+    const res = await requestData('why')
+    console.log('then1-res', res)
+    console.log('getData end')
+}
+
+getData()
+
+console.log('script end')
+
+// script start
+// getData start
+// requestData
+// script end
+// setTimeout
+// then1-res why
+// getData end
+```
+
+- 面试题 4
+
+```js
+async function async1() {
+    console.log('async1 start')
+    await async2()
+    console.log('async1 end')
+}
+
+async function async2() {
+    console.log('async2')
+}
+
+console.log('script start')
+
+setTimeout(function () {
+    console.log('setTimeout')
+}, 0)
+
+async1()
+
+new Promise(function (resolve) {
+    console.log('promise1')
+    resolve()
+}).then(function () {
+    console.log('proimse2')
+})
+
+console.log('script end')
+
+// script start
+// async1 start
+// async2
+// promise1
+// script end
+// async1 end
+// proimse2
+// setTimeout
+```
+
+- 面试题 5
+
+```js
+console.log('start')
+setTimeout(() => {
+    console.log('setTimeout1')
+}, 0)
+;(async function foo() {
+    console.log('async 1')
+    await asyncFunction()
+    console.log('async2')
+})().then(console.log('foo.then'))
+async function asyncFunction() {
+    console.log('asyncFunction')
+    setTimeout(() => {
+        console.log('setTimeout2')
+    }, 0)
+    new Promise((res) => {
+        console.log('promise1')
+        res('promise2')
+    }).then(console.log)
+}
+console.log('end')
+
+// start
+// async 1
+// asyncFunction
+// promise1
+// foo.then
+// end
+// promise2
+// async2
+// setTimeout1
+// setTimeout2
+```
+
+1. 最开始碰到 console.log("start"); 直接执行并打印出 start
+2. 往下走，遇到一个 setTimeout1 就放到宏任务队列
+3. 碰到立即执行函数 foo， 打印出 async 1
+4. 遇到 await 堵塞队列，先 执行 await 的函数
+5. 执行 asyncFunction 函数， 打印出 asyncFunction
+6. 遇到第二个 setTimeout2， 放到宏任务队列
+7. new Promise 立即执行，打印出 promise1
+8. 执行到 res("promise2") 函数调用，就是 Promise.then。放到微任务队列
+9. asyncFunction 函数就执行完毕， 把后面的打印 async2 会放到微任务队列
+10. 然后打印出立即执行函数的 then 方法 foo.then
+11. 最后执行打印 end
+12. 开始执行微任务的队列 打印出第一个 promise2
+13. 然后打印第二个 async2
+14. 微任务执行完毕，执行宏任务 打印第一个 setTimeout1
+15. 执行第二个宏任务 打印 setTimeout2
+
+![ ](/img/interview/thread.jpg)
+
+### 17.前端模块化
+
+前端模块化就是复杂的文件编程一个一个独立的模块，比如 js 文件等等，分成独立的模块有利于重用
+（复用性）和维护（版本迭代），这样会引来模块之间相互依赖的问题，所以有了 commonJS 规范，
+AMD，CMD 规范等等，以及用于 js 打包（编译等处理）的工具 webpack。
+
+### 18.setTimeout 最小执行时间是多少
+
+html5 规定的内容：
+setTimeout 最小执行时间是 4ms
+setInterval 最小执行时间是 10ms
+
+### 19.包管理工具
+
+> 常见属性
+
+- name: 项目名称
+- version: 项目版本号
+- description：描述信息，很多时候作为项目的基本描述
+- main: 程序入口
+- scripts: 用于配置一些脚本命令，以键值对形式存在
+- author：作者相关信息
+- license: 开源协议
+- private: 当前项目是否私有
+- dependencies: 记录开发坏境还是生成环境都需要依赖的包
+- devDependencies: 记录生成环境不需要的，如 webpack、babel 等
+
+> npm install 原理
+
+![ ](/img/interview/npm.jpg)
+
+### 20.强类型语言和弱类型语言的区别
+
+- 强类型语言：强类型语言也称为强类型定义语言，是一种总是强制类型定义的语言，要求变量的使用要严格符合定义，所有变量都必须先定义后使用。Java 和 C++等语言都是强制类型定义的，也就是说，一旦一个变量被指定了某个数据类型，如果不经过强制转换，那么它就永远是这个数据类型了。例如你有一个整数，如果不显式地进行转换，你不能将其视为一个字符串。
+- 弱类型语言：弱类型语言也称为弱类型定义语言，与强类型定义相反。JavaScripti 语言就属于弱类型语言。简单理解就是一种变量类型可以被忽略的语言。比如 JavaScript 是弱类型定义的，在 JavaScript 中就可以将字符串 12'和整数 3 进行连接得到字符串'123'，在相加的时候会进行强制类型转换。
+
+两者对比：强类型语言在速度上可能略逊色于弱类型语言，但是强类型语言带来的严谨性可以有效地帮助避免许多错误。
+
+### 21.解释性语言和编译型语言的区别
+
+- 解释型语言
+    使用专门的解释器对源程序逐行解释成特定平台的机器码并立即执行。是代码在执行时才被解释器行行动态翻译和执行，而不是在执行之前就完成翻译。解释型语言不需要事先编译，其直接将源代码解释成机器码并立即执行，所以只要某一平台提供了相应的解释器即可运行该程序。其特点总结如下
+  - 解释型语言每次运行都需要将源代码解释称机器码并执行，效率较低；
+  - 只要平台提供相应的解释器，就可以运行源代码，所以可以方便源程序移植；
+  - JavaScript、.Python 等属于解释型语言。
+- 编译型语言
+    使用专门的编译器，针对特定的平台，将高级语言源代码一次性的编译成河被该平台硬件执行的机器码，并包装成该平台所能识别的可执行性程序的格式。在编译型语言写的程序执行之前，需要一个专门的编译过程，把源代码编译成机器语言的文件，如 eX 格式的文件，以后要再运行时，直接使用编译结果即可，如直接运行 eXe 文件。因为只需编译一次，以后运行时不需要编译，所以编译型语言执行效率高。其特点总结如下：
+  - 一次性的编译成平台相关的机器语言文件，运行时脱离开发环境，运行效率高；
+  - 与特定平台相关，一般无法移植到其他平台；
+  - C、C++等属于编译型语言。
+
+两者主要区别在于：前者源程序编译后即可在该平台运行，后者是在运行期间才编译。所以前者运行速度快，后者跨平台性好。
+
+### 22.异步编程的实现方式
+
+- 回调函数
+
+  - 优点：简单、容易理解
+  - 缺点：不利于维护，代码耦合高
+
+- 事件监听(采用时间驱动模式，取决于某个事件是否发生)
+
+  - 优点：容易理解，可以绑定多个事件，每个事件可以指定多个回调函数
+  - 缺点：事件驱动型，流程不够清晰
+
+- 发布/订阅(观察者模式)
+
+类似于事件监听，但是可以通过‘消息中心‘，了解现在有多少发布者，多少订阅者
+
+- Promise 对象
+
+  - 优点：可以利用 then 方法，进行链式写法；可以书写错误时的回调函数；
+  - 缺点：编写和理解，相对比较难
+
+- Generator 函数
+
+  - 优点：函数体内外的数据交换、错误处理机制
+  - 缺点：流程管理不方便
+
+- async 函数
+
+  - 优点：内置执行器、更好的语义、更广的适用性、返回的是 Promise 、结构清晰。
+  - 缺点：错误处理机制
+
+### 23.token 存储在哪
+
+token：验证身份的令牌，一般就是用户通过账号密码登录后，服务端把这些凭证通过加密等一系列操作后得到的字符串。
+
+1. 存在 localstorage 里，后期每次请求接口都需要将它当作一个字段传给后端
+2. 存 cookie 中，会自动发送，缺点就是不能跨域
+
+如果存在 localstorage 中，容易被 XSS 共计，但是如果做好了对应措施，利大于弊
+如果存在 cookie 中会有 CSRF 攻击
+
+## 四、原型与原型链
+
+### 1.原型与原型链
 
 原型就是一个普通对象，他是构造函数的实例共享属性和方法；所有实例中引用的原型都是同一个对象。使用 prototype 可以把方法挂载原型上，内存只保存一份
 **proto**可以理解为指针。实例对象中的属性，指向了构造函数的原型（protortpe）
@@ -646,14 +1506,14 @@ console.log(p1)
 
 ![ ](/img/interview/proto.jpg)
 
-## 继承
+### 2.继承
 
 1. 原型链继承
 2. 借用构造函数继承
 3. 组合式继承
 4. ES6 的 class 继承
 
-### 原型链继承
+#### 原型链继承
 
 ```js
 function Super(){ this.a=1 }
@@ -668,7 +1528,7 @@ console.log( test.say() )// hhh
 优点：通过原型继承多个引用类型的属性和方法
 缺点：Sub 原型变成了 Super 的实例，如果 Super 的实例某个属性是引用值，该引用值就会被应用到所有 Sub 创建的实例中去，会有污染问题。
 
-### 盗用构造函数(构造函数模式+call)
+#### 盗用构造函数(构造函数模式+call)
 
 ```js
 function Super = function(){ this.a = 1 }
@@ -683,7 +1543,7 @@ const test = new Sub()
 优点：每个实例都会有自己的 a 属性，哪怕是引用值也不会被污染
 缺点：Super 构造函数中的方法在每个实例上都要创建一遍（除非该方法声明提到全局）；Sub 的实例无法访问 Super 原型上的方法
 
-### 组合继承(原型继承+盗用构造函数继承)
+#### 组合继承(原型继承+盗用构造函数继承)
 
 ```js
 function Super(){ this.a=[1,2] }
@@ -705,7 +1565,7 @@ console.log(test2.a)// [1,2]
 优点：可以在子类构造函数中向父类传参数,父类的引用属性不会被共享
 缺点：子类不能访问父类原型上定义的方法（即不能访问 Parent.prototype 上定义的方法），因此所有方法属性都写在构造函数中，每次创建实例都会初始化
 
-### 原型式继承
+#### 原型式继承
 
 ```js
 // es5
@@ -725,7 +1585,7 @@ const test = Object.create(obj)
 优点：对一个对象进行浅克隆创建另一个对象，同时继承该对象的原型属性
 缺点：由于是浅克隆，所以实例共享的对象属性如果是引用值，会受污染。
 
-### 寄生式继承(构造函数模式+工厂模式)
+#### 寄生式继承(构造函数模式+工厂模式)
 
 ```js
 function createObj(o){
@@ -743,7 +1603,7 @@ const test = createObj(obj)
 优点：根据一个对象克隆创建另一个对象，并增强对象
 缺点：同【盗用构造函数继承】方法在每个实例上都要创建一遍
 
-### 寄生式组合继承(盗用构造函数继承 + 原型式继承)
+#### 寄生式组合继承(盗用构造函数继承 + 原型式继承)
 
 ```js
 function Super(){ this.a=[1,2] }
@@ -761,7 +1621,9 @@ const test = new Sub()
 
 优点：集合了【原型式继承】和【盗用构造函数继承】的优点，效率比【组合继承】更高。
 
-## this 指向
+## 五、this/call/apply/bind
+
+### 1.this 指向
 
 1. 全局对象中的 this 指向 window
 2. 全局作用域或普通函数中 this 指向全局 window
@@ -1010,14 +1872,45 @@ person1.obj.foo2.call(person2)() // person2
 person1.obj.foo2().call(person2) // obj
 ```
 
-## call和apply的区别？
+### 2.箭头函数的 this 指向哪⾥？
+
+箭头函数不同于传统 JavaScript 中的函数，箭头函数并没有属于⾃⼰的 this，它所谓的 this 是捕获其所在上下⽂的 this 值，作为⾃⼰的 this 值，并且由于没有属于⾃⼰的 this，所以是不会被 new 调⽤的，这个所谓的 this 也不会被改变。
+
+可以⽤ Babel 理解⼀下箭头函数:
+
+```js
+// ES6
+const obj = {
+    getArrow() {
+        return () => {
+            console.log(this === obj)
+        }
+    },
+}
+```
+
+转化后：
+
+```js
+// ES5，由 Babel 转译
+var obj = {
+    getArrow: function getArrow() {
+        var _this = this
+        return function () {
+            console.log(_this === obj)
+        }
+    },
+}
+```
+
+### 3.call 和 apply 的区别？
 
 它们的作用一模一样，区别仅在于传入参数的形式的不同。
 
-- apply接受两个参数，第一个参数指定了函数体内this对象的指向，第二个参数为一个带下标的集合，这个集合可以为数组，也可以为类数组，appy方法把这个集合中的元素作为参数传递给被调用的函数。
-- cal传入的参数数量不固定，跟appy相同的是，第一个参数也是代表函数体内的this指向，从第二个参数开始往后，每个参数被依次传入函数。
+- apply 接受两个参数，第一个参数指定了函数体内 this 对象的指向，第二个参数为一个带下标的集合，这个集合可以为数组，也可以为类数组，appy 方法把这个集合中的元素作为参数传递给被调用的函数。
+- cal 传入的参数数量不固定，跟 appy 相同的是，第一个参数也是代表函数体内的 this 指向，从第二个参数开始往后，每个参数被依次传入函数。
 
-## 手写 call、apply、bind
+### 4.手写 call、apply、bind
 
 ```js
 Function.prototype.MyCall = function (context) {
@@ -1096,143 +1989,11 @@ Function.prototype.MyBind = function (context) {
 }
 ```
 
-## 作用域
+## 六、执行上下文、作用域链、闭包
 
-```js
-function Foo() {
-    getName = function () {
-        console.log(1)
-    }
-    return this
-}
-Foo.getName = function () {
-    console.log(2)
-}
-Foo.prototype.getName = function () {
-    console.log(3)
-}
-var getName = function () {
-    console.log(4)
-}
-function getName() {
-    console.log(5)
-}
-Foo.getName()
-getName()
-Foo().getName()
-getName()
-new Foo.getName()
-new Foo().getName()
-new new Foo().getName()
-```
+### 1.闭包的理解
 
-- 执行 Foo.getName(), 执行 Foo 函数对象上的的静态方法。打印出 2
-- 执行 getName()， 就是执行的 getName 变量的函数。打印 4
-  - 为什么这里是 执行的 变量 getName，而不是函数 getName 呢。这得归功于 js 的预编译 js 在执行之前进行预编译，会进行 函数提升 和 变量提升,所以函数和变量都进行提升了，但是函数声明的优先级最高，会被提升至当前作用域最顶端。当在执行到后面的时候会导致 getName 被重新赋值，就会把执行结果为 4 的这个函数赋值给变量
-- 执行 Foo().getName()， 调用 Foo 执行后返回值上的 getName 方法。 Foo 函数执行了，里面会给外面的 getName 函数重新赋值，并返回了 this。 也就是执行了 this.getName。所以打印出了 1
-- 执行 getName()， 由于上一步，函数被重新赋值。所以这次的结果和上次的结果是一样的，还是为 1
-- 执行 new Foo.getName()， 这个 new 其实就是 new 了 Foo 上面的静态方法 getName 所以是 2。 当然如果你们在这个函数里面打印 this 的话，会发现指向的是一个新对象 也就是 new 出来的一个新对象
-  - 可以把 Foo.getName()看成一个整体，因为这里 . 的优先级比 new 高
-- 执行 new Foo().getName()，这里函数执行 new Foo() 会返回一个对象，然后调用这个对象原型上的 getName 方法， 所以结果是 3
-- 执行 new new Foo().getName(), 这个和上一次的结果是一样，上一个函数调用后并咩有返回值，所以在进行 new 的时候也没有意义了。 最终结果也是 3
-
-## 防抖
-
-- 事件被触发 n 秒后再执行回调，如果在这 n 秒内又被调用，则重新计时。 在一段时间内，事件只会最后触发一次。scroll 事件滚动、搜索框输入查询、表单验证、按钮提交、浏览器缩放
-
-```js
-function debounce(func, wait) {
-    let timeout
-    return function () {
-        const that = this
-        const args = arguments
-        clearTimeout(timeout)
-        timeout = setTimeout(function () {
-            func.apply(that, args)
-        }, wait)
-    }
-}
-
-// 立即执行防抖
-function debounce(func, wait, immediate) {
-    let timeout
-    return function () {
-        const that = this
-        const args = arguments
-        clearTimeout(timeout)
-        if (immediate) {
-            const callNow = !timeout
-            timeout = setTimeout(function () {
-                timeout = null
-            }, wait)
-            if (callNow) {
-                func.apply(that, args)
-            }
-        } else {
-            timeout = setTimeout(function () {
-                func.apply(that, args)
-            }, wait)
-        }
-    }
-}
-
-// 取消防抖
-function debounce(func, wait) {
-    let timeout
-    let debounced = function () {
-        const that = this
-        const args = arguments
-        clearTimeout(timeout)
-        timeout = setTimeout(function () {
-            func.apply(that, args)
-        }, wait)
-    }
-    debounced.cancel = function () {
-        clearTimeout(timeout)
-        timeout = null
-    }
-    return debounced
-}
-```
-
-## 节流
-
-- 在一个单位时间内，只能触发一次函数。如果这个单位时间内触发多次函数，只有一次生效。按照一段时间的间隔来进行触发。
-
-```js
-// 时间戳 立即执行
-function throttle(func, awit) {
-    let old = 0
-    return function () {
-        const that = this
-        const args = arguments
-        let now = newDate().valueOf()
-        if (now - old > wait) {
-            func.apply(that, func)
-            old = now
-        }
-    }
-}
-
-// 使用定时器 第一次不执行，最后一次调用会执行
-function throttle(func, wait) {
-    let timeout
-    return function () {
-        const that = this
-        const args = arguments
-        if (!timeout) {
-            timeout = setTimeout(function () {
-                func.apply(that, args)
-                timeout = null
-            }, wait)
-        }
-    }
-}
-```
-
-## 闭包
-
-> 闭包就是方法里面返回一个方法
+闭包是指有权访问另一个函数作用域中变量的函数，创建闭包的最常见的方式就是在一个函数内创建另一个函数，创建的函数可以访问到当前函数的局部变量。
 
 ```js
 function a() {
@@ -1243,12 +2004,17 @@ function a() {
 }
 ```
 
-> 闭包形成条件
+闭包有两个常用的用途；
+
+- 闭包的第一个用途是使我们在函数外部能够访问到函数内部的变量。通过使用闭包，可以通过在外部调用闭包函数，从而在外部访问到函数内部的变量，可以使用这种方法来创建私有变量。
+- 闭包的另一个用途是使已经运行结束的函数上下文中的变量对象继续留在内存中，因为闭包函数保留了这个变量对象的引用，所以这个变量对象不会被回收。
+
+### 2.闭包形成条件
 
 1. 函数嵌套
 2. 内部函数引用外部函数的局部变量
 
-> 闭包的存在意义
+### 3.闭包的存在意义
 
 1. 可以读取函数内部的变量
 2. 可以使变量的值长期保存在内存中，生命周期比较长。
@@ -1292,7 +2058,7 @@ for (var i = 1; i <= 5; i++) {
 }
 ```
 
-- 第三种就是使用let定义i了来解决问题了，这个也是最为推荐的方式
+- 第三种就是使用 let 定义 i 了来解决问题了，这个也是最为推荐的方式
 
 ```js
 for (let = 1; i <= 5; i++) {
@@ -1302,437 +2068,143 @@ for (let = 1; i <= 5; i++) {
 }
 ```
 
-## 柯里化
-
-把接收多个参数的函数，变成一个接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数，而且返回结果的新函数的技术。
-
-- 为什么需要有函数柯里化？
-
-1. 逻辑单一
-2. 函数参数复用
+### 4.作用域
 
 ```js
-function foo(x, y, z) {
-    console.log(x + y + z)
-}
-foo(10, 20, 30) // 60
-
-function foo2(x) {
-    return function (y) {
-        return function (z) {
-            console.log(x + y + z)
-        }
+function Foo() {
+    getName = function () {
+        console.log(1)
     }
+    return this
 }
-foo2(10)(20)(30) // 60
-
-let foo3 = (x) => (y) => (z) => {
-    console.log(x + y + z)
+Foo.getName = function () {
+    console.log(2)
 }
-foo3(10)(20)(30) // 60
+Foo.prototype.getName = function () {
+    console.log(3)
+}
+var getName = function () {
+    console.log(4)
+}
+function getName() {
+    console.log(5)
+}
+Foo.getName()
+getName()
+Foo().getName()
+getName()
+new Foo.getName()
+new Foo().getName()
+new new Foo().getName()
 ```
 
-> 案例一
+- 执行 Foo.getName(), 执行 Foo 函数对象上的的静态方法。打印出 2
+- 执行 getName()， 就是执行的 getName 变量的函数。打印 4
+  - 为什么这里是 执行的 变量 getName，而不是函数 getName 呢。这得归功于 js 的预编译 js 在执行之前进行预编译，会进行 函数提升 和 变量提升,所以函数和变量都进行提升了，但是函数声明的优先级最高，会被提升至当前作用域最顶端。当在执行到后面的时候会导致 getName 被重新赋值，就会把执行结果为 4 的这个函数赋值给变量
+- 执行 Foo().getName()， 调用 Foo 执行后返回值上的 getName 方法。 Foo 函数执行了，里面会给外面的 getName 函数重新赋值，并返回了 this。 也就是执行了 this.getName。所以打印出了 1
+- 执行 getName()， 由于上一步，函数被重新赋值。所以这次的结果和上次的结果是一样的，还是为 1
+- 执行 new Foo.getName()， 这个 new 其实就是 new 了 Foo 上面的静态方法 getName 所以是 2。 当然如果你们在这个函数里面打印 this 的话，会发现指向的是一个新对象 也就是 new 出来的一个新对象
+  - 可以把 Foo.getName()看成一个整体，因为这里 . 的优先级比 new 高
+- 执行 new Foo().getName()，这里函数执行 new Foo() 会返回一个对象，然后调用这个对象原型上的 getName 方法， 所以结果是 3
+- 执行 new new Foo().getName(), 这个和上一次的结果是一样，上一个函数调用后并咩有返回值，所以在进行 new 的时候也没有意义了。 最终结果也是 3
+
+### 5.对作用域、作用域链的理解
+
+#### 全局作用域和函数作用域
+
+（1）全局作用域
+
+- 最外层函数和最外层函数外面定义的变量拥有全局作用域
+- 所有未定义直接赋值的变量自动声明为全局作用域
+- 所有window对象的属性拥有全局作用域
+- 全局作用域有很大的弊端，过多的全局作用域变量会污染全局命名空间，容易引起命名冲突。
+
+（2）函数作用域
+
+- 函数作用域声明在函数内部的变零，一般只有固定的代码片段可以访问到
+- 作用域是分层的，内层作用域可以访问外层作用域，反之不行
+
+#### 块级作用域
+
+- 使用ES6中新增的let和const指令可以声明块级作用域，块级作用域可以在函数中创建也可以在一个代码块中的创建（由{ }包裹的代码片段）
+- let和const声明的变量不会有变量提升，也不可以重复声明
+- 在循环中比较适合绑定块级作用域，这样就可以把声明的计数器变量限制在循环内部。
+
+#### 作用域链
+
+在当前作用域中查找所需变量，但是该作用域没有这个变量，那这个变量就是自由变量。如果在自己作用域找不到该变量就去父级作用域查找，依次向上级作用域查找，直到访问到window对象就被终止，这一层层的关系就是作用域链。
+
+作用域链的作用是保证对执行环境有权访问的所有变量和函数的有序访问，通过作用域链，可以访问到外层环境的变量和函数。
+
+作用域链的本质上是一个指向变量对象的指针列表。变量对象是一个包含了执行环境中所有变量和函数的对象。作用域链的前端始终都是当前执行上下文的变量对象。全局执行上下文的变量对象（也就是全局对象）始终是作用域链的最后一个对象。
+
+当查找一个变量时，如果当前执行环境中没有找到，可以沿着作用域链向后查找。
+
+### 6.对执行上下文的理解
+
+#### 执行上下文类型
+
+- （1）全局执行上下文
+
+任何不在函数内部的都是全局执行上下文，它首先会创建一个全局的window对象，并且设置this的值等于这个全局对象，一个程序中只有一个全局执行上下文。
+
+- （2）函数执行上下文
+
+当一个函数被调用时，就会为该函数创建一个新的执行上下文，函数的上下文可以有任意多个。
+
+- （3）**eval**函数执行上下文
+
+执行在eval函数中的代码会有属于他自己的执行上下文，不过eval函数不常使用，不做介绍。
+
+#### 执行上下文栈
+
+- JavaScript引擎使用执行上下文栈来管理执行上下文
+- 当JavaScript执行代码时，首先遇到全局代码，会创建一个全局执行上下文并且压入执行栈中，每当遇到一个函数调用，就会为该函数创建一个新的执行上下文并压入栈顶，引擎会执行位于执行上下文栈顶的函数，当函数执行完成之后，执行上下文从栈中弹出，继续执行下一个上下文。当所有的代码都执行完毕之后，从栈中弹出全局执行上下文。
 
 ```js
-// 信息一： 日志类型
-// 信息二： 日志的类型：info/debug/feature
-// 信息三： 具体信息
-function logInfo(date, type, message) {
-    console.log(`时间：${date} 类型：${type} 内容${message}`)
+let a = 'Hello World!';
+function first() {
+  console.log('Inside first function');
+  second();
+  console.log('Again inside first function');
 }
-logInfo('2023-02-07', 'debug', '修复界面bug')
-logInfo('2023-02-07', 'debug', '修复界面bug')
-logInfo('2023-02-07', 'debug', '修复界面bug')
-
-// 柯里化
-let logInfo2 = (date) => (type) => (message) => {
-    console.log(`时间：${date} 类型：${type} 内容${message}`)
+function second() {
+  console.log('Inside second function');
 }
-let logToday = logInfo2('2023-02-08')
-let logTodayDeBug = logToday('debug')
-let logTodayFrature = logToday('feature')
-logTodayDeBug('服务器') //时间：2023-02-08 类型：debug 内容服务器
-logTodayFrature('按钮') //时间：2023-02-08 类型：feature 内容按钮
+first();
+//执行顺序
+//先执行second(),在执行first()
 ```
 
-> 案例二
+#### 创建执行上下文
 
-```js
-function makeAdder(count) {
-    function add(num) {
-        return count + num
-    }
-    return add
-}
+创建执行上下文有两个阶段：创建阶段和执行阶段
 
-let adder5 = makeAdder(5)
-console.log(adder5(5))
-console.log(adder5(10))
-```
+- 创建阶段
+  - this绑定
+    - 在全局执行上下文中，this指向全局对象（window对象）
+    - 在函数执行上下文中，this指向取决于函数如何调用。如果它被一个引用对象调用，那么 this 会被设置成那个对象，否则 this 的值被设置为全局对象或者 undefined
+  - 创建词法环境组件
+    - 词法环境是一种有标识符——变量映射的数据结构，标识符是指变量/函数名，变量是对实际对象或原始数据的引用。
+    - 词法环境的内部有两个组件：加粗样式：环境记录器:用来储存变量个函数声明的实际位置外部环境的引用：可以访问父级作用域
+  - 创建变量环境组件
+    - 变量环境也是一个词法环境，其环境记录器持有变量声明语句在执行上下文中创建的绑定关系。
+- 执行阶段
 
-## 深拷贝与浅拷贝
+此阶段会完成对变量的分配，最后执行完代码。
 
-JSON.stringify()缺点
+简单来说执行上下文就是指：
 
-1. 如果 obj 里面有时间对象，则 JSON.stringify 后再 JSON.parse 的结果，时间将只是字符串的形式，而不是对象的形式。
-2. 如果 obj 里面有 RegExp，则打印出来是空对象。
-3. 如果对象中有函数或者 undefined，则会直接被丢掉。
-4. 如果 json 里有对象是由构造函数生成的，则会丢掉对象的 constructon。
-5. 如果对象中存在循环引用的情况也无法正确实现深拷贝。
-6. 如果对象中存在 NAN，则序列化后会变成 null。
+在执行一点JS代码之前，需要先解析代码。解析的时候会先创建一个全局执行上下文环境，先把代码中即将执行的变量、函数声明都拿出来，变量先赋值为undefined，函数先声明好可使用。这一步执行完了，才开始正式的执行程序。
 
-```js
-let arr = [1, 2, 3]
-let newArr = [...arr]
-newArr.push(4)
-console.log(arr) // [1,2,3]
-console.log(newArr) // [1,2,3,4]
+在一个函数执行之前，也会创建一个函数执行上下文环境，跟全局执行上下文类似，不过函数执行上下文会多出this、arguments和函数的参数。
 
-let arr2 = [
-    [1, 2, 3],
-    [4, 5, 6],
-]
-let newArr2 = [...arr2]
-newArr2[0].push(888)
-console.log(arr2) //[1, 2, 3, 888][4, 5, 6]
-console.log(newArr2) //[1, 2, 3, 888][4, 5, 6]
+● 全局上下文：变量定义，函数声明
+● 函数上下文：变量定义，函数声明，this，arguments
 
-let obj = {
-    name: '张三',
-    age: 18,
-}
-let obj1 = { ...obj }
-obj1.name = '王五'
-console.log(obj)
-console.log(obj1)
-// 只能实现第一层，当有多层的时候还是浅拷贝
-```
+## 七、手写
 
-```js
-// 引用数据类型（数组，对象）
-function deepClone(source) {
-    // [] => Array(基类) {} => Object
-    const targetObj = source.constructor === Array ? [] : {}
-    for (let keys in source) {
-        if (source.hasOwnProperty(keys)) {
-            // keys => 3种
-            if (source[keys] && typeof source[keys] === 'object') {
-                targetObj[keys] = deepClone(source[keys])
-            } else {
-                // 基本数据类型，直接赋值
-                targetObj[keys] = source[keys]
-            }
-        }
-    }
-    return targetObj
-}
-
-let obj = {
-    ff: 'name',
-    gg: 1,
-    obj: { str: '111', age: 12 },
-    arr: [1, 2, 3, 4],
-}
-let newObjC = deepClone(obj)
-newObjC.ff = '123'
-console.log(obj)
-console.log(newObjC)
-```
-
-## 异步编程的实现方式
-
-- 回调函数
-
-  - 优点：简单、容易理解
-  - 缺点：不利于维护，代码耦合高
-
-- 事件监听(采用时间驱动模式，取决于某个事件是否发生)
-
-  - 优点：容易理解，可以绑定多个事件，每个事件可以指定多个回调函数
-  - 缺点：事件驱动型，流程不够清晰
-
-- 发布/订阅(观察者模式)
-
-类似于事件监听，但是可以通过‘消息中心‘，了解现在有多少发布者，多少订阅者
-
-- Promise 对象
-
-  - 优点：可以利用 then 方法，进行链式写法；可以书写错误时的回调函数；
-  - 缺点：编写和理解，相对比较难
-
-- Generator 函数
-
-  - 优点：函数体内外的数据交换、错误处理机制
-  - 缺点：流程管理不方便
-
-- async 函数
-
-  - 优点：内置执行器、更好的语义、更广的适用性、返回的是 Promise 、结构清晰。
-  - 缺点：错误处理机制
-
-## 事件委托
-
-利用事件冒泡的机制来实现，把子元素的事件绑定到了父元素身上，如果子元素阻止了事件冒泡，那么委托也就不成立。
-
-阻止事件冒泡： event.stopPropagation()
-addEventListener('click',函数名,true/false) 默认是 false(事件冒泡)true(事件捕获)
-
-## 事件循环
-
-> 任务队列
-
-- JS 分为同步任务和异步任务
-- 同步任务都在主线程上执行，形成一个执行栈
-- 主线程之外，事件触发线程管理着一个任务队列，只要异步任务有了运行结果，就在任务队列之中放置一个事件。
-- 一旦执行栈中的所有同步任务执行完毕（此时 JS 引擎空闲），系统就会读取任务队列，将可运行的异步任务添加到可执行栈中，开始执行。
-
-> 宏任务
-
-可以理解是每次执行栈执行的代码就是一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行）。浏览器为了能够使得 JS 内部(macro)task 与 DOM 任务能够有序的执行，会在一个(macro)task 执行结束后，在下一个(macro)task 执行开始前，对页面进行重新渲染。
-
-task 主要包含：script(整体代码)、setTimeout、setInterval、I/O、UI 交互事件、postMessage、MessageChannel、setImmediate(Node.js 环境)
-
-> 微任务
-
-可以理解是在当前 task 执行结束后立即执行的任务。也就是说，在当前 task 任务后，下一个 task 之前，在渲染之前。所以它的响应速度相比 setTimeout（setTimeout 是 task）会更快，因为无需等渲染。也就是说，在某一个 macrotask 执行完后，就会将在它执行期间产生的所有 microtask 都执行完毕（在渲染前）。
-
-microtask 主要包含：Promise.then、MutaionObserver、process.nextTick(Node.js 环境)
-
-> 运行机制
-
-- 执行一个宏任务（栈中没有就从事件队列中获取）
-- 执行过程中如果遇到微任务，就将它添加到微任务的任务队列中
-- 宏任务执行完毕后，立即执行当前微任务队列中的所有微任务（依次执行）
-- 当前宏任务执行完毕，开始检查渲染，然后 GUI 线程接管渲染
-- 渲染完毕后，JS 线程继续接管，开始下一个宏任务（从事件队列中获取）
-
-![ ](/img/interview/task.jpg)
-
-> 面试题
-
-- 面试题 1
-
-```js
-console.log('script start')
-setTimeout(function () {
-    console.log('setTimeout1')
-    new Promise(function (resolve) {
-        resolve()
-    }).then(function () {
-        new Promise(function (resolve) {
-            resolve()
-        }).then(function () {
-            console.log('then4')
-        })
-        console.log('then2')
-    })
-})
-new Promise(function (resolve) {
-    console.log('promise1')
-    resolve()
-}).then(function () {
-    console.log('then1')
-})
-setTimeout(function () {
-    console.log('setTimeout2')
-})
-console.log(2)
-queueMicrotask(() => {
-    console.log('queueMicrotask1')
-})
-new Promise(function (resolve) {
-    resolve()
-}).then(function () {
-    console.log('then3')
-})
-console.log('script end')
-// script start
-// promise1
-// 2
-// script end
-
-// then1
-// queueMicrotask1
-// then3
-
-// setTimeout1
-// then2
-// then4
-
-// setTimeout2
-```
-
-- 面试题 2
-
-```js
-console.log('script start')
-
-function requestData(url) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            console.log('setTimeout')
-            resolve(url)
-        }, 2000)
-    })
-}
-
-function getData() {
-    console.log('getData start')
-    requestData('why').then((res) => {
-        console.log('then1-res', res)
-    })
-    console.log('getData end')
-}
-
-getData()
-
-console.log('script end')
-
-// script start
-// getData start
-// getData end
-// script end
-// setTimeout
-// then1-res why
-```
-
-- 面试题 3
-
-```js
-console.log('script start')
-
-function requestData(url) {
-    console.log('requestData')
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            console.log('setTimeout')
-            resolve(url)
-        }, 2000)
-    })
-}
-
-async function getData() {
-    console.log('getData start')
-    const res = await requestData('why')
-    console.log('then1-res', res)
-    console.log('getData end')
-}
-
-getData()
-
-console.log('script end')
-
-// script start
-// getData start
-// requestData
-// script end
-// setTimeout
-// then1-res why
-// getData end
-```
-
-- 面试题 4
-
-```js
-async function async1() {
-    console.log('async1 start')
-    await async2()
-    console.log('async1 end')
-}
-
-async function async2() {
-    console.log('async2')
-}
-
-console.log('script start')
-
-setTimeout(function () {
-    console.log('setTimeout')
-}, 0)
-
-async1()
-
-new Promise(function (resolve) {
-    console.log('promise1')
-    resolve()
-}).then(function () {
-    console.log('proimse2')
-})
-
-console.log('script end')
-
-// script start
-// async1 start
-// async2
-// promise1
-// script end
-// async1 end
-// proimse2
-// setTimeout
-```
-
-- 面试题 5
-
-```js
-console.log('start')
-setTimeout(() => {
-    console.log('setTimeout1')
-}, 0)
-;(async function foo() {
-    console.log('async 1')
-    await asyncFunction()
-    console.log('async2')
-})().then(console.log('foo.then'))
-async function asyncFunction() {
-    console.log('asyncFunction')
-    setTimeout(() => {
-        console.log('setTimeout2')
-    }, 0)
-    new Promise((res) => {
-        console.log('promise1')
-        res('promise2')
-    }).then(console.log)
-}
-console.log('end')
-
-// start
-// async 1
-// asyncFunction
-// promise1
-// foo.then
-// end
-// promise2
-// async2
-// setTimeout1
-// setTimeout2
-```
-
-1. 最开始碰到 console.log("start"); 直接执行并打印出 start
-2. 往下走，遇到一个 setTimeout1 就放到宏任务队列
-3. 碰到立即执行函数 foo， 打印出 async 1
-4. 遇到 await 堵塞队列，先 执行 await 的函数
-5. 执行 asyncFunction 函数， 打印出 asyncFunction
-6. 遇到第二个 setTimeout2， 放到宏任务队列
-7. new Promise 立即执行，打印出 promise1
-8. 执行到 res("promise2") 函数调用，就是 Promise.then。放到微任务队列
-9. asyncFunction 函数就执行完毕， 把后面的打印 async2 会放到微任务队列
-10. 然后打印出立即执行函数的 then 方法 foo.then
-11. 最后执行打印 end
-12. 开始执行微任务的队列 打印出第一个 promise2
-13. 然后打印第二个 async2
-14. 微任务执行完毕，执行宏任务 打印第一个 setTimeout1
-15. 执行第二个宏任务 打印 setTimeout2
-
-![ ](/img/interview/thread.jpg)
-
-## 前端模块化
-
-前端模块化就是复杂的文件编程一个一个独立的模块，比如 js 文件等等，分成独立的模块有利于重用
-（复用性）和维护（版本迭代），这样会引来模块之间相互依赖的问题，所以有了 commonJS 规范，
-AMD，CMD 规范等等，以及用于 js 打包（编译等处理）的工具 webpack。
-
-## 递归求和
+### 1.递归求和
 
 ```js
 function add(num1, num2) {
@@ -1747,7 +2219,7 @@ let sum = add(1, 2)
 console.log(sum)
 ```
 
-## 通过 es6 互换值
+### 2.通过 es6 互换值
 
 ```js
 let a = 1
@@ -1756,7 +2228,7 @@ let b = 2
 console.log(a, b) //2 1
 ```
 
-## 去重
+### 3.去重
 
 - 方法一
 
@@ -1786,7 +2258,7 @@ let item = [...new Set(arr)]
 console.log(item) // [1, 2, 33, 4, 5, 3, 6]
 ```
 
-## 数组扁平化
+### 4.数组扁平化
 
 - 方法一
 
@@ -1814,7 +2286,7 @@ let arr = [1, 2, [3, [4, [5, [6]]]]]
 console.log(arr.flat(Infinity))
 ```
 
-## 将数组扁平化且去除重复的元素，最后升序输出
+### 5.将数组扁平化且去除重复的元素，最后升序输出
 
 ```js
 let arr = [1, [1, [2]], [3, 4], 7, 4, [2, 3, [4, 5, [2, 2, 1, 5, 4, 3, 8]]]]
@@ -1827,7 +2299,7 @@ function fn(arr) {
 console.log(fn(arr)) //[1, 2, 3, 4, 5, 7, 8]
 ```
 
-## 找出数组中出现最多的数字
+### 6.找出数组中出现最多的数字
 
 ```js
 function findMostRepetitionsNumber(arr) {
@@ -1856,7 +2328,7 @@ const arr = [3, 5, 6, 6, 6, 6, 5, 9, 8, 10, 5, 7]
 console.log(findMostRepetitionsNumber(arr))
 ```
 
-## 如何拦截全局 Promise reject，但并没有设定 reject 处理器 时候的错误
+### 7.如何拦截全局 Promise reject，但并没有设定 reject 处理器 时候的错误
 
 ```js
 // 使用Try catch 只能拦截try语句块里面的
@@ -1876,23 +2348,7 @@ window.addEventListener('unhandledrejection', (event) => {
 })
 ```
 
-## setTimeout 最小执行时间是多少
-
-html5 规定的内容：
-setTimeout 最小执行时间是 4ms
-setInterval 最小执行时间是 10ms
-
-## token 存储在哪
-
-token：验证身份的令牌，一般就是用户通过账号密码登录后，服务端把这些凭证通过加密等一系列操作后得到的字符串。
-
-1. 存在 localstorage 里，后期每次请求接口都需要将它当作一个字段传给后端
-2. 存 cookie 中，会自动发送，缺点就是不能跨域
-
-如果存在 localstorage 中，容易被 XSS 共计，但是如果做好了对应措施，利大于弊
-如果存在 cookie 中会有 CSRF 攻击
-
-## 大文件上传
+### 8.大文件上传
 
 分片上传
 
@@ -1901,7 +2357,7 @@ token：验证身份的令牌，一般就是用户通过账号密码登录后，
 3. 按照一定的规则把各个数据块上传
 4. 发送完成后，服务端后判断数据上传的完整性，如果完整，那么就把数据库合并成成原始文件
 
-## 手写实现 sleep
+### 9.手写实现 sleep
 
 ```js
 ;(async () => {
@@ -1919,7 +2375,7 @@ token：验证身份的令牌，一般就是用户通过账号密码登录后，
 })()
 ```
 
-## 找到仅在两个数组中出现过一次的数据
+### 10.找到仅在两个数组中出现过一次的数据
 
 ```js
 var a = [1, 2, 4],
@@ -1929,7 +2385,7 @@ const newArr = a.concat(b).filter((item, _, arr) => {
 })
 ```
 
-## 快速打乱数组
+### 11.快速打乱数组
 
 ```js
 var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -1937,22 +2393,3 @@ arr.sort(() => Math.random() - 0.5)
 //利用sort return 大于等于0不交换位置，小于0交换位置
 // [5, 8, 4, 3, 2, 9, 10, 6, 1, 7]
 ```
-
-## 包管理工具
-
-> 常见属性
-
-- name: 项目名称
-- version: 项目版本号
-- description：描述信息，很多时候作为项目的基本描述
-- main: 程序入口
-- scripts: 用于配置一些脚本命令，以键值对形式存在
-- author：作者相关信息
-- license: 开源协议
-- private: 当前项目是否私有
-- dependencies: 记录开发坏境还是生成环境都需要依赖的包
-- devDependencies: 记录生成环境不需要的，如 webpack、babel 等
-
-> npm install 原理
-
-![ ](/img/interview/npm.jpg)
