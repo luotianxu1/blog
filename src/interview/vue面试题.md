@@ -655,7 +655,7 @@ new Watcher(vm, updateComponent)
 
 get 方法中的 pushTarget 实际上就是把 Dep.target 赋值为当前的 watcher。
 
-this.getter..call(vm,vm),这里的 getter 会执行 vm.render()方法，在这个过程中便会角触发数据对象的 getter。.那么每个对象值的 getter 都特有一个 dep,在触发 getter 的时候会调用 dep.depend()）方法，也就会执行 Dep.target..addDep(this)。刚才 Dep.target 已经被赋值为 watcher,于是便会执行 addDep 方法，然后走到 dep.addSub()方法，便将当前的 watcher 订阅到这个数据持有的 dp 的 subs 中，这个目的是为后续数据变化时候能通知到哪些 subs 做准备。所以在 vm.render()过程中，会触发所有数据的 getter,这样便已经完成了一个依赖收集的过程。
+this.getter.call(vm,vm),这里的 getter 会执行 vm.render()方法，在这个过程中便会角触发数据对象的 getter。.那么每个对象值的 getter 都特有一个 dep,在触发 getter 的时候会调用 dep.depend()）方法，也就会执行 Dep.target..addDep(this)。刚才 Dep.target 已经被赋值为 watcher,于是便会执行 addDep 方法，然后走到 dep.addSub()方法，便将当前的 watcher 订阅到这个数据持有的 dp 的 subs 中，这个目的是为后续数据变化时候能通知到哪些 subs 做准备。所以在 vm.render()过程中，会触发所有数据的 getter,这样便已经完成了一个依赖收集的过程。
 
 > 多对多的关系 一个 dep 对应多个 watcher，一个 watcher 有多个 dep。默认渲染的时候会进行依赖收集
 
@@ -665,7 +665,7 @@ vuejs 是采用数据劫持结合发布者-订阅者模式的方式，通过 Obj
 
 1. 需要 observe 的数据对象进行递归遍历，包括子属性对象的属性，都加上 setter 和 getter 这样的话，给这个对象的某个值赋值，就会触发 setter，那么就能监听到了数据变化
 2. compile 解析模板指令，将模板中的变量替换成数据，然后初始化渲染页面视因，并将每个指令对应的节点绑定更新函数，添加监听数据的订阅者，一旦数据有变动，收到通知，更新视图
-3. Watcher 订丁阅者是 Observer 和 Compile 之间通信的桥梁，主要做的事情是：
+3. Watcher 订阅者是 Observer 和 Compile 之间通信的桥梁，主要做的事情是：
     - 在自身实例化时往属性 订阅器(dep)里面添加自己
     - 自身必须有一个 update()方法
     - 待属性变动 dep.notice()通知时，能调用自身的 updat0 方法，并触发 Compile 中邬定的回调，则功成身退。
@@ -1266,7 +1266,7 @@ slot 又名插槽，是 vue 的内容分发机制，组件内部的模板引擎�
 
 ### 6.组件更新流程
 
--组件更新会触发组件的 prepatch 方法，会复用组件，并且比较组件的 属性 事件 插槽 -父组件给子组件传递的值是响应式的，在模板中使用会做依赖收集 收集自己的组件 watcher
+组件更新会触发组件的 prepatch 方法，会复用组件，并且比较组件的 属性 事件 插槽 -父组件给子组件传递的值是响应式的，在模板中使用会做依赖收集 收集自己的组件 watcher
 
 ### 7.异步组件原理
 
