@@ -1,7 +1,7 @@
 ---
 title: DOM事件机制
 icon: javascript
-order: 9
+order: 12
 date: 2023-03-01
 category:
     - Javascript
