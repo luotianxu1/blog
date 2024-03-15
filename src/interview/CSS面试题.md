@@ -262,7 +262,7 @@ my-image { background:(low.png);}
 
 ## CSS 预处理器/后处理器是什么？为什么要使用它们？
 
-预处理器，如：less,sass,stylus,用来预编译 sass 或者 less,增加了 css 代码的复用性。层级，mixin,变量，循环，函数等对编写以及开发 U 组件都极为方便。
+预处理器，如：less,sass,stylus,用来预编译 sass 或者 less,增加了 css 代码的复用性。层级，mixin,变量，循环，函数等对编写以及开发组件都极为方便。
 
 后处理器，如：postCss,通常是在完成的样式表中根据 css 规范处理 css,让其更加有效。目前最常做的是给 css 属性添加浏览器私有前缀，实现跨浏览器兼容性的问题。
 
@@ -280,7 +280,7 @@ css 预处理器为 css 增加一些编程特性，无需考虑浏览器的兼�
 
 ## :before 和：after 的双冒号和单冒号有什么区别？
 
-- 冒号(：)用于 CSS3 伪类，双冒号(：)用于 CSS3 伪元素。
+- 冒号(:)用于 CSS3 伪类，双冒号(::)用于 CSS3 伪元素。
 - :before就是以一个子元素的存在，定义在元素主体内容之前的一个伪元素。并不存在于 dom 之中，只存在在页面之中。
 
 ## 如何让浏览器支持小字体
@@ -693,7 +693,7 @@ PostCss 在业务中的使用场景非常多：
 - webpack 中操作 CSS 需要使用的两个关键的 loader:css-loader 和 style-loader
 - 注意，答出“用什么”有时候可能还不够，面试官会怀疑你是不是在背答案，所以你还需要了解每个 loader 都做了什么事情：
   - css-loader:导入 CSS 模块，对 CSS 代码进行编译处理；
-  - style-loader::创建 style 标签，把 CSS 内容写入标签。
+  - style-loader:创建 style 标签，把 CSS 内容写入标签。
 
 在实际使用中，css-loader 的执行顺序一定要安排在 style-loader 的前面。因为只有完成了编译过程，才可以对 css 代码进行插入；若提前插入了未编译的代码，那么 webpack 是无法理解这坨东西的，它会无情报错。
 
