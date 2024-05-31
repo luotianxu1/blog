@@ -90,3 +90,9 @@ tag:
 ```
 
 :::
+
+## 换行
+
+```css
+wordBreak:"break-all";
+```
