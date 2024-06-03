@@ -67,7 +67,7 @@ export default hopeTheme({
             '/interview/': ['luotx'],
         },
     },
-    iconAssets: '//at.alicdn.com/t/c/font_3926889_et0lo894y7s.css', // 字体图标资源链接
+    iconAssets: '//at.alicdn.com/t/c/font_3926889_oo4tcba8wbb.css', // 字体图标资源链接
     iconPrefix: 'iconfont icon-',
     // page meta
     metaLocales: {
